@@ -1,0 +1,13 @@
+Metric,Assemblage,Modeled,StressResponse,Min,Max,RefCalMean,RefCal.Stdev
+prop.spp.Salinity.BF,diatom,yes,increase,-0.124081985,12.92168492,1.276815582,0.311480363
+prop.spp.HighMotility,diatom,no,increase,0,0.43227345,1.01609703,0.394715817
+prop.ind.most.tol,diatom,no,increase,0,0.479826087,1.016951073,0.285429347
+prop.spp.BCG3,diatom,no,decrease,0,0.467083333,0.780820881,0.500671304
+cnt.spp.IndicatorClass_TP_high,sba,no,increase,0,5,1.12991492,0.316744755
+prop.spp.IndicatorClass_DOC_high,sba,no,increase,0.03125,0.773611111,1.165854895,0.404550863
+prop.spp.Green,sba,no,increase,0,0.7,1.101917401,0.385749827
+prop.spp.BCG3,sba,no,decrease,0,0.5,0.738732621,0.46138964
+prop.spp.IndicatorClass_DOC_high,hybrid,no,increase,0.014451346,0.25,1.506704542,0.565222235
+prop.spp.Trophic.I,hybrid,no,decrease,0,0.176470588,0.883848296,0.583222402
+prop.spp.ZHR,hybrid,no,decrease,0,0.187837838,1.202871525,0.518866972
+prop.spp.BCG3,hybrid,no,decrease,0.055793651,0.419694397,0.729923431,0.645708026

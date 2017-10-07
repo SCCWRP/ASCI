@@ -1,0 +1,34 @@
+Package: ASCI
+Type: Package
+Title: Calculate scores for the Algal Stream Condition Index
+Version: 0.0.0.9000
+Date: 2017-10-06
+Description: Calculate O/E and pMMI scores using diatom, soft-bodied algae, or a 
+    hybrid appproach. Scores are used for bioassessment of California perennial 
+    streams.
+BugReports: https://github.com/fawda123/ASCI/issues
+License: CC0
+LazyData: true
+Imports:
+    caret,
+    cluster,
+    ggplot2,
+    indicspecies,
+    plyr,
+    randomForest,
+    reshape2, 
+    rms, 
+    sampling,
+    sqldf, 
+    vegan
+Depends:
+    R (>= 3.4.1),
+Authors@R: c(
+  person(given = "Marcus W.", family = "Beck",
+    role = c("aut","cre"),
+    email = "marcusb@sccwrp.org"),
+  person(given = "Susanna", family = "Theroux",
+    role = "aut", 
+    email = "susannat@sccwrp.org"
+    )
+  )

@@ -1,0 +1,106 @@
+StationCode,SampleDate,Replicate,CollectionMethodCode,SampleTypeCode,BAResult,Result,FinalID
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,6,NA,Achnanthidium exiguum var heterovalvum
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,225,NA,Achnanthidium minutissimum
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,2,NA,Adlafia minuscula
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,8,NA,Adlafia suchlandtii
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,1,NA,Amphora copulata
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,1,NA,Amphora inariensis
+000CAT148,8/10/10,1,Algae_SWAMP,Microalgae,NA,17451.5,Chantransia sp 1
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,25,NA,Cocconeis placentula var euglypta
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,2,NA,Diatoma mesodon
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,12,NA,Geissleria acceptata
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,173,NA,Gomphonema micropus
+000CAT148,8/10/10,1,Algae_SWAMP,Microalgae,NA,471.793,Heteroleibleinia kossinskajae
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,2,NA,Meridion circulare var constrictum
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,14,NA,Navicula cryptocephala
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,8,NA,Navicula menisculus
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,7,NA,Navicula perminuta
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,2,NA,Navicula radiosa
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,9,NA,Nitzschia frustulum
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,2,NA,Nitzschia inconspicua
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,5,NA,Nitzschia perspicua
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,3,NA,Nitzschia recta
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,1,NA,Pinnularia mesolepta
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,72,NA,Planothidium lanceolatum
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,2,NA,Planothidium peragallii
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,8,NA,Reimeria sinuata
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,2,NA,Rhoicosphenia abbreviata
+000CAT148,8/10/10,1,Algae_SWAMP,Integrated,8,NA,Sellaphora seminulum
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,233,NA,Achnanthidium minutissimum
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,18,NA,Amphora pediculus
+102PS0139,8/9/10,1,Algae_SWAMP,Microalgae,NA,62024.7,Chamaesiphon incrustans
+102PS0139,8/9/10,1,Algae_SWAMP,Microalgae,NA,2360000,Chamaesiphon minutus
+102PS0139,8/9/10,1,Algae_SWAMP,Microalgae,NA,49619.7,Chamaesiphon starmachii
+102PS0139,8/9/10,1,Algae_SWAMP,Microalgae,NA,576829,Chlorosaccus fluidus
+102PS0139,8/9/10,1,Algae_SWAMP,Qualitative,NA,NA,Cladophora glomerata
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,115,NA,Cocconeis placentula var euglypta
+102PS0139,8/9/10,1,Algae_SWAMP,Qualitative,NA,NA,Coleodesmium wrangelii
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,1,NA,Diadesmis
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,4,NA,Encyonema minutum
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,42,NA,Gomphoneis olivaceoides
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,6,NA,Gomphonema
+102PS0139,8/9/10,1,Algae_SWAMP,Microalgae,NA,539947,Gongrosira debaryana
+102PS0139,8/9/10,1,Algae_SWAMP,Microalgae,NA,11789,Heteroleibleinia kossinskajae
+102PS0139,8/9/10,1,Algae_SWAMP,Microalgae,NA,150993,Homoeothrix varians
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,10,NA,Navicula cryptotenella
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,1,NA,Nitzschia dissipata
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,8,NA,Nitzschia inconspicua
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,1,NA,Nitzschia linearis
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,78,NA,Planothidium lanceolatum
+102PS0139,8/9/10,1,Algae_SWAMP,Qualitative,NA,NA,Prasiola mexicana
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,26,NA,Reimeria sinuata
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,19,NA,Rhoicosphenia sp C SWAMP EWT
+102PS0139,8/9/10,1,Algae_SWAMP,Integrated,38,NA,Rhoicosphenia abbreviata
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,352,NA,Achnanthidium minutissimum
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,2,NA,Amphipleura pellucida
+105DLCDCC,5/19/09,1,Algae_SWAMP,Microalgae,NA,6313.23,Chamaesiphon polymorphus
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,24,NA,Cocconeis placentula var euglypta
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,2,NA,Diatoma mesodon
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,3,NA,Epithemia adnata
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,106,NA,Gomphonema pumilum
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,2,NA,Hannaea arcus
+105DLCDCC,5/19/09,1,Algae_SWAMP,Microalgae,NA,40172.3,Heteroleibleinia kossinskajae
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,8,NA,Kolbesia suchlandtii
+105DLCDCC,5/19/09,1,Algae_SWAMP,Microalgae,NA,39899.6,Leptolyngbya foveolarum
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,1,NA,Navicula menisculus
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,4,NA,Nitzschia dissipata
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,4,NA,Nitzschia inconspicua
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,4,NA,Nitzschia paleacea
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,78,NA,Planothidium lanceolatum
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,3,NA,Reimeria sinuata
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,3,NA,Rhoicosphenia abbreviata
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,1,NA,Rhopalodia gibba
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,1,NA,Rossithidium pusillum
+105DLCDCC,5/19/09,1,Algae_SWAMP,Integrated,2,NA,Synedra ulna
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,337,NA,Achnanthidium minutissimum
+105DLCDCC,6/23/09,1,Algae_SWAMP,Microalgae,NA,35088.1,Batrachospermum sp 1
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,2,NA,Caloneis bacillum
+105DLCDCC,6/23/09,1,Algae_SWAMP,Microalgae,NA,311452,Calothrix epiphytica
+105DLCDCC,6/23/09,1,Algae_SWAMP,Microalgae,NA,48713.2,Chamaesiphon polymorphus
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,19,NA,Cocconeis placentula var euglypta
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,6,NA,Diatoma mesodon
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,8,NA,Diatoma tenuis
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,1,NA,Diatoma vulgaris
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,2,NA,Epithemia sorex
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,4,NA,Gomphoneis eriense var variabilis
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,50,NA,Gomphonema pumilum
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,11,NA,Hannaea arcus
+105DLCDCC,6/23/09,1,Algae_SWAMP,Microalgae,NA,32324,Heteroleibleinia kossinskajae
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,14,NA,Kolbesia suchlandtii
+105DLCDCC,6/23/09,1,Algae_SWAMP,Microalgae,NA,62711.4,Leptolyngbya foveolarum
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,2,NA,Navicula gregaria
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,4,NA,Navicula menisculus
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,48,NA,Nitzschia dissipata
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,11,NA,Nitzschia inconspicua
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,4,NA,Nitzschia linearis
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,4,NA,Nitzschia perminuta
+105DLCDCC,6/23/09,1,Algae_SWAMP,Microalgae,NA,3780000,Phormidium subfuscum
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,36,NA,Planothidium lanceolatum
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,4,NA,Reimeria sinuata
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,3,NA,Rhoicosphenia abbreviata
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,9,NA,Rossithidium pusillum
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,2,NA,Sellaphora seminulum
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,2,NA,Simonsenia delognei
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,4,NA,Synedra mazamaensis
+105DLCDCC,6/23/09,1,Algae_SWAMP,Integrated,13,NA,Synedra ulna
+105DLCDCC,6/23/09,1,Algae_SWAMP,Microalgae,NA,13899.5,Xenococcus minimus
