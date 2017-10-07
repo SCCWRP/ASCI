@@ -22,7 +22,7 @@ Imports:
     sqldf, 
     vegan
 Depends:
-    R (>= 3.4.1),
+    R (>= 3.4.1)
 Authors@R: c(
   person(given = "Marcus W.", family = "Beck",
     role = c("aut","cre"),
@@ -32,3 +32,4 @@ Authors@R: c(
     email = "susannat@sccwrp.org"
     )
   )
+RoxygenNote: 6.0.1

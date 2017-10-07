@@ -7,10 +7,9 @@ library("cluster")
 library(randomForest)
 library(vegan)
 
-source("scripts/rarify.R")
-source("scripts/dapply.R")
-# source("~/Documents/R/bin/model.predict.RanFor.4.2.r");
-source("scripts/assess.one.sample.4.1.r")
+source("R/rarify.R")
+source("R/dapply.R")
+source("R/assess.one.sample.4.1.r")
 
 jaccfun<-function(siti,sitj) {
   shared<-sum((siti>0)&(sitj>0));
