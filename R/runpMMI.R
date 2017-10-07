@@ -1,6 +1,6 @@
-# # Run the ASCI pMMI 
+# # Run the ASCI pMMI
 # 
-# #### Load packages 
+# #### Load packages
 # library("sampling")
 # library("rms")
 # library("randomForest")
@@ -13,7 +13,7 @@
 # source("R/OE.load.and.source.R")
 # 
 # # Step 1. Import taxonomy data -----------------------------------------------------------
-# bugs<- read.csv("demo_algae_tax.csv", stringsAsFactors = F) 
+# bugs<- read.csv("demo_algae_tax.csv", stringsAsFactors = F)
 # reqfields<- c("StationCode", "SampleDate", "Replicate","SampleTypeCode", "BAResult", "Result", "FinalID")
 # missingtaxafields<-setdiff(reqfields, colnames(bugs))
 # if( length(missingtaxafields) >0 ) { print(paste("Missing fields", missingtaxafields))}
@@ -32,14 +32,14 @@
 # #bugs$FinalID2<-toupper(bugs$FinalID)
 # #STE$FinalID2<-toupper(STE$FinalID)
 # unrecognizedtaxa <- setdiff(bugs$FinalID, STE$FinalID)
-# if (length(unrecognizedtaxa) > 0 ) { print(paste("Unrecognized taxa", unrecognizedtaxa))}  
+# if (length(unrecognizedtaxa) > 0 ) { print(paste("Unrecognized taxa", unrecognizedtaxa))}
 # bugs<- merge(bugs, STE[,c("FinalID", "FinalIDassigned", "Genus", "Phylum", "Class")], all.x = T) # non matches get purged for now  #this is now case sensitive, could change
 # bugs.d<-subset(bugs, Class=="Bacillariophyceae")
 # bugs.sba<-subset(bugs, Class!="Bacillariophyceae")
 # bugs$ComboResult<-as.numeric(pmax(bugs$BAResult,bugs$Result, na.rm=T))
-#   
+# 
 # # Step 4. Rarify diatom data -----------------------------------------------------------
-# bugs.d.sub<-rarify(inbug=bugs.d, sample.ID="SampleID", abund="BAResult", subsiz=500) 
+# bugs.d.sub<-rarify(inbug=bugs.d, sample.ID="SampleID", abund="BAResult", subsiz=500)
 # 
 # # Step 5. Convert to species abd matrix at Species level  -----------------------------------------------------------
 # bugs.d.m<-as.data.frame(acast(bugs.d.sub, SampleID~FinalIDassigned, value.var="BAResult", fun.aggregate=sum))
@@ -51,27 +51,13 @@
 # bugs.sba.m<-as.data.frame(ifelse(bugs.sba.m>0,1,0))
 # bugs.hybrid.m<-as.data.frame(ifelse(bugs.hybrid.m>0,1,0))
 # 
-# # Import traits table 
+# # Import traits table
 # traits<-read.csv('lookups/combotraits.fromaaron4.csv',header=TRUE,strip.white=TRUE,check.names=FALSE)
 # 
 # # calculate metrics using runpMMI.calcmetrics.R
-# diatoms = T 
-# sba = F
-# hybrid = F 
-# source("R/runpMMI.calcmetrics.R")
-# diatoms = F
-# sba = T
-# hybrid = F 
-# source("R/runpMMI.calcmetrics.R")
-# diatoms = F
-# sba = F
-# hybrid = T 
-# source("R/runpMMI.calcmetrics.R")
-# 
-# # Import calculated metrics (that you just generated)
-# d.metrics<-read.csv("diatom.metrics.csv", row.names=1, stringsAsFactors = F)
-# sba.metrics<-read.csv("sba.metrics.csv", row.names=1, stringsAsFactors = F)
-# hybrid.metrics<-read.csv("hybrid.metrics.csv", row.names=1, stringsAsFactors = F)
+# d.metrics<-pmmi_calcmetrics('diatoms')
+# sba.metrics<-pmmi_calccmetrics('sba')
+# hybrid.metrics<-pmmi_calcmetrics('hybrid')
 # 
 # # Load winning metrics -----------------------------------------------------------
 # d.win<-read.csv("lookups/diatoms.combined.win.metrics.scaled.csv", row.names=1, stringsAsFactors = F)
@@ -81,7 +67,7 @@
 # sba.win<-colnames(sba.win[,-(length(names(sba.win)))])
 # hybrid.win<-colnames(hybrid.win[,-(length(names(hybrid.win)))])
 # 
-# # subset winning metrics for new sites 
+# # subset winning metrics for new sites
 # d.results<-d.metrics[,d.win]
 # sba.results<-sba.metrics[,sba.win]
 # hybrid.results<- hybrid.metrics[,hybrid.win]
@@ -90,13 +76,13 @@
 # 
 # quants<-read.csv("lookups/quants/quants.csv", stringsAsFactors = F)
 # # for increasers, min is 5th of ref and max is 95th of str
-# # for decreasers, min is 5th of str and max is 95th of ref 
+# # for decreasers, min is 5th of str and max is 95th of ref
 # 
 # d.results.scored<-data.frame(row.names(d.results))
 # sba.results.scored<-data.frame(row.names(sba.results))
 # hybrid.results.scored<-data.frame(row.names(hybrid.results))
 # 
-# # increase (obs - max) / ( min - max) 
+# # increase (obs - max) / ( min - max)
 # d.results.scored$prop.spp.Salinity.BF <- ((d.results$prop.spp.Salinity.BF - 12.9216849) / (-0.12408199 - 12.9216849)) / 1.2768156
 # d.results.scored$prop.spp.HighMotility <- ((d.results$prop.spp.HighMotility - 0.4322735) / (0 - 0.4322735)) / 1.0160970
 # d.results.scored$prop.ind.most.tol <- ((d.results$prop.ind.most.tol - 0.4798261) / (0 - 0.4798261)) / 1.0169511

@@ -12,15 +12,15 @@ oefun(taxain, sitein)
 \item{sitein}{chr string for path to input site data}
 }
 \value{
-A list with three element named as \code{Scores.diatoms}, \code{Scores.sba}, and \code{Scores.hybrid}
+A list with three elements named as \code{Scores.diatoms}, \code{Scores.sba}, and \code{Scores.hybrid}.  Each element includes an additional list of three data.frames names \code{OE.scores}, \code{Capture.Probs}, and \code{Group.Occurrence.Probs}.
 }
 \description{
-Run the ASCI O/E index for diatoms, soft-bodied algae, and hyrids
+Run the ASCI O/E index for diatoms, soft-bodied algae, and hybrids
 }
 \details{
 Three index scores are calculated and returned as a named list
 }
 \examples{
 
-oefun('demoalgae_tax.csv', 'demo_algae_sitedata.csv')
+oefun('demo_algae_tax.csv', 'demo_algae_sitedata.csv')
 }
