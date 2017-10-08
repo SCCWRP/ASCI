@@ -4,16 +4,21 @@
 \alias{pmmi_calcmetrics}
 \title{Calculate ASCI metrics}
 \usage{
-pmmi_calcmetrics(taxa = c("diatoms", "sba", "hybrid"))
+pmmi_calcmetrics(taxa = c("diatoms", "sba", "hybrid"), tax_dat)
 }
 \arguments{
 \item{taxa}{chr string indicating taxa to use to calculate metrics}
+
+\item{tax_dat}{data.frame of taxonomy data for diatoms, soft-bodied algae, or hybrid}
 }
 \value{
 a data.frame of scores for the relevant taxa
 }
 \description{
 Calculate ASCI metrics
+}
+\details{
+\code{tax_dat} is converted to \code{taxonomy_pa} for presence/absence
 }
 \examples{
 pmmi_calcmetrics('diatoms')

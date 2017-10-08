@@ -1,64 +1,59 @@
-# # Run the ASCI pMMI
-# 
-# #### Load packages
-# library("sampling")
-# library("rms")
-# library("randomForest")
-# library(sqldf)
-# library(vegan)
-# library(indicspecies)
-# library(reshape2)
-# library(plyr) # WARNING: problems arise if you have dplyr already loaded, so maybe start from scratch
-# options(gsubfn.engine = "R")
-# source("R/OE.load.and.source.R")
-# 
-# # Step 1. Import taxonomy data -----------------------------------------------------------
-# bugs<- read.csv("demo_algae_tax.csv", stringsAsFactors = F)
-# reqfields<- c("StationCode", "SampleDate", "Replicate","SampleTypeCode", "BAResult", "Result", "FinalID")
-# missingtaxafields<-setdiff(reqfields, colnames(bugs))
-# if( length(missingtaxafields) >0 ) { print(paste("Missing fields", missingtaxafields))}
-# bugs$SampleID <- paste(bugs$StationCode, bugs$SampleDate, bugs$Replicate, sep="_")
-# 
-# # Step 2. Import stations data -----------------------------------------------------------
-# stations<-read.csv("demo_algae_sitedata.csv", stringsAsFactors = F)
-# stations$SampleID <- paste(stations$StationCode, stations$SampleDate, stations$Replicate, sep="_")
-# row.names(stations) <- stations$SampleID
-# missingsites<-setdiff(bugs$StationCode, stations$StationCode)
-# if(length(missingsites) > 0 ) {print(paste("Missing station codes", missingsites)) }
-# stations<-subset(stations, stations$StationCode %in% bugs$StationCode)
-# 
-# # Step 3. Make ASCI-readable taxa names -----------------------------------------------------------
-# STE<-read.csv("lookups/algae_STE.csv", stringsAsFactors = F)
-# #bugs$FinalID2<-toupper(bugs$FinalID)
-# #STE$FinalID2<-toupper(STE$FinalID)
-# unrecognizedtaxa <- setdiff(bugs$FinalID, STE$FinalID)
-# if (length(unrecognizedtaxa) > 0 ) { print(paste("Unrecognized taxa", unrecognizedtaxa))}
-# bugs<- merge(bugs, STE[,c("FinalID", "FinalIDassigned", "Genus", "Phylum", "Class")], all.x = T) # non matches get purged for now  #this is now case sensitive, could change
-# bugs.d<-subset(bugs, Class=="Bacillariophyceae")
-# bugs.sba<-subset(bugs, Class!="Bacillariophyceae")
-# bugs$ComboResult<-as.numeric(pmax(bugs$BAResult,bugs$Result, na.rm=T))
-# 
-# # Step 4. Rarify diatom data -----------------------------------------------------------
-# bugs.d.sub<-rarify(inbug=bugs.d, sample.ID="SampleID", abund="BAResult", subsiz=500)
-# 
-# # Step 5. Convert to species abd matrix at Species level  -----------------------------------------------------------
-# bugs.d.m<-as.data.frame(acast(bugs.d.sub, SampleID~FinalIDassigned, value.var="BAResult", fun.aggregate=sum))
-# bugs.sba.m<-as.data.frame(acast(bugs.sba, SampleID~FinalIDassigned, value.var="Result", fun.aggregate=sum))
-# bugs.hybrid.m<-as.data.frame(acast(bugs, SampleID~FinalIDassigned, value.var="ComboResult", fun.aggregate=sum))
-# 
-# # Convert to presence/absence -----------------------------------------------------------
-# bugs.d.m<-as.data.frame(ifelse(bugs.d.m>0,1,0))
-# bugs.sba.m<-as.data.frame(ifelse(bugs.sba.m>0,1,0))
-# bugs.hybrid.m<-as.data.frame(ifelse(bugs.hybrid.m>0,1,0))
-# 
-# # Import traits table
-# traits<-read.csv('lookups/combotraits.fromaaron4.csv',header=TRUE,strip.white=TRUE,check.names=FALSE)
-# 
-# # calculate metrics using runpMMI.calcmetrics.R
-# d.metrics<-pmmi_calcmetrics('diatoms')
-# sba.metrics<-pmmi_calccmetrics('sba')
-# hybrid.metrics<-pmmi_calcmetrics('hybrid')
-# 
+# Run the ASCI pMMI
+
+#### Load packages
+library("sampling")
+library("rms")
+library("randomForest")
+library(sqldf)
+library(vegan)
+library(indicspecies)
+library(reshape2)
+library(plyr) # WARNING: problems arise if you have dplyr already loaded, so maybe start from scratch
+options(gsubfn.engine = "R")
+source("R/OE.load.and.source.R")
+
+# Step 1. Import taxonomy data -----------------------------------------------------------
+bugs<- read.csv("demo_algae_tax.csv", stringsAsFactors = F)
+reqfields<- c("StationCode", "SampleDate", "Replicate","SampleTypeCode", "BAResult", "Result", "FinalID")
+missingtaxafields<-setdiff(reqfields, colnames(bugs))
+if( length(missingtaxafields) >0 ) { print(paste("Missing fields", missingtaxafields))}
+bugs$SampleID <- paste(bugs$StationCode, bugs$SampleDate, bugs$Replicate, sep="_")
+
+# Step 2. Import stations data -----------------------------------------------------------
+stations<-read.csv("demo_algae_sitedata.csv", stringsAsFactors = F)
+stations$SampleID <- paste(stations$StationCode, stations$SampleDate, stations$Replicate, sep="_")
+row.names(stations) <- stations$SampleID
+missingsites<-setdiff(bugs$StationCode, stations$StationCode)
+if(length(missingsites) > 0 ) {print(paste("Missing station codes", missingsites)) }
+stations<-subset(stations, stations$StationCode %in% bugs$StationCode)
+
+# Step 3. Make ASCI-readable taxa names -----------------------------------------------------------
+STE<-read.csv("lookups/algae_STE.csv", stringsAsFactors = F)
+#bugs$FinalID2<-toupper(bugs$FinalID)
+#STE$FinalID2<-toupper(STE$FinalID)
+unrecognizedtaxa <- setdiff(bugs$FinalID, STE$FinalID)
+if (length(unrecognizedtaxa) > 0 ) { print(paste("Unrecognized taxa", unrecognizedtaxa))}
+bugs<- merge(bugs, STE[,c("FinalID", "FinalIDassigned", "Genus", "Phylum", "Class")], all.x = T) # non matches get purged for now  #this is now case sensitive, could change
+bugs.d<-subset(bugs, Class=="Bacillariophyceae")
+bugs.sba<-subset(bugs, Class!="Bacillariophyceae")
+bugs$ComboResult<-as.numeric(pmax(bugs$BAResult,bugs$Result, na.rm=T))
+
+# Step 4. Rarify diatom data -----------------------------------------------------------
+bugs.d.sub<-rarify(inbug=bugs.d, sample.ID="SampleID", abund="BAResult", subsiz=500)
+
+# Step 5. Convert to species abd matrix at Species level  -----------------------------------------------------------
+bugs.d.m<-as.data.frame(acast(bugs.d.sub, SampleID~FinalIDassigned, value.var="BAResult", fun.aggregate=sum))
+bugs.sba.m<-as.data.frame(acast(bugs.sba, SampleID~FinalIDassigned, value.var="Result", fun.aggregate=sum))
+bugs.hybrid.m<-as.data.frame(acast(bugs, SampleID~FinalIDassigned, value.var="ComboResult", fun.aggregate=sum))
+
+# Import traits table
+traits<-read.csv('lookups/combotraits.fromaaron4.csv',header=TRUE,strip.white=TRUE,check.names=FALSE)
+
+# calculate metrics using runpMMI.calcmetrics.R
+d.metrics<-pmmi_calcmetrics('diatoms', bugs.d.m)
+sba.metrics<-pmmi_calcmetrics('sba', bugs.sba.m)
+hybrid.metrics<-pmmi_calcmetrics('hybrid', bugs.hybrid.m)
+
 # # Load winning metrics -----------------------------------------------------------
 # d.win<-read.csv("lookups/diatoms.combined.win.metrics.scaled.csv", row.names=1, stringsAsFactors = F)
 # sba.win<-read.csv("lookups/sba.combined.win.metrics.scaled.csv", row.names=1, stringsAsFactors = F)

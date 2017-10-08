@@ -1,20 +1,22 @@
 #' Calculate ASCI metrics
 #' 
 #' @param taxa chr string indicating taxa to use to calculate metrics
+#' @param tax_dat data.frame of taxonomy data for diatoms, soft-bodied algae, or hybrid
 #'
 #' @export
+#' 
+#' @details \code{tax_dat} is converted to \code{taxonomy_pa} for presence/absence
 #' 
 #' @return a data.frame of scores for the relevant taxa
 #' 
 #' @examples 
 #' pmmi_calcmetrics('diatoms')
-pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid')){
+pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat){
   
   taxa <- match.arg(taxa)
-
-  if (taxa == 'diatoms') { taxonomy_pa<-bugs.d.m }
-  if (taxa == 'sba') { taxonomy_pa<-bugs.sba.m }
-  if (taxa == 'hybrid') { taxonomy_pa<-bugs.hybrid.m }
+  
+  # convert taxonomy data to presence/absence
+  taxonomy_pa <- as.data.frame(ifelse(tax_dat > 0, 1, 0))
   
   indicators.count=read.csv('lookups/indic.with.count.csv',header=TRUE,strip.white=TRUE,check.names=FALSE)
   indicators=indicators.count
@@ -234,7 +236,7 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid')){
        #   load(filename)
        #   assign(paste0(i, ".d.RF"), rf.out.top)
        #   print(paste(i, "is modeled"))}
-    filename<-paste0("RFmodels/", "diatoms.", "prop.spp.Salinity.BF", "RF.model.Rdata")
+    filename<-paste0("data/", "diatoms.", "prop.spp.Salinity.BF", "RF.model.Rdata")
     load(filename)
     assign(paste0("prop.spp.Salinity.BF", ".d.RF"), rf.out.top)
     required.predictors <- row.names(prop.spp.Salinity.BF.d.RF$importance)
