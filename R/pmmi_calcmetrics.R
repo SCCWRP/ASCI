@@ -9,10 +9,12 @@
 #' 
 #' @return a data.frame of scores for the relevant taxa
 #' 
-#' @examples 
-#' pmmi_calcmetrics('diatoms')
+#' @examples
+#' \dontrun{
+#' pmmi_calcmetrics('diatoms', bugs.d.m)
+#' }
 pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat){
-  
+
   taxa <- match.arg(taxa)
   
   # convert taxonomy data to presence/absence

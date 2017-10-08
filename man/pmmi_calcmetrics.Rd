@@ -21,5 +21,7 @@ Calculate ASCI metrics
 \code{tax_dat} is converted to \code{taxonomy_pa} for presence/absence
 }
 \examples{
-pmmi_calcmetrics('diatoms')
+\dontrun{
+pmmi_calcmetrics('diatoms', bugs.d.m)
+}
 }
