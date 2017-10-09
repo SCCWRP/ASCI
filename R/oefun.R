@@ -17,8 +17,6 @@
 #' oefun(demo_algae_tax, demo_algae_sitedata)
 oefun <- function(taxain, sitein){
 
-  source("R/model.predict.RanFor.4.2_ed2.r") #overwrites earlier model.predict
-  
   # Step 1. Import taxonomy data -----------------------------------------------------------
   bugs<- taxain
   reqfields<- c("StationCode", "SampleDate", "Replicate","SampleTypeCode", "BAResult", "Result", "FinalID")
@@ -60,7 +58,6 @@ oefun <- function(taxain, sitein){
 
   # Step 5. Calculate O/E for diatoms -----------------------------------------------------------
   required.d.oe.predictors <- row.names(diatom.rf.oe$importance)
-  required.d.oe.predictors
   missingpredictors <- setdiff(required.d.oe.predictors, colnames(stations))
   if (length(missingpredictors) > 0 ) {print(paste("missing predictors", missingpredictors)) }
   
@@ -70,15 +67,14 @@ oefun <- function(taxain, sitein){
   calib.bugs.d.tax.refcal<-read.csv("lookups/diatoms.bugs.rc.csv", stringsAsFactors = F, row.names=1)
   calib.stations.d.refcal.BG<- read.csv("lookups/diatoms.stations.rc.csv", stringsAsFactors = F, row.names=1)
   
-  Scores.diatoms <- model.predict.RanFor.4.2(
+  Scores.diatoms <- rfpred(
     bugcal.pa = calib.bugs.d.tax.refcal,
     grps.final = calib.stations.d.refcal.BG$BG,
     preds.final = required.d.oe.predictors,
     ranfor.mod = diatom.rf.oe, 
     prednew = stations.d.oe.predictors,
-    bugnew = bugs.d.m,
-    Pc=0.5,
-    Cal.OOB=F);
+    bugnew = bugs.d.m
+    )
 
   # Step 5. Calculate O/E for sba ----------------------------------------------------------------------------------------------------------------------
   required.sba.oe.predictors <- row.names(sba.rf.oe$importance)
@@ -92,15 +88,14 @@ oefun <- function(taxain, sitein){
   calib.bugs.sba.tax.refcal<-read.csv("lookups/sba.bugs.rc.csv", stringsAsFactors = F, row.names=1)
   calib.stations.sba.refcal.BG<- read.csv("lookups/sba.stations.rc.csv", stringsAsFactors = F, row.names=1)
   
-  Scores.sba <- model.predict.RanFor.4.2(
+  Scores.sba <- rfpred(
     bugcal.pa = calib.bugs.sba.tax.refcal,
     grps.final = calib.stations.sba.refcal.BG$BG,
     preds.final = required.sba.oe.predictors,
     ranfor.mod = sba.rf.oe, 
     prednew = stations.sba.oe.predictors,
-    bugnew = bugs.sba.m,
-    Pc=0.5,
-    Cal.OOB=F);
+    bugnew = bugs.sba.m
+    )
 
   # Step 5. Calculate O/E for hybrid ----------------------------------------------------------------------------------------------------------------------
   required.hybrid.oe.predictors <- row.names(hybrid.rf.oe$importance)
@@ -114,15 +109,14 @@ oefun <- function(taxain, sitein){
   calib.bugs.hybrid.tax.refcal<-read.csv("lookups/hybrid.bugs.rc.csv", stringsAsFactors = F, row.names=1)
   calib.stations.hybrid.refcal.BG<- read.csv("lookups/hybrid.stations.rc.csv", stringsAsFactors = F, row.names=1)
 
-  Scores.hybrid <- model.predict.RanFor.4.2(
+  Scores.hybrid <- rfpred(
     bugcal.pa = calib.bugs.hybrid.tax.refcal,
     grps.final = calib.stations.hybrid.refcal.BG$BG,
     preds.final = required.hybrid.oe.predictors,
     ranfor.mod = hybrid.rf.oe, 
     prednew = stations.hybrid.oe.predictors,
-    bugnew = bugs.hybrid.m,
-    Pc=0.5,
-    Cal.OOB=F);
+    bugnew = bugs.hybrid.m
+    )
 
   out <- list(
     Scores.diatoms = Scores.diatoms,

@@ -15,6 +15,9 @@ rarify(inbug, sample.ID, abund, subsiz)
 
 \item{subsiz}{numeric value indicating size of the subsample}
 }
+\value{
+A rarified \code{data.frame}.
+}
 \description{
 Rarify (subsample) a macroinvertebrate sample down to a fixed count
 }
@@ -22,5 +25,5 @@ Rarify (subsample) a macroinvertebrate sample down to a fixed count
 Version 1.0 06/10/05
 }
 \author{
-John Van Sickle, USEPA, \mail{VanSickle.John@epa.gov}
+John Van Sickle, USEPA, \email{VanSickle.John@epa.gov}
 }

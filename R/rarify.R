@@ -7,7 +7,7 @@
 #' @param abund chr string of column name with the abundance data
 #' @param subsiz numeric value indicating size of the subsample
 #'
-#' @author John Van Sickle, USEPA, \mail{VanSickle.John@epa.gov}
+#' @author John Van Sickle, USEPA, \email{VanSickle.John@epa.gov}
 #' 
 #' @note Version 1.0 06/10/05
 #' 
