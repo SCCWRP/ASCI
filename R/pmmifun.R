@@ -14,21 +14,21 @@
 #' @export
 #' 
 #' @examples 
-#' pmmifun('demo_algae_tax.csv', 'demo_algae_sitedata.csv')
+#' pmmifun(demo_algae_tax, demo_algae_sitedata)
 pmmifun <- function(taxain, sitein){
 
   options(gsubfn.engine = "R")
   source("R/OE.load.and.source.R")
   
   # Step 1. Import taxonomy data -----------------------------------------------------------
-  bugs<- read.csv("demo_algae_tax.csv", stringsAsFactors = F)
+  bugs <- taxain
   reqfields<- c("StationCode", "SampleDate", "Replicate","SampleTypeCode", "BAResult", "Result", "FinalID")
   missingtaxafields<-setdiff(reqfields, colnames(bugs))
   if( length(missingtaxafields) >0 ) { print(paste("Missing fields", missingtaxafields))}
   bugs$SampleID <- paste(bugs$StationCode, bugs$SampleDate, bugs$Replicate, sep="_")
   
   # Step 2. Import stations data -----------------------------------------------------------
-  stations<-read.csv("demo_algae_sitedata.csv", stringsAsFactors = F)
+  stations <- sitein
   stations$SampleID <- paste(stations$StationCode, stations$SampleDate, stations$Replicate, sep="_")
   row.names(stations) <- stations$SampleID
   missingsites<-setdiff(bugs$StationCode, stations$StationCode)

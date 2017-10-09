@@ -14,8 +14,7 @@
 #' @export
 #' 
 #' @examples 
-#' 
-#' oefun('demo_algae_tax.csv', 'demo_algae_sitedata.csv')
+#' oefun(demo_algae_tax, demo_algae_sitedata)
 oefun <- function(taxain, sitein){
   
   source("R/OE.load.and.source.R")
@@ -24,14 +23,14 @@ oefun <- function(taxain, sitein){
   source("R/model.predict.RanFor.4.2_ed2.r") #overwrites earlier model.predict
   
   # Step 1. Import taxonomy data -----------------------------------------------------------
-  bugs<- read.csv(taxain, stringsAsFactors = F) 
+  bugs<- taxain
   reqfields<- c("StationCode", "SampleDate", "Replicate","SampleTypeCode", "BAResult", "Result", "FinalID")
   missingtaxafields<-setdiff(reqfields, colnames(bugs))
   if( length(missingtaxafields) >0 ) { print(paste("Missing fields", missingtaxafields))}
   bugs$SampleID <- paste(bugs$StationCode, bugs$SampleDate, bugs$Replicate, sep="_")
   
   # Step 2. Import stations data -----------------------------------------------------------
-  stations<-read.csv(sitein, stringsAsFactors = F)
+  stations <- sitein
   stations$SampleID <- paste(stations$StationCode, stations$SampleDate, stations$Replicate, sep="_")
   row.names(stations) <- stations$SampleID
   missingsites<-setdiff(bugs$StationCode, stations$StationCode)

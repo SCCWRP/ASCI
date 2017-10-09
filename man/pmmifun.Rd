@@ -21,6 +21,5 @@ Run the ASCI pMMI index for diatoms, soft-bodied algae, and hybrids
 Three index scores are calculated and returned as a named list
 }
 \examples{
-
-pmmifun('demo_algae_tax.csv', 'demo_algae_sitedata.csv')
+pmmifun(demo_algae_tax, demo_algae_sitedata)
 }

@@ -21,6 +21,5 @@ Run the ASCI O/E index for diatoms, soft-bodied algae, and hybrids
 Three index scores are calculated and returned as a named list
 }
 \examples{
-
-oefun('demo_algae_tax.csv', 'demo_algae_sitedata.csv')
+oefun(demo_algae_tax, demo_algae_sitedata)
 }
