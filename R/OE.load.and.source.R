@@ -1,13 +1,6 @@
 ###################################################################################
 #  LOAD AND SOURCE # 
 ###################################################################################
-library(reshape2)
-library(ggplot2)
-library("cluster")
-library(randomForest)
-library(vegan)
-
-source("R/assess.one.sample.4.1.r")
 
 jaccfun<-function(siti,sitj) {
   shared<-sum((siti>0)&(sitj>0));
