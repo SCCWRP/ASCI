@@ -18,7 +18,6 @@
 pmmifun <- function(taxain, sitein){
 
   options(gsubfn.engine = "R")
-  source("R/OE.load.and.source.R")
   
   # Step 1. Import taxonomy data -----------------------------------------------------------
   bugs <- taxain
