@@ -3,3 +3,4 @@
 export(oefun)
 export(pmmi_calcmetrics)
 export(pmmifun)
+export(rarify)
