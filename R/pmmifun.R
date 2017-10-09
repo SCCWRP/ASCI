@@ -51,7 +51,7 @@ pmmifun <- function(taxain, sitein){
   bugs.hybrid.m<-as.data.frame(acast(bugs, SampleID~FinalIDassigned, value.var="ComboResult", fun.aggregate=sum))
   
   # Import traits table
-  traits<-read.csv('lookups/combotraits.fromaaron4.csv',header=TRUE,strip.white=TRUE,check.names=FALSE)
+  traits <- pmmilkup$traits
 
   # calculate metrics using runpMMI.calcmetrics.R
   d.metrics<-pmmi_calcmetrics('diatoms', bugs.d.m)
@@ -59,9 +59,9 @@ pmmifun <- function(taxain, sitein){
   hybrid.metrics<-pmmi_calcmetrics('hybrid', bugs.hybrid.m)
   
   # Load winning metrics -----------------------------------------------------------
-  d.win<-read.csv("lookups/diatoms.combined.win.metrics.scaled.csv", row.names=1, stringsAsFactors = F)
-  sba.win<-read.csv("lookups/sba.combined.win.metrics.scaled.csv", row.names=1, stringsAsFactors = F)
-  hybrid.win<-read.csv("lookups/hybrid.combined.win.metrics.scaled.csv", row.names=1, stringsAsFactors = F)
+  d.win <- pmmilkup$d.win 
+  sba.win <- pmmilkup$sba.win
+  hybrid.win <- pmmilkup$hybrid.win
   d.win<-colnames(d.win[,-(length(names(d.win)))])
   sba.win<-colnames(sba.win[,-(length(names(sba.win)))])
   hybrid.win<-colnames(hybrid.win[,-(length(names(hybrid.win)))])
@@ -73,7 +73,7 @@ pmmifun <- function(taxain, sitein){
   
   # score results ------------------------------------------------------
   
-  quants<-read.csv("lookups/quants/quants.csv", stringsAsFactors = F)
+  quants <- pmmilkup$quants
   # for increasers, min is 5th of ref and max is 95th of str
   # for decreasers, min is 5th of str and max is 95th of ref
   

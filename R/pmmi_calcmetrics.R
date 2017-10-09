@@ -21,9 +21,8 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat){
   # convert taxonomy data to presence/absence
   taxonomy_pa <- as.data.frame(ifelse(tax_dat > 0, 1, 0))
   
-  indicators.count=read.csv('lookups/indic.with.count.csv',header=TRUE,strip.white=TRUE,check.names=FALSE)
-  indicators=indicators.count
-  
+  indicators <- pmmilkup$indicators
+
   ##################################################################################################################################################################
   # data prep
   ##################################################################################################################################################################
