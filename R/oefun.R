@@ -33,9 +33,6 @@ oefun <- function(taxain, sitein){
   stations<-subset(stations, stations$StationCode %in% bugs$StationCode)
   
   # Step 3. Make ASCI-readable taxa names -----------------------------------------------------------
-  STE<-read.csv("lookups/algae_STE.csv", stringsAsFactors = F)
-  #bugs$FinalID2<-toupper(bugs$FinalID)
-  #STE$FinalID2<-toupper(STE$FinalID)
   unrecognizedtaxa <- setdiff(bugs$FinalID, STE$FinalID)
   if (length(unrecognizedtaxa) > 0 ) { print(paste("Unrecognized taxa", unrecognizedtaxa))}  
   bugs<- merge(bugs, STE[,c("FinalID", "FinalIDassigned", "Genus", "Phylum", "Class")], all.x = T) # non matches get purged for now  #this is now case sensitive, could change
@@ -64,8 +61,8 @@ oefun <- function(taxain, sitein){
   stations.d.oe.predictors<-stations[,required.d.oe.predictors]
   row.names(stations.d.oe.predictors) <- stations$SampleID
   
-  calib.bugs.d.tax.refcal<-read.csv("lookups/diatoms.bugs.rc.csv", stringsAsFactors = F, row.names=1)
-  calib.stations.d.refcal.BG<- read.csv("lookups/diatoms.stations.rc.csv", stringsAsFactors = F, row.names=1)
+  calib.bugs.d.tax.refcal <- oelkup$diatoms.bugs.rc
+  calib.stations.d.refcal.BG <- oelkup$diatoms.stations.rc
   
   Scores.diatoms <- rfpred(
     bugcal.pa = calib.bugs.d.tax.refcal,
@@ -85,8 +82,8 @@ oefun <- function(taxain, sitein){
   stations.sba.oe.predictors<-stations[,required.sba.oe.predictors]
   row.names(stations.sba.oe.predictors) <- stations$SampleID
   
-  calib.bugs.sba.tax.refcal<-read.csv("lookups/sba.bugs.rc.csv", stringsAsFactors = F, row.names=1)
-  calib.stations.sba.refcal.BG<- read.csv("lookups/sba.stations.rc.csv", stringsAsFactors = F, row.names=1)
+  calib.bugs.sba.tax.refcal <- oelkup$sba.bugs.rc
+  calib.stations.sba.refcal.BG <- oelkup$sba.stations.rc
   
   Scores.sba <- rfpred(
     bugcal.pa = calib.bugs.sba.tax.refcal,
@@ -106,8 +103,8 @@ oefun <- function(taxain, sitein){
   stations.hybrid.oe.predictors<-stations[,required.hybrid.oe.predictors]
   row.names(stations.hybrid.oe.predictors) <- stations$SampleID
   
-  calib.bugs.hybrid.tax.refcal<-read.csv("lookups/hybrid.bugs.rc.csv", stringsAsFactors = F, row.names=1)
-  calib.stations.hybrid.refcal.BG<- read.csv("lookups/hybrid.stations.rc.csv", stringsAsFactors = F, row.names=1)
+  calib.bugs.hybrid.tax.refcal <- oelkup$hybrid.bugs.rc
+  calib.stations.hybrid.refcal.BG <- oelkup$hybrid.stations.rc
 
   Scores.hybrid <- rfpred(
     bugcal.pa = calib.bugs.hybrid.tax.refcal,

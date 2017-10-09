@@ -30,6 +30,10 @@ Authors@R: c(
   person(given = "Susanna", family = "Theroux",
     role = "aut", 
     email = "susannat@sccwrp.org"
+    ),
+  person(given = "John", family = "Van Sickle",
+    role = "aut", 
+    email = "VanSickle.John@epa.gov"
     )
   )
 RoxygenNote: 6.0.1

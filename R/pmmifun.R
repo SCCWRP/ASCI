@@ -35,9 +35,6 @@ pmmifun <- function(taxain, sitein){
   stations<-subset(stations, stations$StationCode %in% bugs$StationCode)
   
   # Step 3. Make ASCI-readable taxa names -----------------------------------------------------------
-  STE<-read.csv("lookups/algae_STE.csv", stringsAsFactors = F)
-  #bugs$FinalID2<-toupper(bugs$FinalID)
-  #STE$FinalID2<-toupper(STE$FinalID)
   unrecognizedtaxa <- setdiff(bugs$FinalID, STE$FinalID)
   if (length(unrecognizedtaxa) > 0 ) { print(paste("Unrecognized taxa", unrecognizedtaxa))}
   bugs<- merge(bugs, STE[,c("FinalID", "FinalIDassigned", "Genus", "Phylum", "Class")], all.x = T) # non matches get purged for now  #this is now case sensitive, could change
