@@ -11,11 +11,9 @@
 #' @return 
 #' A list with three elements named as \code{d.results.scored}, \code{sba.results.scored}, and \code{hybrid.results.scored}. Each element is a \code{data.frame} with metric scores by site.
 #'
-#' 
 #' @export
 #' 
 #' @examples 
-#' 
 #' pmmifun('demo_algae_tax.csv', 'demo_algae_sitedata.csv')
 pmmifun <- function(taxain, sitein){
 
@@ -58,7 +56,7 @@ pmmifun <- function(taxain, sitein){
   
   # Import traits table
   traits<-read.csv('lookups/combotraits.fromaaron4.csv',header=TRUE,strip.white=TRUE,check.names=FALSE)
-  
+
   # calculate metrics using runpMMI.calcmetrics.R
   d.metrics<-pmmi_calcmetrics('diatoms', bugs.d.m)
   sba.metrics<-pmmi_calcmetrics('sba', bugs.sba.m)

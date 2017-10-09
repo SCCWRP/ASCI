@@ -15,6 +15,7 @@
 #' }
 pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat){
 
+  # get taxa arg
   taxa <- match.arg(taxa)
   
   # convert taxonomy data to presence/absence
@@ -60,7 +61,7 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat){
   simpson=diversity(taxonomy_pa[,-z],index='simpson') #Computing Simpson
   richness=specnumber(taxonomy_pa[,-z]) #Computing Richness
   specialty_metrics=data.frame(SampleID=taxonomy_pa[,z],shannon,simpson,richness) #Combining the three into one table with SampleIDs attached
-  
+
   ### Metric Calculations ------------------------------------------------------------------------------------------------------------
   metrics=ddply(.data = stations_combined3, .variables = ~SampleID,.fun = summarize,
   
@@ -105,7 +106,7 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat){
                 prop.spp.OxyReq.DO_100orDO_75=sum(na.omit(OxygenRequirements=='DO_100'|OxygenRequirements=='DO_75'))/length(OxygenRequirements), #proportion of DO_100 and DO_75 - species
                 prop.spp.OxyReq.DO_75=sum(na.omit(OxygenRequirements=='DO_75'))/length(OxygenRequirements), #proportion of DO_75 - species
                 prop.spp.OxyReq.DO_50=sum(na.omit(OxygenRequirements=='DO_50'))/length(OxygenRequirements), #proportion of DO_50 - species
-                prop.spp.OxyReq.DO_atleast50=sum(na.omit(OxygenRequirements==c('DO_50','DO_75','DO_100')))/length(OxygenRequirements), #proportion of at least DO_50 - species
+                prop.spp.OxyReq.DO_atleast50=sum(na.omit(OxygenRequirements %in% c('DO_50','DO_75','DO_100')))/length(OxygenRequirements), #proportion of at least DO_50 - species
                 prop.spp.OxyRed.DO_30=sum(na.omit(OxygenRequirements=='DO_30'))/length(OxygenRequirements), #proportion of DO_30 - species
                 prop.spp.OxyReq.DO_30orDO_10=sum(na.omit(OxygenRequirements=='DO_30'|OxygenRequirements=='DO_10'))/length(OxygenRequirements), #proportion of DO_30 and DO_10 - species
                 prop.spp.OxyReq.DO_10=sum(na.omit(OxygenRequirements=='DO_10'))/length(OxygenRequirements), #proportion of DO_10 - species
