@@ -18,7 +18,7 @@ rarify <- function(inbug, sample.ID, abund, subsiz){
   outbug<-inbug
   sampid<-unique(inbug[,sample.ID])
   nsamp<-length(sampid)
-  
+
   #zero out all abundances in output data set
   outbug[,abund]<-0
   

@@ -7,7 +7,6 @@ library("cluster")
 library(randomForest)
 library(vegan)
 
-source("R/dapply.R")
 source("R/assess.one.sample.4.1.r")
 
 jaccfun<-function(siti,sitj) {
