@@ -17,7 +17,6 @@
 #' oefun(demo_algae_tax, demo_algae_sitedata)
 oefun <- function(taxain, sitein){
   
-  source("R/OE.cand.vars.R")
   source("R/OE.caret.load.and.source.R")
   source("R/model.predict.RanFor.4.2_ed2.r") #overwrites earlier model.predict
   
