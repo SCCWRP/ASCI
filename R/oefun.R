@@ -11,6 +11,8 @@
 #' @return 
 #' A list with three elements named as \code{Scores.diatoms}, \code{Scores.sba}, and \code{Scores.hybrid}.  Each element includes an additional list of three data.frames names \code{OE.scores}, \code{Capture.Probs}, and \code{Group.Occurrence.Probs}.
 #' 
+#' @importFrom reshape2 acast
+#' 
 #' @export
 #' 
 #' @examples 
@@ -18,7 +20,7 @@
 oefun <- function(taxain, sitein){
 
   # Step 1. Import taxonomy data -----------------------------------------------------------
-  bugs<- taxain
+  bugs <- taxain
   reqfields<- c("StationCode", "SampleDate", "Replicate","SampleTypeCode", "BAResult", "Result", "FinalID")
   missingtaxafields<-setdiff(reqfields, colnames(bugs))
   if( length(missingtaxafields) >0 ) { print(paste("Missing fields", missingtaxafields))}
@@ -54,7 +56,7 @@ oefun <- function(taxain, sitein){
   bugs.hybrid.m <- ifelse(bugs.hybrid.m > 0,1,0)
 
   # Step 5. Calculate O/E for diatoms -----------------------------------------------------------
-  required.d.oe.predictors <- row.names(diatom.rf.oe$importance)
+  required.d.oe.predictors <- row.names(diatom_rf_oe$importance)
   missingpredictors <- setdiff(required.d.oe.predictors, colnames(stations))
   if (length(missingpredictors) > 0 ) {print(paste("missing predictors", missingpredictors)) }
   
@@ -68,13 +70,13 @@ oefun <- function(taxain, sitein){
     bugcal.pa = calib.bugs.d.tax.refcal,
     grps.final = calib.stations.d.refcal.BG$BG,
     preds.final = required.d.oe.predictors,
-    ranfor.mod = diatom.rf.oe, 
+    ranfor.mod = diatom_rf_oe, 
     prednew = stations.d.oe.predictors,
     bugnew = bugs.d.m
     )
 
   # Step 5. Calculate O/E for sba ----------------------------------------------------------------------------------------------------------------------
-  required.sba.oe.predictors <- row.names(sba.rf.oe$importance)
+  required.sba.oe.predictors <- row.names(sba_rf_oe$importance)
   required.sba.oe.predictors
   missingpredictors <- setdiff(required.sba.oe.predictors, colnames(stations))
   if (length(missingpredictors) > 0 ) {print(paste("missing predictors", missingpredictors)) }
@@ -89,13 +91,13 @@ oefun <- function(taxain, sitein){
     bugcal.pa = calib.bugs.sba.tax.refcal,
     grps.final = calib.stations.sba.refcal.BG$BG,
     preds.final = required.sba.oe.predictors,
-    ranfor.mod = sba.rf.oe, 
+    ranfor.mod = sba_rf_oe, 
     prednew = stations.sba.oe.predictors,
     bugnew = bugs.sba.m
     )
 
   # Step 5. Calculate O/E for hybrid ----------------------------------------------------------------------------------------------------------------------
-  required.hybrid.oe.predictors <- row.names(hybrid.rf.oe$importance)
+  required.hybrid.oe.predictors <- row.names(hybrid_rf_oe$importance)
   required.hybrid.oe.predictors
   missingpredictors <- setdiff(required.hybrid.oe.predictors, colnames(stations))
   if (length(missingpredictors) > 0 ) {print(paste("missing predictors", missingpredictors)) }
@@ -110,7 +112,7 @@ oefun <- function(taxain, sitein){
     bugcal.pa = calib.bugs.hybrid.tax.refcal,
     grps.final = calib.stations.hybrid.refcal.BG$BG,
     preds.final = required.hybrid.oe.predictors,
-    ranfor.mod = hybrid.rf.oe, 
+    ranfor.mod = hybrid_rf_oe, 
     prednew = stations.hybrid.oe.predictors,
     bugnew = bugs.hybrid.m
     )

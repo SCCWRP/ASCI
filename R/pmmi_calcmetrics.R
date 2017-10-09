@@ -236,11 +236,11 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat){
        #   for (i in d.win.metrics.modeled) {
        #   filename<-paste0("~/Documents/R/ASCI/pMMI.all/diatoms.models.out/", "diatoms.", i, "RF.model.Rdata")
        #   load(filename)
-       #   assign(paste0(i, ".d.RF"), rf.out.top)
+       #   assign(paste0(i, ".d.RF"), rf_out_top)
        #   print(paste(i, "is modeled"))}
     filename<-paste0("data/", "diatoms.", "prop.spp.Salinity.BF", "RF.model.Rdata")
     load(filename)
-    assign(paste0("prop.spp.Salinity.BF", ".d.RF"), rf.out.top)
+    assign(paste0("prop.spp.Salinity.BF", ".d.RF"), rf_out_top)
     required.predictors <- row.names(prop.spp.Salinity.BF.d.RF$importance)
     required.predictors
     missingpredictors <- setdiff(required.predictors, colnames(stations))

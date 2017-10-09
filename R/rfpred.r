@@ -19,11 +19,11 @@
 #' @export
 #' 
 #' @return function output is a list containing three elements
-#' \begin{itemize}   
+#' \itemize{ 
 #' \item \code{OE.scores} A data frame for all samples, containing O, E, O/E and BC from the predictive and null models, as well as outlier flags
 #' \item \code{Capture.Probs} Matrix of model-predicted capture (occurrence) probabilties for all taxa in all samples
 #' \item \code{Group.Occurrnce.Probs} Matrix of predicted probabilities of occurrence for each sample in each calibration-site group
-#' \end{itemize}
+#' }
 rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew, bugnew, Pc = 0.5, Cal.OOB = FALSE, saverfe = FALSE) {
 
   #first convert bug matrix to P/A (1/0)
