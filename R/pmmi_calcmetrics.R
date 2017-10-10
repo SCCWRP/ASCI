@@ -2,10 +2,14 @@
 #' 
 #' @param taxa chr string indicating taxa to use to calculate metrics
 #' @param tax_dat data.frame of taxonomy data for diatoms, soft-bodied algae, or hybrid
+#' @param stations data.frame of site data
 #'
 #' @export
 #' 
 #' @details \code{tax_dat} is converted to \code{taxonomy_pa} for presence/absence
+#' 
+#' @importFrom vegan diversity specnumber
+#' @importFrom plyr ddply summarize
 #' 
 #' @return a data.frame of scores for the relevant taxa
 #' 
@@ -13,7 +17,7 @@
 #' \dontrun{
 #' pmmi_calcmetrics('diatoms', bugs.d.m)
 #' }
-pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat){
+pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stations){
 
   # get taxa arg
   taxa <- match.arg(taxa)
@@ -34,6 +38,9 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat){
   taxonomy_pa_melt<-as.data.frame(droplevels(subset(taxonomy_pa_melt, value!=0)))
   #taxonomy_pa_melt=sqldf("select SampleID, variable as FinalIDassigned from taxonomy_pa_melt where value=1 order by SampleID") #selecting only those rows with non-zero values
   names(taxonomy_pa_melt)[2] <- "FinalIDassigned"
+  
+  # Import traits table
+  traits <- pmmilkup$traits
   
   ###Stations Data Prep
   #the next set of lines is the combining of tables to create one gaint table that is to be used in the metrics calculations below
@@ -233,21 +240,14 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat){
   
   # now for the one modeled metric
   if (taxa == 'diatoms') {
-       #   for (i in d.win.metrics.modeled) {
-       #   filename<-paste0("~/Documents/R/ASCI/pMMI.all/diatoms.models.out/", "diatoms.", i, "RF.model.Rdata")
-       #   load(filename)
-       #   assign(paste0(i, ".d.RF"), rf_out_top)
-       #   print(paste(i, "is modeled"))}
-    filename<-paste0("data/", "diatoms.", "prop.spp.Salinity.BF", "RF.model.Rdata")
-    load(filename)
-    assign(paste0("prop.spp.Salinity.BF", ".d.RF"), rf_out_top)
-    required.predictors <- row.names(prop.spp.Salinity.BF.d.RF$importance)
+
+    required.predictors <- row.names(rf_out_top$importance)
     required.predictors
     missingpredictors <- setdiff(required.predictors, colnames(stations))
     if (length(missingpredictors) > 0 ) {print(paste("missing predictors", missingpredictors)) }
     stations.predictors<-stations[,required.predictors]
     row.names(stations.predictors) <- stations$SampleID
-    predicted<-predict(prop.spp.Salinity.BF.d.RF, stations.predictors)
+    predicted<-predict(rf_out_top, stations.predictors)
     observed<-metrics[,"prop.spp.Salinity.BF"]
     resid<-observed-predicted
     metrics$prop.spp.Salinity.BF<-resid

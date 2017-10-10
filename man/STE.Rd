@@ -4,7 +4,7 @@
 \name{STE}
 \alias{STE}
 \title{Taxonomic nomenclature}
-\format{A \code{\link[base]{data.frame}} of taxonomic lookup data used for verifying species names in sample data, 4964 rows and seven columns.}
+\format{A \code{\link[base]{data.frame}} of taxonomic lookup data used for verifying species names in sample data, 4961 rows and five columns.}
 \usage{
 STE
 }

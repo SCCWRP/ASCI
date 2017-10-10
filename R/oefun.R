@@ -13,6 +13,8 @@
 #' 
 #' @importFrom reshape2 acast
 #' 
+#' @import randomForest
+#' 
 #' @export
 #' 
 #' @examples 
@@ -37,7 +39,7 @@ oefun <- function(taxain, sitein){
   # Step 3. Make ASCI-readable taxa names -----------------------------------------------------------
   unrecognizedtaxa <- setdiff(bugs$FinalID, STE$FinalID)
   if (length(unrecognizedtaxa) > 0 ) { print(paste("Unrecognized taxa", unrecognizedtaxa))}  
-  bugs<- merge(bugs, STE[,c("FinalID", "FinalIDassigned", "Genus", "Phylum", "Class")], all.x = T) # non matches get purged for now  #this is now case sensitive, could change
+  bugs<- merge(bugs, STE, all.x = T) # non matches get purged for now  #this is now case sensitive, could change
   bugs.d<-subset(bugs, Class=="Bacillariophyceae")
   bugs.sba<-subset(bugs, Class!="Bacillariophyceae")
   bugs$ComboResult<-as.numeric(pmax(bugs$BAResult,bugs$Result, na.rm=T))

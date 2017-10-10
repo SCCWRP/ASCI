@@ -13,6 +13,9 @@
 #'
 #' @export
 #' 
+#' @importFrom reshape2 melt
+#' @importFrom sqldf sqldf
+#' 
 #' @examples 
 #' pmmifun(demo_algae_tax, demo_algae_sitedata)
 pmmifun <- function(taxain, sitein){
@@ -37,7 +40,7 @@ pmmifun <- function(taxain, sitein){
   # Step 3. Make ASCI-readable taxa names -----------------------------------------------------------
   unrecognizedtaxa <- setdiff(bugs$FinalID, STE$FinalID)
   if (length(unrecognizedtaxa) > 0 ) { print(paste("Unrecognized taxa", unrecognizedtaxa))}
-  bugs<- merge(bugs, STE[,c("FinalID", "FinalIDassigned", "Genus", "Phylum", "Class")], all.x = T) # non matches get purged for now  #this is now case sensitive, could change
+  bugs<- merge(bugs, STE, all.x = T) # non matches get purged for now  #this is now case sensitive, could change
   bugs.d<-subset(bugs, Class=="Bacillariophyceae")
   bugs.sba<-subset(bugs, Class!="Bacillariophyceae")
   bugs$ComboResult<-as.numeric(pmax(bugs$BAResult,bugs$Result, na.rm=T))
@@ -49,14 +52,11 @@ pmmifun <- function(taxain, sitein){
   bugs.d.m<-as.data.frame(acast(bugs.d.sub, SampleID~FinalIDassigned, value.var="BAResult", fun.aggregate=sum))
   bugs.sba.m<-as.data.frame(acast(bugs.sba, SampleID~FinalIDassigned, value.var="Result", fun.aggregate=sum))
   bugs.hybrid.m<-as.data.frame(acast(bugs, SampleID~FinalIDassigned, value.var="ComboResult", fun.aggregate=sum))
-  
-  # Import traits table
-  traits <- pmmilkup$traits
 
-  # calculate metrics using runpMMI.calcmetrics.R
-  d.metrics<-pmmi_calcmetrics('diatoms', bugs.d.m)
-  sba.metrics<-pmmi_calcmetrics('sba', bugs.sba.m)
-  hybrid.metrics<-pmmi_calcmetrics('hybrid', bugs.hybrid.m)
+  # calculate metrics
+  d.metrics<-pmmi_calcmetrics('diatoms', bugs.d.m, stations)
+  sba.metrics<-pmmi_calcmetrics('sba', bugs.sba.m, stations)
+  hybrid.metrics<-pmmi_calcmetrics('hybrid', bugs.hybrid.m, stations)
   
   # Load winning metrics -----------------------------------------------------------
   d.win <- pmmilkup$d.win 

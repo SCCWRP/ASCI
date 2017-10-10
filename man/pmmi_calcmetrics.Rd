@@ -4,12 +4,14 @@
 \alias{pmmi_calcmetrics}
 \title{Calculate ASCI metrics}
 \usage{
-pmmi_calcmetrics(taxa = c("diatoms", "sba", "hybrid"), tax_dat)
+pmmi_calcmetrics(taxa = c("diatoms", "sba", "hybrid"), tax_dat, stations)
 }
 \arguments{
 \item{taxa}{chr string indicating taxa to use to calculate metrics}
 
 \item{tax_dat}{data.frame of taxonomy data for diatoms, soft-bodied algae, or hybrid}
+
+\item{stations}{data.frame of site data}
 }
 \value{
 a data.frame of scores for the relevant taxa
