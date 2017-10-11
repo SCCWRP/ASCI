@@ -1,0 +1,21 @@
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+
+bibentry(bibtype = "Manual",
+         title = "{SCCWRP/ASCI: v0.0.1}",
+         author = c(
+           person(given = "Marcus W.", family = "Beck",
+                  role = c("aut","cre"),
+                  email = "marcusb@sccwrp.org"),
+           person(given = "Susanna", family = "Theroux",
+                  role = "aut", 
+                  email = "susannat@sccwrp.org"
+           ),
+           person(given = "John", family = "Van Sickle",
+                  role = "aut", 
+                  email = "VanSickle.John@epa.gov"
+           )
+         ),
+         year = year,
+         note = note,
+         url = "http://doi.org/10.5281/zenodo.1008839")

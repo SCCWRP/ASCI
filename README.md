@@ -5,6 +5,7 @@
 
 [![Travis-CI Build Status](https://travis-ci.org/SCCWRP/ASCI.svg?branch=master)](https://travis-ci.org/SCCWRP/ASCI)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/SCCWRP/ASCI?branch=master&svg=true)](https://ci.appveyor.com/project/SCCWRP/ASCI)
+[![DOI](https://zenodo.org/badge/106055957.svg)](https://zenodo.org/badge/latestdoi/106055957)
 
 R package materials to calculate the Algal Stream Condition Index (ASCI) based on O/E and pMMI scores using diatom, soft-bodied algae, or a hybrid appproach.
 
@@ -23,6 +24,8 @@ library(ASCI)
 ### Citation
 
 Please cite the current release as follows:
+
+Marcus W Beck, Susanna Theroux, John Van Sickle (2017, October 11). SCCWRP/ASCI: v0.0.1. Zenodo. http://doi.org/10.5281/zenodo.1008839
 
 ### Usage
 
@@ -109,14 +112,14 @@ lapply(pmmiscr, head)
 ```
 ## $d.results.scored
 ##   prop.spp.Salinity.BF prop.spp.HighMotility prop.ind.most.tol
-## 1            0.7710424             0.5702122         0.8901792
+## 1            0.7712797             0.5882098         0.8942293
 ## 2            0.7747982             0.5288176         0.7100848
-## 3            0.7750099             0.4962933         0.8369493
+## 3            0.7752957             0.5288176         0.8467081
 ## 4            0.7698189             0.3850259         0.7676104
 ##   prop.spp.BCG3 diatom.pMMI
-## 1             1   0.8078584
+## 1             1   0.8134297
 ## 2             1   0.7534252
-## 3             1   0.7770631
+## 3             1   0.7877054
 ## 4             1   0.7306138
 ## 
 ## $sba.results.scored
