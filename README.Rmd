@@ -1,0 +1,59 @@
+---
+output:
+  html_document:
+    keep_md: yes
+    toc: no
+    self_contained: no
+---
+
+## ASCI
+
+#### *Marcus W. Beck, marcusb@sccwrp.org, Susanna Theroux, susannat@sccwrp.org, John Van Sickle, VanSickle.John@epa.gov*
+
+R package materials to calculate the Algal Stream Condition Index (ASCI) based on O/E and pMMI scores using diatom, soft-bodied algae, or a hybrid appproach.
+
+### Installation
+
+Install the package as follows:
+
+```{r, eval = FALSE}
+install.packages('devtools')
+library(devtools)
+install_github('SCCWRP/ASCI')
+library(ASCI)
+```
+
+### Citation
+
+Please cite the current release as follows:
+
+### Usage
+
+Two sample files are included to demonstrate the correct format for input data. The `demo_algae_tax` file is a `data.frame` of taxonomic data in long format (one row per sample).  The `demo_algae_sitedata` file is a `data.frame` of site data.  Site names must match between the files. See the help files for each for more information (e.g., `?demo_algae_tax`)
+
+Two core functions are used to estimate scores.  The `oefun` function estimates O/E scores and the `pmmifun` funtion estimates pMMI scores. Both function require taxonomic and site data as inputs. 
+
+```{r, message = F, warning = F, echo = F}
+devtools::load_all()
+```
+```{r}
+# O/E scores
+oescr <- oefun(demo_algae_tax, demo_algae_sitedata)
+
+# pMMI scores
+pmmiscr <- pmmifun(demo_algae_tax, demo_algae_sitedata)
+```
+
+The output from each function is a list of data frames with the relevant score information.
+```{r}
+names(oescr)
+names(pmmiscr)
+```
+
+Scores for each index can be viewed as follows.
+```{r}
+lapply(oescr, function(x) head(x$OE.scores))
+lapply(pmmiscr, head)
+```
+
+

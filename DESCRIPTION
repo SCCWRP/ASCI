@@ -10,15 +10,9 @@ BugReports: https://github.com/fawda123/ASCI/issues
 License: CC0
 LazyData: true
 Imports:
-    caret,
-    cluster,
-    ggplot2,
-    indicspecies,
     plyr,
     randomForest,
     reshape2, 
-    rms, 
-    sampling,
     sqldf, 
     vegan
 Depends:
