@@ -29,7 +29,7 @@ Marcus W Beck, Susanna Theroux, John Van Sickle (2017, October 11). SCCWRP/ASCI:
 
 ### Usage
 
-Two sample files are included to demonstrate the correct format for input data. The `demo_algae_tax` file is a `data.frame` of taxonomic data in long format (one row per sample).  The `demo_algae_sitedata` file is a `data.frame` of site data.  Site names must match between the files. See the help files for each for more information (e.g., `?demo_algae_tax`)
+Two sample files are included to demonstrate the correct format for input data. The `demo_algae_tax` file is a `data.frame` of taxonomic data in long format (one row per sample).  The `demo_algae_sitedata` file is a `data.frame` of site data.  Site names must match between the files. See the help files for more information (e.g., `?demo_algae_tax`)
 
 Two core functions are used to estimate scores.  The `oefun` function estimates O/E scores and the `pmmifun` funtion estimates pMMI scores. Both function require taxonomic and site data as inputs. 
 
@@ -43,7 +43,7 @@ oescr <- oefun(demo_algae_tax, demo_algae_sitedata)
 pmmiscr <- pmmifun(demo_algae_tax, demo_algae_sitedata)
 ```
 
-The output from each function is a list of data frames with the relevant score information.
+The output from each function is a `list` with the relevant score information.
 
 ```r
 names(oescr)
@@ -112,15 +112,15 @@ lapply(pmmiscr, head)
 ```
 ## $d.results.scored
 ##   prop.spp.Salinity.BF prop.spp.HighMotility prop.ind.most.tol
-## 1            0.7712797             0.5882098         0.8942293
+## 1            0.7710424             0.5702122         0.8901792
 ## 2            0.7747982             0.5288176         0.7100848
-## 3            0.7752957             0.5288176         0.8467081
+## 3            0.7750099             0.4962933         0.8369493
 ## 4            0.7698189             0.3850259         0.7676104
 ##   prop.spp.BCG3 diatom.pMMI
-## 1             1   0.8134297
-## 2             1   0.7534252
-## 3             1   0.7877054
-## 4             1   0.7306138
+## 1     1.0000000   0.8078584
+## 2     1.0000000   0.7534252
+## 3     0.9792559   0.7718771
+## 4     1.0000000   0.7306138
 ## 
 ## $sba.results.scored
 ##   cnt.spp.IndicatorClass_TP_high prop.spp.IndicatorClass_DOC_high

@@ -35,7 +35,7 @@ Marcus W Beck, Susanna Theroux, John Van Sickle (2017, October 11). SCCWRP/ASCI:
 
 ### Usage
 
-Two sample files are included to demonstrate the correct format for input data. The `demo_algae_tax` file is a `data.frame` of taxonomic data in long format (one row per sample).  The `demo_algae_sitedata` file is a `data.frame` of site data.  Site names must match between the files. See the help files for each for more information (e.g., `?demo_algae_tax`)
+Two sample files are included to demonstrate the correct format for input data. The `demo_algae_tax` file is a `data.frame` of taxonomic data in long format (one row per sample).  The `demo_algae_sitedata` file is a `data.frame` of site data.  Site names must match between the files. See the help files for more information (e.g., `?demo_algae_tax`)
 
 Two core functions are used to estimate scores.  The `oefun` function estimates O/E scores and the `pmmifun` funtion estimates pMMI scores. Both function require taxonomic and site data as inputs. 
 
@@ -50,7 +50,7 @@ oescr <- oefun(demo_algae_tax, demo_algae_sitedata)
 pmmiscr <- pmmifun(demo_algae_tax, demo_algae_sitedata)
 ```
 
-The output from each function is a list of data frames with the relevant score information.
+The output from each function is a `list` with the relevant score information.
 ```{r}
 names(oescr)
 names(pmmiscr)
