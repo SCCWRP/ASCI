@@ -4,12 +4,14 @@
 \alias{oefun}
 \title{Run the ASCI O/E}
 \usage{
-oefun(taxain, sitein)
+oefun(taxain, sitein, ...)
 }
 \arguments{
 \item{taxain}{chr string for path to input taxonomy data}
 
 \item{sitein}{chr string for path to input site data}
+
+\item{...}{additional arguments passed to \code{\link{rfpred}}}
 }
 \value{
 A list with three elements named as \code{Scores.diatoms}, \code{Scores.sba}, and \code{Scores.hybrid}.  Each element includes an additional list of three data.frames names \code{OE.scores}, \code{Capture.Probs}, and \code{Group.Occurrence.Probs}.

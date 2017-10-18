@@ -4,6 +4,7 @@
 #' 
 #' @param taxain chr string for path to input taxonomy data
 #' @param sitein chr string for path to input site data
+#' @param ... additional arguments passed to \code{\link{rfpred}}
 #' 
 #' @details 
 #' Three index scores are calculated and returned as a named list
@@ -19,13 +20,13 @@
 #' 
 #' @examples 
 #' oefun(demo_algae_tax, demo_algae_sitedata)
-oefun <- function(taxain, sitein){
+oefun <- function(taxain, sitein, ...){
 
   # Step 1. Import taxonomy data -----------------------------------------------------------
   bugs <- taxain
   reqfields<- c("StationCode", "SampleDate", "Replicate","SampleTypeCode", "BAResult", "Result", "FinalID")
   missingtaxafields<-setdiff(reqfields, colnames(bugs))
-  if( length(missingtaxafields) >0 ) { print(paste("Missing fields", missingtaxafields))}
+  if(length(missingtaxafields) >0) { print(paste("Missing fields", missingtaxafields))}
   bugs$SampleID <- paste(bugs$StationCode, bugs$SampleDate, bugs$Replicate, sep="_")
   
   # Step 2. Import stations data -----------------------------------------------------------
@@ -74,7 +75,8 @@ oefun <- function(taxain, sitein){
     preds.final = required.d.oe.predictors,
     ranfor.mod = diatom_rf_oe, 
     prednew = stations.d.oe.predictors,
-    bugnew = bugs.d.m
+    bugnew = bugs.d.m, 
+    ...
     )
 
   # Step 5. Calculate O/E for sba ----------------------------------------------------------------------------------------------------------------------
@@ -95,7 +97,8 @@ oefun <- function(taxain, sitein){
     preds.final = required.sba.oe.predictors,
     ranfor.mod = sba_rf_oe, 
     prednew = stations.sba.oe.predictors,
-    bugnew = bugs.sba.m
+    bugnew = bugs.sba.m, 
+    ...
     )
 
   # Step 5. Calculate O/E for hybrid ----------------------------------------------------------------------------------------------------------------------
@@ -116,7 +119,8 @@ oefun <- function(taxain, sitein){
     preds.final = required.hybrid.oe.predictors,
     ranfor.mod = hybrid_rf_oe, 
     prednew = stations.hybrid.oe.predictors,
-    bugnew = bugs.hybrid.m
+    bugnew = bugs.hybrid.m, 
+    ...
     )
 
   out <- list(

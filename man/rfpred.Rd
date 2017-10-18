@@ -7,7 +7,7 @@
 Predict O/E scores for a new set of sites based on a Random Forest predictive model}
 \usage{
 rfpred(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew, bugnew,
-  Pc = 0.5, Cal.OOB = FALSE, saverfe = FALSE)
+  Pc = 0.5, Cal.OOB = FALSE, rmnull = TRUE)
 }
 \arguments{
 \item{bugcal.pa}{\code{data.frame} of taxonomy at calibration reference sites}
@@ -26,7 +26,7 @@ rfpred(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew, bugnew,
 
 \item{Cal.OOB}{logical value default \code{FALSE}, set to \code{TRUE} only if you are predicting for the model calibration data and desire out-of-bag predictions}
 
-\item{saverfe}{logical value indicating if RFE scores are saved as a text file in the working directory}
+\item{rmnull}{logical indicating of null O/E scores are removed from output}
 }
 \value{
 function output is a list containing three elements

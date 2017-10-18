@@ -10,6 +10,8 @@ BugReports: https://github.com/fawda123/ASCI/issues
 License: CC0
 LazyData: true
 Imports:
+    dplyr,
+    magrittr,
     plyr,
     randomForest,
     reshape2, 
