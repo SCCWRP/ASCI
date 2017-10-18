@@ -24,7 +24,7 @@
 #' 
 #' @return function output is a list containing three elements
 #' \itemize{ 
-#' \item \code{OE.scores} A data frame for all samples, containing O, E, O/E and BC from the predictive and null models, as well as outlier flags
+#' \item \code{OE.scores} A data frame for all samples, containing O, E, O/E, and O/E percentile from the predictive model (null model results can be included if \code{addnull = TRUE})
 #' \item \code{Capture.Probs} Matrix of model-predicted capture (occurrence) probabilties for all taxa in all samples
 #' \item \code{Group.Occurrnce.Probs} Matrix of predicted probabilities of occurrence for each sample in each calibration-site group
 #' }
@@ -102,7 +102,8 @@ rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew,
       E = OE.stats$E.prd
     ) %>% 
     mutate(
-      OoverE = O / E
+      OoverE = O / E, 
+      OoverEp = pnorm(OoverE, mean(OoverE), sd(OoverE))
     )
 
   
