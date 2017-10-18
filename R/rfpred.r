@@ -10,13 +10,15 @@
 #' @param bugnew \code{data.frame} of taxonomy presence/absence data at all new sites/samples (rows) at which predictions are desired (e.g., 'test' sites)
 #' @param Pc numeric value for capture probability cutoff
 #' @param Cal.OOB logical value default \code{FALSE}, set to \code{TRUE} only if you are predicting for the model calibration data and desire out-of-bag predictions 
-#' @param rmnull logical indicating of null O/E scores are removed from output
+#' @param addnull logical indicating of null O/E scores are added to output
+#' @param bcpred logical indicating if BC predictions are added to output
 #' 
 #' @author J. Van Sickle, USEPA, \email{VanSickle.John@epa.gov}
 #'
 #' @note Version 4.2 - Added option for out-of-bag predictions on CAL data. 12/30/10
 #' 
 #' @importFrom magrittr "%>%"
+#' @importFrom dplyr mutate
 #' 
 #' @export
 #' 
@@ -27,7 +29,7 @@
 #' \item \code{Group.Occurrnce.Probs} Matrix of predicted probabilities of occurrence for each sample in each calibration-site group
 #' }
 rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew, 
-                   bugnew, Pc = 0.5, Cal.OOB = FALSE, rmnull = TRUE) {
+                   bugnew, Pc = 0.5, Cal.OOB = FALSE, addnull = FALSE, bcpred = FALSE) {
 
   #first convert bug matrix to P/A (1/0)
   temp.pa<-bugnew
@@ -95,17 +97,17 @@ rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew,
   
   # Final data frame contains values of O, E, O/E, Onull, Enull, Onull/Enull, BC.prd and BC.null, for all samples
   #Also includes outlier flags
-  
-  OE.final<-data.frame(
-    O = OE.stats$OBS,
-    E = OE.stats$E.prd,
-    OoverE = OE.stats$OBS / OE.stats$E.prd, 
-    BC = OE.stats$BC.prd,
-    row.names=row.names(bugnew.pa)
+  OE.final <- data.frame(
+      O = OE.stats$OBS,
+      E = OE.stats$E.prd
+    ) %>% 
+    mutate(
+      OoverE = O / E
     )
+
   
   # add OE NULL estimates if TRUE
-  if(!rmnull){
+  if(addnull){
     
     # Compute Expected richness (E) and BC for null model using taxa >= Pc.
     # Note that the set of taxa included in the null model is fixed for all samples
@@ -117,15 +119,28 @@ rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew,
     
     # add null ests to OE.final
     OE.final <- OE.final %>% 
-      dplyr::mutate(
+      mutate(
         Onull = Obsnull, 
         Enull = rep(Enull, length(Obsnull)), 
         OoverE.null = Obsnull/Enull, 
         BC.null = BC.null
-      ) %>% 
-      data.frame(row.names=row.names(bugnew.pa))
+      ) 
+
   
   }
+  
+  # add BC pred if TRUE
+  if(bcpred){
+
+    OE.final <- OE.final %>% 
+      mutate(
+        BC = OE.stats$BC.prd
+      )
+
+  }
+  
+  # add sites as row.names to OE.scores
+  OE.final <- data.frame(OE.final, row.names=row.names(bugnew.pa))
   
   #function output is a list containing OE.final, matrix of predicted capture probs, and predicted group membership probs
   out <- list(OE.scores=OE.final,Capture.Probs=site.pred.dfa,Group.Occurrence.Probs=grpprobs)
