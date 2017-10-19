@@ -82,7 +82,7 @@ rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew,
 
   # loop over all samples. Compute and store  O, predicted E, predicted BC for each sample. 
   #temporary data frame to hold nonnull results for all samples. 
-  nsit.new<-dim(prednew)[[1]]
+  nsit.new<-nrow(prednew)
   OE.stats<-data.frame(OBS=rep(NA,nsit.new), E.prd=rep(NA,nsit.new),BC.prd=rep(NA,nsit.new),row.names=row.names(prednew))
   for(i in 1:nsit.new) {
      #i<-1
@@ -103,7 +103,7 @@ rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew,
     ) %>% 
     mutate(
       OoverE = O / E, 
-      OoverEp = pnorm(OoverE, mean(OoverE), sd(OoverE))
+      OoverE_Percentile = pnorm(OoverE, mean(OoverE), sd(OoverE))
     )
 
   
@@ -141,7 +141,7 @@ rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew,
   }
   
   # add sites as row.names to OE.scores
-  OE.final <- data.frame(OE.final, row.names=row.names(bugnew.pa))
+  OE.final <- data.frame(SampleID = row.names(bugnew.pa), OE.final)
   
   #function output is a list containing OE.final, matrix of predicted capture probs, and predicted group membership probs
   out <- list(OE.scores=OE.final,Capture.Probs=site.pred.dfa,Group.Occurrence.Probs=grpprobs)

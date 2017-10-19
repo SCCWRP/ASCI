@@ -58,7 +58,7 @@ names(pmmiscr)
 ```
 
 ```
-## [1] "d.results.scored"      "sba.results.scored"    "hybrid.results.scored"
+## [1] "taxa"     "met"      "SampleID" "val"
 ```
 
 Scores for each index can be viewed as follows.
@@ -69,67 +69,41 @@ lapply(oescr, function(x) head(x$OE.scores))
 
 ```
 ## $Scores.diatoms
-##                     O        E   OoverE    OoverEp
-## 000CAT148_8/10/10_1 8 6.666486 1.200033 0.44506519
-## 102PS0139_8/9/10_1  8 7.052908 1.134284 0.08657412
-## 105DLCDCC_5/19/09_1 8 6.411555 1.247747 0.77341730
-## 105DLCDCC_6/23/09_1 8 6.411555 1.247747 0.77341730
+##              SampleID O        E   OoverE OoverE_Percentile
+## 1 000CAT148_8/10/10_1 8 6.666486 1.200033        0.44506519
+## 2  102PS0139_8/9/10_1 8 7.052908 1.134284        0.08657412
+## 3 105DLCDCC_5/19/09_1 8 6.411555 1.247747        0.77341730
+## 4 105DLCDCC_6/23/09_1 8 6.411555 1.247747        0.77341730
 ## 
 ## $Scores.sba
-##                     O        E    OoverE   OoverEp
-## 000CAT148_8/10/10_1 1 2.332670 0.4286934 0.1058495
-## 102PS0139_8/9/10_1  2 2.822729 0.7085342 0.7598885
-## 105DLCDCC_5/19/09_1 3 5.394556 0.5561162 0.3598783
-## 105DLCDCC_6/23/09_1 4 5.430622 0.7365638 0.8164044
+##              SampleID O        E    OoverE OoverE_Percentile
+## 1 000CAT148_8/10/10_1 1 2.332670 0.4286934         0.1058495
+## 2  102PS0139_8/9/10_1 2 2.822729 0.7085342         0.7598885
+## 3 105DLCDCC_5/19/09_1 3 5.394556 0.5561162         0.3598783
+## 4 105DLCDCC_6/23/09_1 4 5.430622 0.7365638         0.8164044
 ## 
 ## $Scores.hybrid
-##                      O         E    OoverE   OoverEp
-## 000CAT148_8/10/10_1  9  9.639016 0.9337053 0.2002215
-## 102PS0139_8/9/10_1  10 10.349072 0.9662702 0.2896690
-## 105DLCDCC_5/19/09_1  9  8.757375 1.0277053 0.4944560
-## 105DLCDCC_6/23/09_1 10  8.407181 1.1894593 0.9205942
+##              SampleID  O         E    OoverE OoverE_Percentile
+## 1 000CAT148_8/10/10_1  9  9.639016 0.9337053         0.2002215
+## 2  102PS0139_8/9/10_1 10 10.349072 0.9662702         0.2896690
+## 3 105DLCDCC_5/19/09_1  9  8.757375 1.0277053         0.4944560
+## 4 105DLCDCC_6/23/09_1 10  8.407181 1.1894593         0.9205942
 ```
 
 ```r
-lapply(pmmiscr, head)
+head(pmmiscr)
 ```
 
 ```
-## $d.results.scored
-##   prop.spp.Salinity.BF prop.spp.HighMotility prop.ind.most.tol
-## 1            0.7710424             0.5702122         0.8901792
-## 2            0.7745123             0.6589148         0.6905672
-## 3            0.7752957             0.5288176         0.8467081
-## 4            0.7698189             0.3850259         0.7676104
-##   prop.spp.BCG3 diatom.pMMI
-## 1             1   0.8078584
-## 2             1   0.7809986
-## 3             1   0.7877054
-## 4             1   0.7306138
-## 
-## $sba.results.scored
-##   cnt.spp.IndicatorClass_TP_high prop.spp.IndicatorClass_DOC_high
-## 1                      0.7080179                        0.3161360
-## 2                      0.7080179                        0.7287864
-## 3                      0.7080179                        0.1235659
-## 4                      0.7080179                        0.5637263
-##   prop.spp.Green prop.spp.BCG3  sba.pMMI
-## 1      0.9075090     1.0000000 0.7329157
-## 2      0.7223031     0.3867628 0.6364676
-## 3      0.9075090     0.0000000 0.4347732
-## 4      0.9075090     1.0000000 0.7948133
-## 
-## $hybrid.results.scored
-##   prop.spp.IndicatorClass_DOC_high prop.spp.Trophic.I prop.spp.ZHR
-## 1                        0.6000610          1.0000000    0.1639208
-## 2                        0.5763431          0.5828506    0.0000000
-## 3                        0.4360691          0.9159080    0.0000000
-## 4                        0.5283145          0.6010646    0.2766163
-##   prop.spp.BCG3 hybri.pMMI
-## 1     1.0000000  0.6909954
-## 2     1.0000000  0.5397984
-## 3     0.8656009  0.5543945
-## 4     1.0000000  0.6014989
+## # A tibble: 6 x 4
+##      taxa                   met            SampleID        val
+##     <chr>                 <chr>               <chr>      <dbl>
+## 1 diatoms  prop.spp.Salinity.BF 000CAT148_8/10/10_1 0.07444986
+## 2 diatoms  prop.spp.Salinity.BF  102PS0139_8/9/10_1 0.01584088
+## 3 diatoms  prop.spp.Salinity.BF 105DLCDCC_5/19/09_1 0.01231552
+## 4 diatoms  prop.spp.Salinity.BF 105DLCDCC_6/23/09_1 0.09878168
+## 5 diatoms prop.spp.HighMotility 000CAT148_8/10/10_1 0.17391304
+## 6 diatoms prop.spp.HighMotility  102PS0139_8/9/10_1 0.20000000
 ```
 
 

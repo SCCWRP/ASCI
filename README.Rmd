@@ -59,7 +59,7 @@ names(pmmiscr)
 Scores for each index can be viewed as follows.
 ```{r}
 lapply(oescr, function(x) head(x$OE.scores))
-lapply(pmmiscr, head)
+head(pmmiscr)
 ```
 
 

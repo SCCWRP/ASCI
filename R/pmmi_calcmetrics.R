@@ -255,7 +255,7 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stat
     out = sqldf("select * from metrics left join specialty_metrics using(SampleID)") #Linking metrics and specialty_metrics tables
     
     }
-  
+
   return(out)
 
 }

@@ -13,9 +13,11 @@ Imports:
     dplyr,
     magrittr,
     plyr,
+    purrr,
     randomForest,
     reshape2, 
     sqldf, 
+    tibble,
     vegan
 Depends:
     R (>= 3.4.1)

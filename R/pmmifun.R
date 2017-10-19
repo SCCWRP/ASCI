@@ -15,6 +15,10 @@
 #' 
 #' @importFrom reshape2 melt
 #' @importFrom sqldf sqldf
+#' @importFrom dplyr bind_rows filter mutate group_by select summarise
+#' @importFrom tidyr gather spread nest unnest separate unite
+#' @import purrr
+#' @import tibble
 #' 
 #' @examples 
 #' pmmifun(demo_algae_tax, demo_algae_sitedata)
@@ -67,19 +71,19 @@ pmmifun <- function(taxain, sitein){
   hybrid.win<-colnames(hybrid.win[,-(length(names(hybrid.win)))])
   
   # subset winning metrics for new sites
-  d.results<-d.metrics[,d.win]
-  sba.results<-sba.metrics[,sba.win]
-  hybrid.results<- hybrid.metrics[,hybrid.win]
+  d.results <- data.frame(d.metrics[,d.win], row.names = d.metrics$SampleID)
+  sba.results <- data.frame(sba.metrics[,sba.win], row.names = sba.metrics$SampleID)
+  hybrid.results <- data.frame(hybrid.metrics[,hybrid.win], row.names = hybrid.metrics$SampleID)
   
   # score results ------------------------------------------------------
   
-  quants <- pmmilkup$quants
+  # hard-coded values are in pmmilkup$quants
   # for increasers, min is 5th of ref and max is 95th of str
   # for decreasers, min is 5th of str and max is 95th of ref
   
-  d.results.scored<-data.frame(row.names(d.results))
-  sba.results.scored<-data.frame(row.names(sba.results))
-  hybrid.results.scored<-data.frame(row.names(hybrid.results))
+  d.results.scored<-data.frame(row.names = row.names(d.results))
+  sba.results.scored<-data.frame(row.names = row.names(sba.results))
+  hybrid.results.scored<-data.frame(row.names = row.names(hybrid.results))
   
   # increase (obs - max) / ( min - max)
   d.results.scored$prop.spp.Salinity.BF <- ((d.results$prop.spp.Salinity.BF - 12.9216849) / (-0.12408199 - 12.9216849)) / 1.2768156
@@ -97,30 +101,50 @@ pmmifun <- function(taxain, sitein){
   hybrid.results.scored$prop.spp.ZHR <- ((hybrid.results$prop.spp.ZHR - 0) / (0.1878378 - 0)) / 1.2028715
   hybrid.results.scored$prop.spp.BCG3 <- ((hybrid.results$prop.spp.BCG3 - 0.05579365) / (0.4196944 - 0.05579365)) / 0.7299234
   
-  row.names(d.results.scored)<-d.results.scored[,1]; d.results.scored<-d.results.scored[,2:5]
-  row.names(sba.results.scored)<-sba.results.scored[,1]; sba.results.scored<-sba.results.scored[,2:5]
-  row.names(hybrid.results.scored)<-hybrid.results.scored[,1]; hybrid.results.scored<-hybrid.results.scored[,2:5]
-  
-  d.results.scored[d.results.scored>1]<-1
-  d.results.scored[d.results.scored<0]<-0
-  sba.results.scored[sba.results.scored>1]<-1
-  sba.results.scored[sba.results.scored<0]<-0
-  hybrid.results.scored[hybrid.results.scored>1]<-1
-  hybrid.results.scored[hybrid.results.scored<0]<-0
-  
-  # compile results ------------------------------------------------------
-  
-  d.results.scored$diatom.pMMI<-rowMeans(d.results.scored)
-  sba.results.scored$sba.pMMI<-rowMeans(sba.results.scored)
-  hybrid.results.scored$hybri.pMMI<-rowMeans(hybrid.results.scored)
-
-  # output
+  # put all results in long format
   out <- list(
-    d.results.scored = d.results.scored, 
-    sba.results.scored = sba.results.scored,
-    hybrid.results.scored = hybrid.results.scored
-  )
+    diatoms_obs = d.results, 
+    diatoms_scr = d.results.scored,
+    sba_obs = sba.results,
+    sba_scr = sba.results.scored,
+    hybrid_obs = hybrid.results, 
+    hybrid_scr = hybrid.results.scored
+  ) %>% 
+  enframe %>% 
+  mutate(
+    value = map(value, rownames_to_column, 'SampleID'),
+    value = map(value, gather, 'met', 'val', -SampleID)
+  ) %>% 
+  unnest %>% 
+  separate(name, c('taxa', 'results'), sep = '_') 
   
+  # metric housekeeping
+  out <- out %>% 
+    mutate(
+      met = ifelse(results == 'scr', paste0(met, '_score'), met),
+      val = ifelse(results == 'scr', pmin(val, 1), val), # ceiling at 1
+      val = ifelse(results == 'scr', pmax(val, 0), val) # floor at 0
+      )
+
+  # get pmmi total score
+  pmmiout <- out %>% 
+    filter(results %in% 'scr') %>% 
+    group_by(taxa, SampleID) %>% 
+    summarise(
+      val = mean(val)
+      ) %>% 
+    mutate(met = 'pmmi') %>% 
+    select(taxa, met, SampleID, val)
+
+  # combine 
+  out <- out %>% 
+    unite('met', met, results, sep = '_') %>% 
+    mutate(
+      met = gsub('_obs$', '', met),
+      met = gsub('_scr$', '_score', met)
+    ) %>% 
+    bind_rows(pmmiout)
+    
   return(out)
   
 }
