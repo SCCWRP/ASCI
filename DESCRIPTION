@@ -18,6 +18,7 @@ Imports:
     reshape2, 
     sqldf, 
     tibble,
+    tidyr,
     vegan
 Depends:
     R (>= 3.4.1)
