@@ -13,7 +13,7 @@
 #'
 #' @export
 #' 
-#' @importFrom reshape2 melt
+#' @importFrom reshape2 acast melt
 #' @importFrom sqldf sqldf
 #' @importFrom dplyr bind_rows filter mutate group_by select summarise
 #' @importFrom tidyr gather spread nest unnest separate unite
@@ -121,7 +121,6 @@ pmmifun <- function(taxain, sitein){
   # metric housekeeping
   out <- out %>% 
     mutate(
-      met = ifelse(results == 'scr', paste0(met, '_score'), met),
       val = ifelse(results == 'scr', pmin(val, 1), val), # ceiling at 1
       val = ifelse(results == 'scr', pmax(val, 0), val) # floor at 0
       )
