@@ -19,6 +19,7 @@
 #' 
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr mutate
+#' @importFrom tibble rownames_to_column
 #' 
 #' @export
 #' 
@@ -97,7 +98,7 @@ rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew,
   
   # Final data frame contains values of O, E, O/E, Onull, Enull, Onull/Enull, BC.prd and BC.null, for all samples
   #Also includes outlier flags
-  OE.final <- data.frame(
+  OE_final <- data.frame(
       O = OE.stats$OBS,
       E = OE.stats$E.prd
     ) %>% 
@@ -118,8 +119,8 @@ rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew,
     Obsnull <- apply(bugnew.pa[,nulltax],1,sum) #vector of Observed richness, new samples, under null model
     BC.null <- apply(bugnew.pa[,nulltax],1,function(x)sum(abs(x-pnull[nulltax])))/(Obsnull+Enull) #vector of null-model BC
     
-    # add null ests to OE.final
-    OE.final <- OE.final %>% 
+    # add null ests to OE_final
+    OE_final <- OE_final %>% 
       mutate(
         Onull = Obsnull, 
         Enull = rep(Enull, length(Obsnull)), 
@@ -133,18 +134,25 @@ rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew,
   # add BC pred if TRUE
   if(bcpred){
 
-    OE.final <- OE.final %>% 
+    OE_final <- OE_final %>% 
       mutate(
         BC = OE.stats$BC.prd
       )
 
   }
   
-  # add sites as row.names to OE.scores
-  OE.final <- data.frame(SampleID = row.names(bugnew.pa), OE.final)
+  # add sites as row.names
+  OE_final <- data.frame(SampleID = row.names(bugnew.pa), OE_final, stringsAsFactors = FALSE)
+  site.pred.dfa <- site.pred.dfa %>% 
+    data.frame(stringsAsFactors = FALSE) %>% 
+    rownames_to_column('SampleID') %>% 
+    gather('OTU', 'CaptureProb', -SampleID)
+  grpprobs <- data.frame(grpprobs, stringsAsFactors = FALSE)
+  names(grpprobs) <- gsub('^X', 'pGroup', names(grpprobs))
+  grpprobs <- rownames_to_column(grpprobs, 'SampleID')
   
-  #function output is a list containing OE.final, matrix of predicted capture probs, and predicted group membership probs
-  out <- list(OE.scores=OE.final,Capture.Probs=site.pred.dfa,Group.Occurrence.Probs=grpprobs)
+  #function output is a list containing OE_final, matrix of predicted capture probs, and predicted group membership probs
+  out <- list(OE_scores=OE_final,Capture_Probs=site.pred.dfa,Group_Occurrence_Probs=grpprobs)
   
   return(out)
   

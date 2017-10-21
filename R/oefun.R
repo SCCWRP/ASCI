@@ -124,9 +124,9 @@ oefun <- function(taxain, sitein, ...){
     )
 
   out <- list(
-    Scores.diatoms = Scores.diatoms,
-    Scores.sba = Scores.sba,
-    Scores.hybrid = Scores.hybrid
+    diatoms = Scores.diatoms,
+    hybrid = Scores.hybrid,
+    sba = Scores.sba
   )
   
   return(out)

@@ -2,8 +2,8 @@
 #' 
 #' Run the ASCI pMMI index for diatoms, soft-bodied algae, and hybrids
 #' 
-#' @param taxain chr string for path to input taxonomy data
-#' @param sitein chr string for path to input site data
+#' @param taxain \code{data.frame} for input taxonomy data
+#' @param sitein \code{data.frame} for input site data
 #' 
 #' @details 
 #' Three index scores are calculated and returned as a named list
@@ -15,7 +15,7 @@
 #' 
 #' @importFrom reshape2 acast melt
 #' @importFrom sqldf sqldf
-#' @importFrom dplyr bind_rows filter mutate group_by select summarise
+#' @importFrom dplyr bind_rows filter mutate group_by select summarise ungroup
 #' @importFrom tidyr gather spread nest unnest separate unite
 #' @import purrr
 #' @import tibble
@@ -109,14 +109,14 @@ pmmifun <- function(taxain, sitein){
     sba_scr = sba.results.scored,
     hybrid_obs = hybrid.results, 
     hybrid_scr = hybrid.results.scored
-  ) %>% 
-  enframe %>% 
-  mutate(
-    value = map(value, rownames_to_column, 'SampleID'),
-    value = map(value, gather, 'met', 'val', -SampleID)
-  ) %>% 
-  unnest %>% 
-  separate(name, c('taxa', 'results'), sep = '_') 
+    ) %>% 
+    enframe %>% 
+    mutate(
+      value = map(value, rownames_to_column, 'SampleID'),
+      value = map(value, gather, 'met', 'val', -SampleID)
+    ) %>% 
+    unnest %>% 
+    separate(name, c('taxa', 'results'), sep = '_') 
   
   # metric housekeeping
   out <- out %>% 
@@ -124,26 +124,45 @@ pmmifun <- function(taxain, sitein){
       val = ifelse(results == 'scr', pmin(val, 1), val), # ceiling at 1
       val = ifelse(results == 'scr', pmax(val, 0), val) # floor at 0
       )
-
+  
   # get pmmi total score
   pmmiout <- out %>% 
     filter(results %in% 'scr') %>% 
     group_by(taxa, SampleID) %>% 
     summarise(
-      val = mean(val)
+      MMI = mean(val)
       ) %>% 
-    mutate(met = 'pmmi') %>% 
-    select(taxa, met, SampleID, val)
+    mutate(MMI_Percentile = pnorm(MMI, mean(MMI), sd(MMI))) %>% 
+    ungroup %>% 
+    split(.$taxa) %>% 
+    map(select, -taxa)
 
-  # combine 
+  # make out a list
   out <- out %>% 
     unite('met', met, results, sep = '_') %>% 
     mutate(
       met = gsub('_obs$', '', met),
       met = gsub('_scr$', '_score', met)
     ) %>% 
-    bind_rows(pmmiout)
-    
+    split(.$taxa) %>% 
+    map(select, -taxa) %>% 
+    map(spread, met, val)
+  
+  # list of lists for input to ASCI
+  out <- list(
+    diatoms = list(pmmiout$diatoms, out$diatoms),
+    sba = list(pmmiout$sba, out$sba),
+    hybrid = list(pmmiout$hybrid, out$hybrid)
+  )
+  
+  # assign names to list elements
+  out <- out %>% 
+    map(function(x){
+      names(x) <- c('MMI_scores', 'MMI_supp')
+      return(x)
+      }
+    )
+  
   return(out)
   
 }

@@ -43,23 +43,20 @@ Two core functions are used to estimate scores.  The `oefun` function estimates 
 devtools::load_all()
 ```
 ```{r}
-# O/E scores
-oescr <- oefun(demo_algae_tax, demo_algae_sitedata)
-
-# pMMI scores
-pmmiscr <- pmmifun(demo_algae_tax, demo_algae_sitedata)
+results <- ASCI(demo_algae_tax, demo_algae_sitedata)
+results
 ```
 
-The output from each function is a `list` with the relevant score information.
+Output from one index type (diatoms, soft-bodied algae, or hybrid) can be returned with the `tax` argument.
 ```{r}
-names(oescr)
-names(pmmiscr)
+ASCI(demo_algae_tax, demo_algae_sitedata, tax = 'diatoms')
 ```
 
-Scores for each index can be viewed as follows.
+The output contains supplementary data as attributes.
 ```{r}
-lapply(oescr, function(x) head(x$OE.scores))
-head(pmmiscr)
+names(attributes(results))
+attr(results, 'Supp1_mmi')
 ```
+
 
 

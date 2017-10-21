@@ -1,0 +1,115 @@
+#' Score samples using the ASCI tool
+#'
+#' @param taxain \code{data.frame} for input taxonomy data
+#' @param sitein \code{data.frame} for input site data
+#' @param tax chr string indicating output to return from a specific taxa, must one to many of \code{'diatoms'}, \code{'sba'}, or \code{'hybrid'}, defaults to all
+#' @param ... additional arguments passed to other funcions, e.g., \code{\link{rfpred}}
+#' 
+#' @details 
+#' Two indices for three taxonomy types are scored, pMMI and O/E for diatoms, soft-bodied algae, and hybrid. This function combines output from the \code{\link{pmmifun}} and \code{\link{oefun}} functions in a user-friendly format.
+#' 
+#' @return 
+#' A \code{asci} object as a \code{data.frame} with site scores for MMI and O/E indices.  Supplementary data are available as attributes named \code{Supp1_mmi}, \code{Supp1_OE}, and \code{Supp2_OE}.  See the examples for accessing.
+#' 
+#' @export
+#' 
+#' @importFrom dplyr bind_rows mutate select
+#' @importFrom tidyr gather spread unnest
+#' @import purrr
+#' @import tibble
+#' 
+#' @seealso  \code{\link{pmmifun}}, \code{\link{oefun}}
+#' 
+#' @examples 
+#' results <- ASCI(demo_algae_tax, demo_algae_sitedata)
+#' attr(results, 'Supp1_mmi')
+ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
+  
+  # sanity check
+  if(any(!tax %in% c('diatoms', 'sba', 'hybrid')))
+    stop('tax must match diatoms, sba, and/or hybrid')
+  
+  ##
+  # individual output
+  
+  # oe
+  oeind <- oefun(taxain, sitein, ...)
+  
+  # pmmi
+  pmmind <- pmmifun(taxain, sitein, ...)
+    
+  ##
+  # main output (scores)
+
+  # oe
+  oescr <- oeind %>% 
+    map(~ .x$OE_scores) %>% 
+    map(gather, 'met', 'val', -SampleID) %>% 
+    enframe('taxa') %>% 
+    unnest
+    
+  # pmmi
+  pmmiscr <- pmmind %>% 
+    map(~ .x$MMI_scores) %>% 
+    map(gather, 'met', 'val', -SampleID) %>% 
+    enframe('taxa') %>% 
+    unnest
+
+  # combine scrs, long format
+  scr <- bind_rows(oescr, pmmiscr) %>% 
+    spread(met, val) %>% 
+    select(taxa, SampleID, MMI, MMI_Percentile, O, E, OoverE, OoverE_Percentile)
+  
+  ##
+  # supplementary info
+
+  # pmmi
+  Supp1_mmi <- pmmind %>% 
+    map(~ .x$MMI_supp) %>% 
+    map(gather, 'Metric', 'Value', -SampleID) %>% 
+    enframe('taxa') %>% 
+    unnest
+  
+  # oe capture probs
+  Supp1_OE <- oeind %>% 
+    map(~ .x$Capture_Probs) %>% 
+    enframe('taxa') %>% 
+    unnest
+  
+  # oe group occurrence probs
+  Supp2_OE <- oeind %>% 
+    map(~ .x$Group_Occurrence_Probs) %>% 
+    map(gather, 'pGroup', 'Prob', -SampleID) %>% 
+    enframe('taxa') %>% 
+    unnest
+  
+  # subset taxa if needed
+  if(length(tax) < 3){
+    
+    scr <- scr %>% 
+      filter(taxa %in% tax)
+    
+    Supp1_mmi <- Supp1_mmi %>% 
+      filter(taxa %in% tax)
+    
+    Supp1_OE <- Supp1_OE %>% 
+      filter(taxa %in% tax)
+    
+    Supp2_OE <- Supp2_OE %>% 
+      filter(taxa %in% tax)
+    
+  }
+    
+  ##
+  # create ASCI class output, with multiple attributes
+  out <- structure(
+    .Data = scr, 
+    class = c('asci', 'data.frame'), 
+    Supp1_mmi = Supp1_mmi, 
+    Supp1_OE = Supp1_OE, 
+    Supp2_OE = Supp2_OE
+  )
+  
+  return(out)
+  
+}

@@ -7,9 +7,9 @@
 pmmifun(taxain, sitein)
 }
 \arguments{
-\item{taxain}{chr string for path to input taxonomy data}
+\item{taxain}{\code{data.frame} for input taxonomy data}
 
-\item{sitein}{chr string for path to input site data}
+\item{sitein}{\code{data.frame} for input site data}
 }
 \value{
 A list with three elements named as \code{d.results.scored}, \code{sba.results.scored}, and \code{hybrid.results.scored}. Each element is a \code{data.frame} with metric scores by site.
