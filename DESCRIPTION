@@ -6,7 +6,7 @@ Date: 2017-10-10
 Description: Calculate O/E and pMMI scores using diatom, soft-bodied algae, or a 
     hybrid appproach. Scores are used for bioassessment of California perennial 
     streams.
-BugReports: https://github.com/fawda123/ASCI/issues
+BugReports: https://github.com/SCCWRP/ASCI/issues
 License: CC0
 LazyData: true
 Imports:
