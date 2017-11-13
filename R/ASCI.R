@@ -14,6 +14,7 @@
 #' @export
 #' 
 #' @importFrom dplyr bind_rows mutate select
+#' @importFrom magrittr "%>%"
 #' @importFrom tidyr gather spread unnest
 #' @import purrr
 #' @import tibble
@@ -43,8 +44,13 @@ ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
 
   # oe
   oescr <- oeind %>% 
-    map(~ .x$OE_scores) %>% 
-    map(gather, 'met', 'val', -SampleID) %>% 
+    map(function(x){
+      
+      x$OE_scores %>% 
+        select(SampleID, O, E, OoverE, OoverE_Percentile) %>% 
+        gather('met', 'val', -SampleID)
+      
+      }) %>% 
     enframe('taxa') %>% 
     unnest
     
@@ -83,6 +89,18 @@ ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
     enframe('taxa') %>% 
     unnest
   
+  # oe null
+  Supp3_OE <- oeind %>% 
+    map(function(x){
+      
+      x$OE_scores %>% 
+        select(SampleID, Onull, Enull, OoverE.null) %>% 
+        gather('met', 'val', -SampleID)
+      
+    }) %>% 
+    enframe('taxa') %>% 
+    unnest
+  
   # subset taxa if needed
   if(length(tax) < 3){
     
@@ -98,12 +116,15 @@ ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
     Supp2_OE <- Supp2_OE %>% 
       filter(taxa %in% tax)
     
+    Supp3_OE <- Supp3_OE %>% 
+      filter(taxa %in% tax)
+    
   }
     
   ##
   # create asci class output
   out <- new('asci', scores = scr, Supp1_mmi = Supp1_mmi, Supp1_OE = Supp1_OE, 
-             Supp2_OE = Supp2_OE, taxa = tax)
+             Supp2_OE = Supp2_OE, Supp3_OE = Supp3_OE, taxa = tax)
   
   return(out)
   

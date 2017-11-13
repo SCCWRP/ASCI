@@ -53,3 +53,12 @@ setGeneric('Supp2_OE', function(object) standardGeneric('Supp2_OE'))
 
 # method
 setMethod('Supp2_OE', 'asci', function(object) object@Supp2_OE)
+
+##
+# Supp3_OE
+
+# generic
+setGeneric('Supp3_OE', function(object) standardGeneric('Supp3_OE'))
+
+# method
+setMethod('Supp3_OE', 'asci', function(object) object@Supp3_OE)

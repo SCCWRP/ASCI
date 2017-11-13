@@ -147,24 +147,24 @@ library(ASCI)</code></pre>
 results</code></pre>
 <pre><code>## An object of class asci 
 ## Scores calculated for diatoms, sba, hybrid 
-## Use these functions for access: scores, Supp1_mmi, Supp1_OE, Supp2_OE</code></pre>
+## Use these functions for access: scores, Supp1_mmi, Supp1_OE, Supp2_OE, Supp3_OE</code></pre>
 <p>Output from one index type (diatoms, soft-bodied algae, or hybrid) can be returned with the <code>tax</code> argument.</p>
 <pre class="r"><code>ASCI(demo_algae_tax, demo_algae_sitedata, tax = &#39;diatoms&#39;)</code></pre>
 <pre><code>## An object of class asci 
 ## Scores calculated for diatoms 
-## Use these functions for access: scores, Supp1_mmi, Supp1_OE, Supp2_OE</code></pre>
+## Use these functions for access: scores, Supp1_mmi, Supp1_OE, Supp2_OE, Supp3_OE</code></pre>
 <p>The output can be accessed using the defined methods.</p>
 <pre class="r"><code>.S4methods(class = &#39;asci&#39;)</code></pre>
-<pre><code>## [1] show      scores    Supp1_mmi Supp1_OE  Supp2_OE 
+<pre><code>## [1] show      scores    Supp1_mmi Supp1_OE  Supp2_OE  Supp3_OE 
 ## see &#39;?methods&#39; for accessing help and source code</code></pre>
 <pre class="r"><code>scores(results)</code></pre>
 <pre><code>## # A tibble: 12 x 8
 ##       taxa            SampleID       MMI MMI_Percentile     O         E
 ##  *   &lt;chr&gt;               &lt;chr&gt;     &lt;dbl&gt;          &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
-##  1 diatoms 000CAT148_8/10/10_1 0.8078584     0.86431742     8  6.666486
-##  2 diatoms  102PS0139_8/9/10_1 0.7534252     0.31653108     8  7.052908
-##  3 diatoms 105DLCDCC_5/19/09_1 0.7877054     0.69705073     8  6.411555
-##  4 diatoms 105DLCDCC_6/23/09_1 0.7306138     0.12746846     8  6.411555
+##  1 diatoms 000CAT148_8/10/10_1 0.8134297     0.87518058     8  6.666486
+##  2 diatoms  102PS0139_8/9/10_1 0.7534252     0.31270715     8  7.052908
+##  3 diatoms 105DLCDCC_5/19/09_1 0.7877054     0.67306700     7  6.411555
+##  4 diatoms 105DLCDCC_6/23/09_1 0.7306138     0.13319087     8  6.411555
 ##  5  hybrid 000CAT148_8/10/10_1 0.6909954     0.91676192     9  9.639016
 ##  6  hybrid  102PS0139_8/9/10_1 0.5397984     0.20206578    10 10.349072
 ##  7  hybrid 105DLCDCC_5/19/09_1 0.5543945     0.26757698     9  8.757375

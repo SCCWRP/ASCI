@@ -1,6 +1,6 @@
 #' Predict O/E scores for new sites
 #'  
-#' Predict O/E scores for a new set of sites based on a Random Forest predictive model
+#' @description Predict O/E scores for a new set of sites based on a Random Forest predictive model
 #' 
 #' @param bugcal.pa \code{data.frame} of taxonomy at calibration reference sites
 #' @param grps.final \code{data.frame} of environmetnal data at calibration reference sites
@@ -10,7 +10,6 @@
 #' @param bugnew \code{data.frame} of taxonomy presence/absence data at all new sites/samples (rows) at which predictions are desired (e.g., 'test' sites)
 #' @param Pc numeric value for capture probability cutoff
 #' @param Cal.OOB logical value default \code{FALSE}, set to \code{TRUE} only if you are predicting for the model calibration data and desire out-of-bag predictions 
-#' @param addnull logical indicating of null O/E scores are added to output
 #' @param bcpred logical indicating if BC predictions are added to output
 #' 
 #' @author J. Van Sickle, USEPA, \email{VanSickle.John@epa.gov}
@@ -25,12 +24,12 @@
 #' 
 #' @return function output is a list containing three elements
 #' \itemize{ 
-#' \item \code{OE.scores} A data frame for all samples, containing O, E, O/E, and O/E percentile from the predictive model (null model results can be included if \code{addnull = TRUE})
+#' \item \code{OE.scores} A data frame for all samples, containing O, E, O/E, and O/E percentile from the predictive model (null model results are included as an attribute)
 #' \item \code{Capture.Probs} Matrix of model-predicted capture (occurrence) probabilties for all taxa in all samples
 #' \item \code{Group.Occurrnce.Probs} Matrix of predicted probabilities of occurrence for each sample in each calibration-site group
 #' }
 rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew, 
-                   bugnew, Pc = 0.5, Cal.OOB = FALSE, addnull = FALSE, bcpred = FALSE) {
+                   bugnew, Pc = 0.5, Cal.OOB = FALSE, bcpred = FALSE) {
 
   #first convert bug matrix to P/A (1/0)
   temp.pa<-bugnew
@@ -108,35 +107,32 @@ rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew,
     )
 
   
-  # add OE NULL estimates if TRUE
-  if(addnull){
+  # add OE NULL estimates 
     
-    # Compute Expected richness (E) and BC for null model using taxa >= Pc.
-    # Note that the set of taxa included in the null model is fixed for all samples
-    pnull <- apply(bugcal.pa,2,sum)/dim(bugcal.pa)[[1]]  #null model predicted occurrnece probabilities, all taxa
-    nulltax <- names(pnull[pnull>=Pc]) #subset of taxa with Pnull >= Pc
-    Enull <- sum(pnull[nulltax])
-    Obsnull <- apply(bugnew.pa[,nulltax],1,sum) #vector of Observed richness, new samples, under null model
-    BC.null <- apply(bugnew.pa[,nulltax],1,function(x)sum(abs(x-pnull[nulltax])))/(Obsnull+Enull) #vector of null-model BC
-    
-    # add null ests to OE_final
-    OE_final <- OE_final %>% 
-      mutate(
-        Onull = Obsnull, 
-        Enull = rep(Enull, length(Obsnull)), 
-        OoverE.null = Obsnull/Enull, 
-        BC.null = BC.null
-      ) 
+  # Compute Expected richness (E) and BC for null model using taxa >= Pc.
+  # Note that the set of taxa included in the null model is fixed for all samples
+  pnull <- apply(bugcal.pa,2,sum)/dim(bugcal.pa)[[1]]  #null model predicted occurrnece probabilities, all taxa
+  nulltax <- names(pnull[pnull>=Pc]) #subset of taxa with Pnull >= Pc
+  Enull <- sum(pnull[nulltax])
+  Obsnull <- apply(bugnew.pa[,nulltax],1,sum) #vector of Observed richness, new samples, under null model
+  BC.null <- apply(bugnew.pa[,nulltax],1,function(x)sum(abs(x-pnull[nulltax])))/(Obsnull+Enull) #vector of null-model BC
+  
+  # add null ests to OE_final
+  OE_final <- OE_final %>% 
+    mutate(
+      Onull = as.numeric(Obsnull), 
+      Enull = as.numeric(rep(Enull, length(Obsnull))), 
+      OoverE.null = as.numeric(Obsnull/Enull), 
+      BC.null = BC.null
+    ) 
 
-  
-  }
-  
   # add BC pred if TRUE
   if(bcpred){
 
     OE_final <- OE_final %>% 
       mutate(
-        BC = OE.stats$BC.prd
+        BC = OE.stats$BC.prd,
+        BC.null = BC.null
       )
 
   }

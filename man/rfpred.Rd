@@ -2,12 +2,10 @@
 % Please edit documentation in R/rfpred.r
 \name{rfpred}
 \alias{rfpred}
-\title{Predict O/E scores for new sites
- 
-Predict O/E scores for a new set of sites based on a Random Forest predictive model}
+\title{Predict O/E scores for new sites}
 \usage{
 rfpred(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew, bugnew,
-  Pc = 0.5, Cal.OOB = FALSE, addnull = FALSE, bcpred = FALSE)
+  Pc = 0.5, Cal.OOB = FALSE, bcpred = FALSE)
 }
 \arguments{
 \item{bugcal.pa}{\code{data.frame} of taxonomy at calibration reference sites}
@@ -26,21 +24,17 @@ rfpred(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew, bugnew,
 
 \item{Cal.OOB}{logical value default \code{FALSE}, set to \code{TRUE} only if you are predicting for the model calibration data and desire out-of-bag predictions}
 
-\item{addnull}{logical indicating of null O/E scores are added to output}
-
 \item{bcpred}{logical indicating if BC predictions are added to output}
 }
 \value{
 function output is a list containing three elements
 \itemize{ 
-\item \code{OE.scores} A data frame for all samples, containing O, E, O/E, and O/E percentile from the predictive model (null model results can be included if \code{addnull = TRUE})
+\item \code{OE.scores} A data frame for all samples, containing O, E, O/E, and O/E percentile from the predictive model (null model results are included as an attribute)
 \item \code{Capture.Probs} Matrix of model-predicted capture (occurrence) probabilties for all taxa in all samples
 \item \code{Group.Occurrnce.Probs} Matrix of predicted probabilities of occurrence for each sample in each calibration-site group
 }
 }
 \description{
-Predict O/E scores for new sites
- 
 Predict O/E scores for a new set of sites based on a Random Forest predictive model
 }
 \note{
