@@ -101,14 +101,9 @@ ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
   }
     
   ##
-  # create ASCI class output, with multiple attributes
-  out <- structure(
-    .Data = scr, 
-    class = c('asci', 'data.frame'), 
-    Supp1_mmi = Supp1_mmi, 
-    Supp1_OE = Supp1_OE, 
-    Supp2_OE = Supp2_OE
-  )
+  # create asci class output
+  out <- new('asci', scores = scr, Supp1_mmi = Supp1_mmi, Supp1_OE = Supp1_OE, 
+             Supp2_OE = Supp2_OE, taxa = tax)
   
   return(out)
   

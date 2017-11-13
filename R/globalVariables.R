@@ -12,3 +12,6 @@ NULL
 
 #' @importFrom utils capture.output flush.console
 NULL
+
+#' @importFrom methods .S4methods new
+NULL

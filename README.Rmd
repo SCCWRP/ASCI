@@ -51,10 +51,10 @@ Output from one index type (diatoms, soft-bodied algae, or hybrid) can be return
 ASCI(demo_algae_tax, demo_algae_sitedata, tax = 'diatoms')
 ```
 
-The output contains supplementary data as attributes.
+The output can be accessed using the defined methods.
 ```{r}
-names(attributes(results))
-attr(results, 'Supp1_mmi')
+.S4methods(class = 'asci')
+scores(results)
 ```
 
 
