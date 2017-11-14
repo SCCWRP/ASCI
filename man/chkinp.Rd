@@ -14,7 +14,7 @@ chkinp(taxain, sitein, getval = FALSE)
 \item{getval}{logical to return a vector of values not satisfied by checks, useful for data prep}
 }
 \value{
-The original data are returned if all checks are met, including a new column for \code{SampleID} (see \code{\link{getids}}).  An error message is returned if the datasets do not meet requirements.
+The original data are returned if all checks are met, including a new column for \code{SampleID} (see \code{\link{getids}}).  An error message is returned if the datasets do not meet requirements or a vector of values that caused the error if \code{getval = TRUE}.
 }
 \description{
 Check input taxonomy and site data for required information
