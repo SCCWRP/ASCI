@@ -37,3 +37,24 @@ Authors@R: c(
     )
   )
 RoxygenNote: 6.0.1
+Collate: 
+    'ASCI.R'
+    'STE.R'
+    'class-asci.R'
+    'asci-methods.R'
+    'chkinp.R'
+    'demo_algae_sitedata.R'
+    'demo_algae_tax.R'
+    'diatom_rf_oe.R'
+    'getids.R'
+    'globalVariables.R'
+    'hybrid_rf_oe.R'
+    'oefun.R'
+    'oelkup.R'
+    'pmmi_calcmetrics.R'
+    'pmmifun.R'
+    'pmmilkup.R'
+    'rarify.R'
+    'rf_out_top.R'
+    'rfpred.r'
+    'sba_rf_oe.R'

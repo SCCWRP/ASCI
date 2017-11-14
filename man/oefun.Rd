@@ -7,9 +7,9 @@
 oefun(taxain, sitein, ...)
 }
 \arguments{
-\item{taxain}{chr string for path to input taxonomy data}
+\item{taxain}{\code{data.frame} for input taxonomy data}
 
-\item{sitein}{chr string for path to input site data}
+\item{sitein}{\code{data.frame} for input site data}
 
 \item{...}{additional arguments passed to \code{\link{rfpred}}}
 }
@@ -23,5 +23,6 @@ Run the ASCI O/E index for diatoms, soft-bodied algae, and hybrids
 Three index scores are calculated and returned as a named list
 }
 \examples{
-oefun(demo_algae_tax, demo_algae_sitedata)
+taxain <- getids(demo_algae_tax)
+oefun(taxain, demo_algae_sitedata)
 }

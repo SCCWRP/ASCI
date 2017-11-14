@@ -21,17 +21,14 @@
 #' @import tibble
 #' 
 #' @examples 
-#' pmmifun(demo_algae_tax, demo_algae_sitedata)
+#' taxain <- getids(demo_algae_tax)
+#' pmmifun(taxain, demo_algae_sitedata)
 pmmifun <- function(taxain, sitein){
 
   options(gsubfn.engine = "R")
   
   # Step 1. Import taxonomy data -----------------------------------------------------------
   bugs <- taxain
-  reqfields<- c("StationCode", "SampleDate", "Replicate","SampleTypeCode", "BAResult", "Result", "FinalID")
-  missingtaxafields<-setdiff(reqfields, colnames(bugs))
-  if( length(missingtaxafields) >0 ) { print(paste("Missing fields", missingtaxafields))}
-  bugs$SampleID <- paste(bugs$StationCode, bugs$SampleDate, bugs$Replicate, sep="_")
   
   # Step 2. Import stations data -----------------------------------------------------------
   stations <- sitein

@@ -24,7 +24,7 @@ rarify <- function(inbug, sample.ID, abund, subsiz){
   
   #loop over samples, rarify each one in turn
   for(i in 1:nsamp){ 
-    
+
     #extract current sample
     isamp<-sampid[i]
     flush.console()

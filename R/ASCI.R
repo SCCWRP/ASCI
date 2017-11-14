@@ -9,7 +9,7 @@
 #' Two indices for three taxonomy types are scored, pMMI and O/E for diatoms, soft-bodied algae, and hybrid. This function combines output from the \code{\link{pmmifun}} and \code{\link{oefun}} functions in a user-friendly format.
 #' 
 #' @return 
-#' A \code{asci} object as a \code{data.frame} with site scores for MMI and O/E indices.  Supplementary data are available as attributes named \code{Supp1_mmi}, \code{Supp1_OE}, and \code{Supp2_OE}.  See the examples for accessing.
+#' A \code{\link{asci}} object with specific methods.  See the examples for accessing.
 #' 
 #' @export
 #' 
@@ -23,15 +23,27 @@
 #' 
 #' @examples 
 #' results <- ASCI(demo_algae_tax, demo_algae_sitedata)
-#' attr(results, 'Supp1_mmi')
+#' scores(results)
+#' Supp1_mmi(results)
+#' Supp1_OE(results)
+#' Supp2_OE(results)
 ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
   
-  # sanity check
+  ## sanity checks
+  
+  # check tax argument
   if(any(!tax %in% c('diatoms', 'sba', 'hybrid')))
     stop('tax must match diatoms, sba, and/or hybrid')
   
+  # run all other checks
+  chkinp(taxain, sitein)
+  
   ##
   # individual output
+  
+  # assign unique id to each
+  taxain <- getids(taxain)
+  sitein <- getids(sitein)
   
   # oe
   oeind <- oefun(taxain, sitein, ...)
@@ -90,7 +102,7 @@ ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
     unnest
   
   # oe null
-  Supp3_OE <- oeind %>% 
+  null_OE <- oeind %>% 
     map(function(x){
       
       x$OE_scores %>% 
@@ -116,15 +128,15 @@ ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
     Supp2_OE <- Supp2_OE %>% 
       filter(taxa %in% tax)
     
-    Supp3_OE <- Supp3_OE %>% 
+    null_OE <- null_OE %>% 
       filter(taxa %in% tax)
     
   }
     
   ##
   # create asci class output
-  out <- new('asci', scores = scr, Supp1_mmi = Supp1_mmi, Supp1_OE = Supp1_OE, 
-             Supp2_OE = Supp2_OE, Supp3_OE = Supp3_OE, taxa = tax)
+  out <- asci(scores = scr, Supp1_mmi = Supp1_mmi, Supp1_OE = Supp1_OE, 
+             Supp2_OE = Supp2_OE, null_OE = null_OE, taxa = tax)
   
   return(out)
   

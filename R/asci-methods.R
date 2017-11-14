@@ -1,6 +1,7 @@
-# methods for asci class
+#' @include class-asci.R
+NULL
 
-# show method
+#' @rdname asci-class
 setMethod('show', 
           signature = 'asci', 
           definition = function(object){
@@ -18,47 +19,32 @@ setMethod('show',
             
           })
 
-##
-# scores
-
-# generic
+#' @param object \code{asci} object created with \code{\link{ASCI}}
+#' @rdname asci-class
+#' 
+#' @export
 setGeneric('scores', function(object) standardGeneric('scores'))
 
-# method
+#' @rdname asci-class
 setMethod('scores', 'asci', function(object) object@scores)
-
-##
-# Supp1_mmi
-
-# generic
+          
+#' @rdname asci-class
+#' @export
 setGeneric('Supp1_mmi', function(object) standardGeneric('Supp1_mmi'))
 
-# method
+#' @rdname asci-class
 setMethod('Supp1_mmi', 'asci', function(object) object@Supp1_mmi)
 
-##
-# Supp1_OE
-
-# generic
+#' @rdname asci-class
+#' @export
 setGeneric('Supp1_OE', function(object) standardGeneric('Supp1_OE'))
 
-# method
+#' @rdname asci-class
 setMethod('Supp1_OE', 'asci', function(object) object@Supp1_OE)
 
-##
-# Supp2_OE
-
-# generic
+#' @rdname asci-class
+#' @export
 setGeneric('Supp2_OE', function(object) standardGeneric('Supp2_OE'))
 
-# method
+#' @rdname asci-class
 setMethod('Supp2_OE', 'asci', function(object) object@Supp2_OE)
-
-##
-# Supp3_OE
-
-# generic
-setGeneric('Supp3_OE', function(object) standardGeneric('Supp3_OE'))
-
-# method
-setMethod('Supp3_OE', 'asci', function(object) object@Supp3_OE)

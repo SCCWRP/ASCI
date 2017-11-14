@@ -2,8 +2,8 @@
 #' 
 #' Run the ASCI O/E index for diatoms, soft-bodied algae, and hybrids
 #' 
-#' @param taxain chr string for path to input taxonomy data
-#' @param sitein chr string for path to input site data
+#' @param taxain \code{data.frame} for input taxonomy data
+#' @param sitein \code{data.frame} for input site data
 #' @param ... additional arguments passed to \code{\link{rfpred}}
 #' 
 #' @details 
@@ -19,16 +19,13 @@
 #' @export
 #' 
 #' @examples 
-#' oefun(demo_algae_tax, demo_algae_sitedata)
+#' taxain <- getids(demo_algae_tax)
+#' oefun(taxain, demo_algae_sitedata)
 oefun <- function(taxain, sitein, ...){
 
   # Step 1. Import taxonomy data -----------------------------------------------------------
   bugs <- taxain
-  reqfields<- c("StationCode", "SampleDate", "Replicate","SampleTypeCode", "BAResult", "Result", "FinalID")
-  missingtaxafields<-setdiff(reqfields, colnames(bugs))
-  if(length(missingtaxafields) >0) { print(paste("Missing fields", missingtaxafields))}
-  bugs$SampleID <- paste(bugs$StationCode, bugs$SampleDate, bugs$Replicate, sep="_")
-  
+
   # Step 2. Import stations data -----------------------------------------------------------
   stations <- sitein
   stations$SampleID <- paste(stations$StationCode, stations$SampleDate, stations$Replicate, sep="_")

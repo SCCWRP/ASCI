@@ -16,7 +16,7 @@ ASCI(taxain, sitein, tax = c("diatoms", "sba", "hybrid"), ...)
 \item{...}{additional arguments passed to other funcions, e.g., \code{\link{rfpred}}}
 }
 \value{
-A \code{asci} object as a \code{data.frame} with site scores for MMI and O/E indices.  Supplementary data are available as attributes named \code{Supp1_mmi}, \code{Supp1_OE}, and \code{Supp2_OE}.  See the examples for accessing.
+A \code{\link{asci}} object with specific methods.  See the examples for accessing.
 }
 \description{
 Score samples using the ASCI tool
@@ -26,7 +26,10 @@ Two indices for three taxonomy types are scored, pMMI and O/E for diatoms, soft-
 }
 \examples{
 results <- ASCI(demo_algae_tax, demo_algae_sitedata)
-attr(results, 'Supp1_mmi')
+scores(results)
+Supp1_mmi(results)
+Supp1_OE(results)
+Supp2_OE(results)
 }
 \seealso{
 \code{\link{pmmifun}}, \code{\link{oefun}}
