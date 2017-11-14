@@ -4,25 +4,54 @@
 \alias{chkinp}
 \title{Check input taxonomy and site data}
 \usage{
-chkinp(taxain, sitein)
+chkinp(taxain, sitein, getval = FALSE)
 }
 \arguments{
 \item{taxain}{\code{data.frame} for input taxonomy data}
 
 \item{sitein}{\code{data.frame} for input site data}
+
+\item{getval}{logical to return a vector of values not satisfied by checks, useful for data prep}
 }
 \value{
-\code{NULL} if all checks are met, otherwise an informative error message is returned
+The original data are returned if all checks are met, including a new column for \code{SampleID} (see \code{\link{getids}}).  An error message is returned if the datasets do not meet requirements.
 }
 \description{
 Check input taxonomy and site data for required information
 }
 \details{
-The following is checked:
+The following are checked:
 \itemize{
 \item Required columns in taxonomy data: StationCode, SampleDate, Replicate,SampleTypeCode, BAResult, Result, FinalID
+\item SampleID in taxanomic data are present in site data
+\item Taxonomic names are present in the \code{\link{STE}} reference file
 }
 }
 \examples{
-chkinp(demo_algae_tax)
+# all checks passed, data returned with SampleID
+chkinp(demo_algae_tax, demo_algae_sitedata)
+
+# errors
+\dontrun{
+
+# missing columns
+tmp <- demo_algae_tax[, -c(1, 2)]
+chkinp(tmp, demo_algae_sitedata)
+chkinp(tmp, demo_algae_sitedata, getval = TRUE)
+
+# site data not found for taxonomic site
+tmp <- demo_algae_sitedata[-1, ]
+chkinp(demo_algae_tax, tmp)
+chkinp(demo_algae_tax, tmp, getval = TRUE)
+
+# incorrect taxonomy
+tmp <- demo_algae_tax
+tmp[1, 'FinalID'] <- 'asdf'
+chkinp(tmp, demo_algae_sitedata)
+chkinp(tmp, demo_algae_sitedata, getval = TRUE)
+
+}
+}
+\seealso{
+\code{\link{getids}}
 }

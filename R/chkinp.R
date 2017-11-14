@@ -4,36 +4,107 @@
 #' 
 #' @param taxain \code{data.frame} for input taxonomy data
 #' @param sitein \code{data.frame} for input site data
+#' @param getval logical to return a vector of values not satisfied by checks, useful for data prep
 #'
-#' @return \code{NULL} if all checks are met, otherwise an informative error message is returned
+#' @return The original data are returned if all checks are met, including a new column for \code{SampleID} (see \code{\link{getids}}).  An error message is returned if the datasets do not meet requirements or a vector of values that caused the error if \code{getval = TRUE}.
 #' 
 #' @details 
-#' The following is checked:
+#' The following are checked:
 #' \itemize{
 #' \item Required columns in taxonomy data: StationCode, SampleDate, Replicate,SampleTypeCode, BAResult, Result, FinalID
+#' \item SampleID in taxanomic data are present in site data
+#' \item Taxonomic names are present in the \code{\link{STE}} reference file
 #' }
 #' 
 #' @export
+#' 
+#' @seealso \code{\link{getids}}
 #'
 #' @importFrom magrittr "%>%"
 #' 
 #' @examples
-#' chkinp(demo_algae_tax)
-chkinp <- function(taxain, sitein){
+#' # all checks passed, data returned with SampleID
+#' chkinp(demo_algae_tax, demo_algae_sitedata)
+#' 
+#' # errors
+#' \dontrun{
+#' 
+#' # missing columns
+#' tmp <- demo_algae_tax[, -c(1, 2)]
+#' chkinp(tmp, demo_algae_sitedata)
+#' chkinp(tmp, demo_algae_sitedata, getval = TRUE)
+#' 
+#' # site data not found for taxonomic site
+#' tmp <- demo_algae_sitedata[-1, ]
+#' chkinp(demo_algae_tax, tmp)
+#' chkinp(demo_algae_tax, tmp, getval = TRUE)
+#' 
+#' # incorrect taxonomy
+#' tmp <- demo_algae_tax
+#' tmp[1, 'FinalID'] <- 'asdf'
+#' chkinp(tmp, demo_algae_sitedata)
+#' chkinp(tmp, demo_algae_sitedata, getval = TRUE)
+#' 
+#' }
+chkinp <- function(taxain, sitein, getval = FALSE){
   
+  ##
   # check if required columns are present
   cols <- c('StationCode', 'SampleDate', 'Replicate','SampleTypeCode', 'BAResult', 'Result', 'FinalID')
   chk <- cols %in% names(taxain)
-  if(!any(chk)){
+  if(any(!chk)){
     
-    msg <- cols[!cols] %>% 
-      paste(collapse = ', ')
+    chk <- cols[!chk]
+    if(getval) return(chk)
     
-    stop('Columns ', msg, ' not found', call. = FALSE)
+    msg <- paste(chk, collapse = ', ') %>% 
+      paste('Required columns not found:', .)
+    stop(msg, call. = FALSE)
     
   }
   
-  return(NULL)
+  ##
+  # add id values after columns are checked
+  taxain <- getids(taxain)
+  sitein <- getids(sitein)
+  sitein <- sitein %>% 
+    filter(SampleID %in% taxain$SampleID)
+  
+  ##
+  # check if all sites in taxain are in sitein
+  chk <- unique(taxain$SampleID) %in% sitein$SampleID
+  if(any(!chk)){
+
+    chk <- unique(taxain$SampleID)[!chk]
+    if(getval) return(chk)
+    
+    msg <- paste(chk, collapse = ', ') %>% 
+      paste('SampleID in taxonomic data not found in site data: ', .)
+    stop(msg, call. = FALSE)
+
+  }
+
+  ##
+  # check taxonomy names
+  chk <- setdiff(taxain$FinalID, STE$FinalID)
+  if(length(chk) > 0){ 
+    
+    if(getval) return(chk)
+    
+    msg <- paste(chk, collapse = ', ') %>% 
+      paste('Unrecognized taxa:', .)
+    stop(msg, call. = FALSE)
+    
+    }
+  
+  ##
+  # return if all checks met
+  out <- list(
+    taxain = taxain, 
+    sitein = sitein
+  )
+  
+  return(out)
   
 }
 

@@ -32,16 +32,9 @@ pmmifun <- function(taxain, sitein){
   
   # Step 2. Import stations data -----------------------------------------------------------
   stations <- sitein
-  stations$SampleID <- paste(stations$StationCode, stations$SampleDate, stations$Replicate, sep="_")
-  row.names(stations) <- stations$SampleID
-  missingsites<-setdiff(bugs$StationCode, stations$StationCode)
-  if(length(missingsites) > 0 ) {print(paste("Missing station codes", missingsites)) }
-  stations<-subset(stations, stations$StationCode %in% bugs$StationCode)
   
-  # Step 3. Make ASCI-readable taxa names -----------------------------------------------------------
-  unrecognizedtaxa <- setdiff(bugs$FinalID, STE$FinalID)
-  if (length(unrecognizedtaxa) > 0 ) { print(paste("Unrecognized taxa", unrecognizedtaxa))}
-  bugs<- merge(bugs, STE, all.x = T) # non matches get purged for now  #this is now case sensitive, could change
+  # Step 3. get diatom, sba, hybrid --------------------------------------------------------
+  bugs<- merge(bugs, STE, all.x = T)
   bugs.d<-subset(bugs, Class=="Bacillariophyceae")
   bugs.sba<-subset(bugs, Class!="Bacillariophyceae")
   bugs$ComboResult<-as.numeric(pmax(bugs$BAResult,bugs$Result, na.rm=T))

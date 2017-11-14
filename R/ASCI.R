@@ -35,21 +35,17 @@ ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
   if(any(!tax %in% c('diatoms', 'sba', 'hybrid')))
     stop('tax must match diatoms, sba, and/or hybrid')
   
-  # run all other checks
-  chkinp(taxain, sitein)
+  # run all other checks, get output if passed
+  dat <- chkinp(taxain, sitein)
   
   ##
   # individual output
   
-  # assign unique id to each
-  taxain <- getids(taxain)
-  sitein <- getids(sitein)
-  
   # oe
-  oeind <- oefun(taxain, sitein, ...)
+  oeind <- oefun(dat$taxain, dat$sitein, ...)
   
   # pmmi
-  pmmind <- pmmifun(taxain, sitein, ...)
+  pmmind <- pmmifun(dat$taxain, dat$sitein, ...)
     
   ##
   # main output (scores)
