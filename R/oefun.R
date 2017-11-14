@@ -20,7 +20,8 @@
 #' 
 #' @examples 
 #' taxain <- getids(demo_algae_tax)
-#' oefun(taxain, demo_algae_sitedata)
+#' sitein <- getids(demo_algae_sitedata)
+#' oefun(taxain, sitein)
 oefun <- function(taxain, sitein, ...){
 
   # Step 1. Import taxonomy data -----------------------------------------------------------

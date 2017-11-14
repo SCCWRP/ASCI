@@ -24,5 +24,6 @@ Three index scores are calculated and returned as a named list
 }
 \examples{
 taxain <- getids(demo_algae_tax)
-oefun(taxain, demo_algae_sitedata)
+sitein <- getids(demo_algae_sitedata)
+oefun(taxain, sitein)
 }

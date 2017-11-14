@@ -22,7 +22,8 @@
 #' 
 #' @examples 
 #' taxain <- getids(demo_algae_tax)
-#' pmmifun(taxain, demo_algae_sitedata)
+#' sitein <- getids(demo_algae_sitedata)
+#' pmmifun(taxain, sitein)
 pmmifun <- function(taxain, sitein){
 
   options(gsubfn.engine = "R")
