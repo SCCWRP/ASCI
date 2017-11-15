@@ -14,7 +14,7 @@
 #' \item Required columns in taxonomy data: StationCode, SampleDate, Replicate,SampleTypeCode, BAResult, Result, FinalID
 #' \item SampleID in taxonomic data are present in site data
 #' \item Taxonomic names are present in the \code{\link{STE}} reference file
-#' \item All sites in the taxonomic data have some abundance data
+#' \item No missing abundance values for diatoms
 #' }
 #' 
 #' @export
@@ -71,8 +71,10 @@ chkinp <- function(taxain, sitein, getval = FALSE){
   
   ##
   # add id values after columns are checked
-  taxain <- getids(taxain)
-  sitein <- getids(sitein)
+  if(!'SampleID' %in% names(taxain))
+    taxain <- getids(taxain)
+  if(!'SampleID' %in% names(sitein))
+    sitein <- getids(sitein)
   sitein <- sitein %>% 
     filter(SampleID %in% taxain$SampleID)
   
@@ -83,8 +85,8 @@ chkinp <- function(taxain, sitein, getval = FALSE){
 
     chk <- unique(taxain$SampleID)[!chk]
     if(getval) return(chk)
-    
-    msg <- paste(chk, collapse = ', ') %>% 
+
+    msg <- paste(chk, collapse = ', ') %>%
       paste('SampleID in taxonomic data not found in site data: ', .)
     stop(msg, call. = FALSE)
 
@@ -93,28 +95,29 @@ chkinp <- function(taxain, sitein, getval = FALSE){
   ##
   # check taxonomy names
   chk <- setdiff(taxain$FinalID, STE$FinalID)
-  if(length(chk) > 0){ 
-    
+  if(length(chk) > 0){
+
     if(getval) return(chk)
-    
-    msg <- paste(chk, collapse = ', ') %>% 
+
+    msg <- paste(chk, collapse = ', ') %>%
       paste('Unrecognized taxa:', .)
     stop(msg, call. = FALSE)
-    
+
     }
-  
+
   ## 
   # check if abundance data available in taxonomy
   chk <- taxain %>% 
+    filter(Class %in% 'Bacillariophyceae') %>% 
     group_by(SampleID) %>% 
-    summarize(chk = any(!is.na(BAResult)))
-  if(!any(chk$chk)){
-    
-    chk <- chk$SampleID[!chk$chk]
+    summarise(chk = any(is.na(BAResult)))
+  if(any(chk$chk)){
+
+    chk <- chk$SampleID[chk$chk]
     if(getval) return(chk)
     
     msg <- paste(chk, collapse = ', ') %>% 
-      paste('Missing abundance data:', .)
+      paste('Missing abundance data for diatoms', .)
     stop(msg, .call = FALSE)
     
   }

@@ -25,7 +25,7 @@ The following are checked:
 \item Required columns in taxonomy data: StationCode, SampleDate, Replicate,SampleTypeCode, BAResult, Result, FinalID
 \item SampleID in taxonomic data are present in site data
 \item Taxonomic names are present in the \code{\link{STE}} reference file
-\item All sites in the taxonomic data have some abundance data
+\item No missing abundance values for diatoms
 }
 }
 \examples{
