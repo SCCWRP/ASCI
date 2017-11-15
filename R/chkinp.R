@@ -12,14 +12,16 @@
 #' The following are checked:
 #' \itemize{
 #' \item Required columns in taxonomy data: StationCode, SampleDate, Replicate,SampleTypeCode, BAResult, Result, FinalID
-#' \item SampleID in taxanomic data are present in site data
+#' \item SampleID in taxonomic data are present in site data
 #' \item Taxonomic names are present in the \code{\link{STE}} reference file
+#' \item All sites in the taxonomic data have some abundance data
 #' }
 #' 
 #' @export
 #' 
 #' @seealso \code{\link{getids}}
 #'
+#' @importFrom dplyr group_by summarise
 #' @importFrom magrittr "%>%"
 #' 
 #' @examples
@@ -28,7 +30,6 @@
 #' 
 #' # errors
 #' \dontrun{
-#' 
 #' # missing columns
 #' tmp <- demo_algae_tax[, -c(1, 2)]
 #' chkinp(tmp, demo_algae_sitedata)
@@ -45,6 +46,11 @@
 #' chkinp(tmp, demo_algae_sitedata)
 #' chkinp(tmp, demo_algae_sitedata, getval = TRUE)
 #' 
+#' # missing abundance data
+#' tmp <- demo_algae_tax
+#' tmp$BAResult <- NA
+#' chkinp(tmp, demo_algae_sitedata)
+#' chkinp(tmp, demo_algae_sitedata, getval = TRUE)
 #' }
 chkinp <- function(taxain, sitein, getval = FALSE){
   
@@ -96,6 +102,22 @@ chkinp <- function(taxain, sitein, getval = FALSE){
     stop(msg, call. = FALSE)
     
     }
+  
+  ## 
+  # check if abundance data available in taxonomy
+  chk <- taxain %>% 
+    group_by(SampleID) %>% 
+    summarize(chk = any(!is.na(BAResult)))
+  if(!any(chk$chk)){
+    
+    chk <- chk$SampleID[!chk$chk]
+    if(getval) return(chk)
+    
+    msg <- paste(chk, collapse = ', ') %>% 
+      paste('Missing abundance data:', .)
+    stop(msg, .call = FALSE)
+    
+  }
   
   ##
   # return if all checks met

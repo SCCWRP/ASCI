@@ -23,8 +23,9 @@ Check input taxonomy and site data for required information
 The following are checked:
 \itemize{
 \item Required columns in taxonomy data: StationCode, SampleDate, Replicate,SampleTypeCode, BAResult, Result, FinalID
-\item SampleID in taxanomic data are present in site data
+\item SampleID in taxonomic data are present in site data
 \item Taxonomic names are present in the \code{\link{STE}} reference file
+\item All sites in the taxonomic data have some abundance data
 }
 }
 \examples{
@@ -33,7 +34,6 @@ chkinp(demo_algae_tax, demo_algae_sitedata)
 
 # errors
 \dontrun{
-
 # missing columns
 tmp <- demo_algae_tax[, -c(1, 2)]
 chkinp(tmp, demo_algae_sitedata)
@@ -50,6 +50,11 @@ tmp[1, 'FinalID'] <- 'asdf'
 chkinp(tmp, demo_algae_sitedata)
 chkinp(tmp, demo_algae_sitedata, getval = TRUE)
 
+# missing abundance data
+tmp <- demo_algae_tax
+tmp$BAResult <- NA
+chkinp(tmp, demo_algae_sitedata)
+chkinp(tmp, demo_algae_sitedata, getval = TRUE)
 }
 }
 \seealso{
