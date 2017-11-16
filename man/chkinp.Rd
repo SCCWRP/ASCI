@@ -26,6 +26,7 @@ The following are checked:
 \item SampleID in taxonomic data are present in site data
 \item Taxonomic names are present in the \code{\link{STE}} reference file
 \item No missing abundance values for diatoms
+\item No missing values for environmental predictor variables
 }
 }
 \examples{
@@ -55,6 +56,13 @@ tmp <- demo_algae_tax
 tmp$BAResult <- NA
 chkinp(tmp, demo_algae_sitedata)
 chkinp(tmp, demo_algae_sitedata, getval = TRUE)
+
+# missing environmental data
+tmp <- demo_algae_sitedata
+tmp$SITE_ELEV <- NA
+tmp$AREA_SQKM <- NA
+chkinp(demo_algae_tax, tmp)
+chkinp(demo_algae_tax, tmp, getval = TRUE)
 }
 }
 \seealso{

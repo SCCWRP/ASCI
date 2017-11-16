@@ -15,6 +15,7 @@
 #' \item SampleID in taxonomic data are present in site data
 #' \item Taxonomic names are present in the \code{\link{STE}} reference file
 #' \item No missing abundance values for diatoms
+#' \item No missing values for environmental predictor variables
 #' }
 #' 
 #' @export
@@ -23,6 +24,7 @@
 #'
 #' @importFrom dplyr group_by summarise
 #' @importFrom magrittr "%>%"
+#' @importFrom tidyr gather
 #' 
 #' @examples
 #' # all checks passed, data returned with SampleID
@@ -51,6 +53,13 @@
 #' tmp$BAResult <- NA
 #' chkinp(tmp, demo_algae_sitedata)
 #' chkinp(tmp, demo_algae_sitedata, getval = TRUE)
+#' 
+#' # missing environmental data
+#' tmp <- demo_algae_sitedata
+#' tmp$SITE_ELEV <- NA
+#' tmp$AREA_SQKM <- NA
+#' chkinp(demo_algae_tax, tmp)
+#' chkinp(demo_algae_tax, tmp, getval = TRUE)
 #' }
 chkinp <- function(taxain, sitein, getval = FALSE){
   
@@ -122,7 +131,40 @@ chkinp <- function(taxain, sitein, getval = FALSE){
     stop(msg, .call = FALSE)
     
   }
-  
+
+  ##
+  # check if predictor data available for oe rf models
+  prd <- c(
+    row.names(diatom_rf_oe$importance), 
+    row.names(sba_rf_oe$importance),
+    row.names(hybrid_rf_oe$importance)
+    ) %>% 
+    unique %>% 
+    sort
+  chk <- sitein[, c('SampleID', prd)] %>% 
+    gather('var', 'val', -SampleID) %>% 
+    filter(is.na(val))
+  if(nrow(chk) > 0){
+    
+    if(getval) return(chk)
+    
+    msg <- unique(chk$SampleID)
+    for(i in seq_along(msg)){
+
+      vrs <- chk %>% 
+        filter(SampleID %in% msg[i]) %>% 
+        .$var
+      msg[i] <- paste(vrs, collapse = ', ') %>% 
+        paste0(msg[i], ':\t', .)
+      
+    }
+
+    msg <- paste(msg, collapse = '\n\n') %>% 
+      paste('\n\nMissing environmental data:\n\n', .)
+    stop(msg, .call = FALSE)
+    
+  }
+
   ##
   # return if all checks met
   out <- list(

@@ -34,7 +34,6 @@ rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew,
   #first convert bug matrix to P/A (1/0)
   temp.pa<-bugnew
   temp.pa[temp.pa>0]<-1
-  rm(bugnew)
 
   #1. - initial definitions
   names(grps.final)<-row.names(bugcal.pa)
@@ -45,7 +44,8 @@ rfpred <- function(bugcal.pa, grps.final, preds.final, ranfor.mod, prednew,
 
   #2. Alignment of new predictor and bug data with model data
   #2a) Align the rows (samples) of the new bug data to the new predictor data
-  temp.pa<-temp.pa[row.names(prednew),]
+  temp.pa<-temp.pa[row.names(temp.pa) %in% row.names(prednew),]
+ 
   #2b)reshape bugnew columns (taxa) to match those in bugcal.pa, and be in same order
   # New bug data might have fewer or more columns (taxa) than calibration bug data
   # create a new empty site x taxa matrix with bugcal.pa columns and bugnew rows, fill it with zeros
