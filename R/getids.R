@@ -20,8 +20,10 @@
 #' getids(demo_algae_tax)
 getids <- function(datin){
   
-  datin <- datin %>% 
-    unite('SampleID', StationCode, SampleDate, Replicate, sep = '_', remove = FALSE)
+  if(!'SampleID' %in% names(datin))
+  
+    datin <- datin %>% 
+      unite('SampleID', StationCode, SampleDate, Replicate, sep = '_', remove = FALSE)
 
   return(datin)
   
