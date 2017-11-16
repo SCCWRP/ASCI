@@ -6,7 +6,7 @@ globalVariables(c('STE', 'Class', 'acast', 'oelkup', 'diatom_rf_oe', 'sba_rf_oe'
                   'IndicatorClass_DOC', 'IndicatorClass_Ref', 'IndicatorClass_TN', 'Heterocystous', 
                   'NitrogenUptakeMetabolism2', 'E', 'O', 'OoverE', 'SampleID', 'met', 'name', 'pnorm', 
                   'results', 'sd', 'taxa', 'val', '.', 'MMI', 'MMI_Percentile', 'OoverE_Percentile', 
-                  'Enull', 'Onull', 'OoverE.null', 'Replicate', 'SampleDate', 'StationCode'))
+                  'Enull', 'Onull', 'OoverE.null', 'Replicate', 'SampleDate', 'StationCode', 'BAResult'))
 
 #' @importFrom stats na.omit pnorm predict runif sd var
 NULL

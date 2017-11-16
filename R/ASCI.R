@@ -42,10 +42,10 @@ ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
   # individual output
   
   # oe
-  oeind <- oefun(dat$taxain, dat$sitein, ...)
+  oeind <- oefun(dat$taxa, dat$site, ...)
   
   # pmmi
-  pmmind <- pmmifun(dat$taxain, dat$sitein, ...)
+  pmmind <- pmmifun(dat$taxa, dat$site, ...)
     
   ##
   # main output (scores)

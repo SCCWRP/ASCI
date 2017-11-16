@@ -6,7 +6,7 @@
 #' @param sitein \code{data.frame} for input site data
 #' @param getval logical to return a vector of values not satisfied by checks, useful for data prep
 #'
-#' @return The original data with only relevant columns are returned if all checks are met, including a new column for \code{SampleID} (see \code{\link{getids}}).  An error message is returned if the datasets do not meet requirements or a vector of values that caused the error if \code{getval = TRUE}.
+#' @return The original data with only relevant columns are returned if all checks are met, including a new column for \code{SampleID} (see \code{\link{getids}}).  An error message is returned if the datasets do not meet requirements or a vector of values that caused the error if \code{getval = TRUE}.  Site data will include only those sites in the taxonomic data.
 #' 
 #' @details 
 #' The following are checked:
@@ -15,8 +15,8 @@
 #' \item Required columns in site data: StationCode, SampleDate, Replicate, AREA_SQKM, AtmCa, CondQR50, DayOfYear, KFCT_AVE, LogWSA, LST32AVE, MAX_ELEV, MEANP_WS, MINP_WS, New_Lat, New_Long, PPT_00_09, SITE_ELEV, TMAX_WS, XWD_WS 
 #' \item SampleID in taxonomic data are present in site data
 #' \item Taxonomic names are present in the \code{\link{STE}} reference file
-#' \item Sites with soft-bodied algae also include diatom data
-#' \item No missing abundance values for diatoms
+#' \item Sites include both diatom and soft-bodied algae data
+#' \item No missing abundance values for diatoms (for rarification)
 #' \item No missing values for environmental predictor variables
 #' }
 #' 
@@ -24,7 +24,7 @@
 #' 
 #' @seealso \code{\link{getids}}
 #'
-#' @importFrom dplyr group_by select summarise
+#' @importFrom dplyr group_by mutate select summarise
 #' @importFrom magrittr "%>%"
 #' @importFrom tidyr gather
 #' 
@@ -55,7 +55,7 @@
 #' chkinp(tmp, demo_algae_sitedata)
 #' chkinp(tmp, demo_algae_sitedata, getval = TRUE)
 #' 
-#' # missing diatom data at a site
+#' # missing diatom data at sites
 #' tmp <- merge(demo_algae_tax, STE, all.x = T) %>%
 #'   filter(!Class %in% 'Bacillariophyceae')
 #' chkinp(tmp, demo_algae_sitedata)
@@ -117,9 +117,7 @@ chkinp <- function(taxain, sitein, getval = FALSE){
   # add id values after columns are checked
   taxain <- getids(taxain)    
   sitein <- getids(sitein)
-  # sitein <- sitein %>% 
-  #   filter(SampleID %in% taxain$SampleID)
-  
+
   ##
   # check if all sites in taxain are in sitein
   chk <- unique(taxain$SampleID) %in% sitein$SampleID
@@ -148,25 +146,25 @@ chkinp <- function(taxain, sitein, getval = FALSE){
     }
 
   ##
-  # check if diatom data are available at all sites
-  taxain <- merge(taxain, STE, all.x = T)
-  dia_sit <- subset(taxain, Class %in% 'Bacillariophyceae') %>% 
-    .$SampleID %>% 
-    unique
-  oth_sit <-subset(taxain, !Class  %in% 'Bacillariophyceae') %>% 
-    .$SampleID %>% 
-    unique
-  chk <- oth_sit[!oth_sit %in% dia_sit]
-  if(length(chk) > 0){
+  # check if sites have both diatom and sba data
+  tmp <-taxain %>% 
+    merge(STE, all.x = TRUE) %>% 
+    mutate(diaind = ifelse(Class %in% 'Bacillariophyceae', 'dia', 'sba')) %>% 
+    group_by(SampleID) %>%
+    summarise(n = length(unique(diaind)))
+  chk <- tmp$n < 2
+  if(any(chk)){
     
+    chk <- tmp[chk, ] %>% 
+      .$SampleID
     if(getval) return(chk)
     
     msg <- paste(chk, collapse = ', ') %>% 
-      paste('No diatoms at sites:', .)
+      paste('Missing both diatom or soft-bodied algae at sites:', .)
     stop(msg, .call = FALSE)
     
   }
-    
+  
   ## 
   # check if abundance diatom data available in taxonomy
   chk <- taxain %>% 
@@ -212,10 +210,22 @@ chkinp <- function(taxain, sitein, getval = FALSE){
   }
 
   ##
+  # final subset of sitein to include only sites in taxain
+  # order by SampleID
+  # select only relevant columns
+  sitein <- sitein %>%
+    filter(SampleID %in% taxain$SampleID) %>% 
+    arrange(SampleID) %>% 
+    .[, c('SampleID', sitcols)]
+  taxain <- taxain %>% 
+    arrange(SampleID) %>% 
+    .[, c('SampleID', taxcols)]
+  
+  ##
   # return if all checks met
   out <- list(
-    taxain = taxain[, c('SampleID', taxcols)], 
-    sitein = sitein[, c('SampleID', sitcols)]
+    taxa = taxain,
+    site = sitein
   )
   
   return(out)

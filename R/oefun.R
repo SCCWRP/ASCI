@@ -32,8 +32,8 @@ oefun <- function(taxain, sitein, ...){
   
   # Step 3. Make ASCI-readable taxa names -----------------------------------------------------------
   bugs<- merge(bugs, STE, all.x = T) # non matches get purged for now  #this is now case sensitive, could change
-  bugs.d<-subset(bugs, Class=="Bacillariophyceae")
-  bugs.sba<-subset(bugs, Class!="Bacillariophyceae")
+  bugs.d<-subset(bugs, Class %in% "Bacillariophyceae")
+  bugs.sba<-subset(bugs, !Class %in% "Bacillariophyceae")
   bugs$ComboResult<-as.numeric(pmax(bugs$BAResult,bugs$Result, na.rm=T))
     
   # Step 4. Rarify diatom data -----------------------------------------------------------
@@ -81,7 +81,7 @@ oefun <- function(taxain, sitein, ...){
   
   calib.bugs.sba.tax.refcal <- oelkup$sba.bugs.rc
   calib.stations.sba.refcal.BG <- oelkup$sba.stations.rc
-  
+
   Scores.sba <- rfpred(
     bugcal.pa = calib.bugs.sba.tax.refcal,
     grps.final = calib.stations.sba.refcal.BG$BG,

@@ -14,7 +14,7 @@ chkinp(taxain, sitein, getval = FALSE)
 \item{getval}{logical to return a vector of values not satisfied by checks, useful for data prep}
 }
 \value{
-The original data with only relevant columns are returned if all checks are met, including a new column for \code{SampleID} (see \code{\link{getids}}).  An error message is returned if the datasets do not meet requirements or a vector of values that caused the error if \code{getval = TRUE}.
+The original data with only relevant columns are returned if all checks are met, including a new column for \code{SampleID} (see \code{\link{getids}}).  An error message is returned if the datasets do not meet requirements or a vector of values that caused the error if \code{getval = TRUE}.  Site data will include only those sites in the taxonomic data.
 }
 \description{
 Check input taxonomy and site data for required information
@@ -26,8 +26,8 @@ The following are checked:
 \item Required columns in site data: StationCode, SampleDate, Replicate, AREA_SQKM, AtmCa, CondQR50, DayOfYear, KFCT_AVE, LogWSA, LST32AVE, MAX_ELEV, MEANP_WS, MINP_WS, New_Lat, New_Long, PPT_00_09, SITE_ELEV, TMAX_WS, XWD_WS 
 \item SampleID in taxonomic data are present in site data
 \item Taxonomic names are present in the \code{\link{STE}} reference file
-\item Sites with soft-bodied algae also include diatom data
-\item No missing abundance values for diatoms
+\item Sites include both diatom and soft-bodied algae data
+\item No missing abundance values for diatoms (for rarification)
 \item No missing values for environmental predictor variables
 }
 }
@@ -58,7 +58,7 @@ tmp[1, 'FinalID'] <- 'asdf'
 chkinp(tmp, demo_algae_sitedata)
 chkinp(tmp, demo_algae_sitedata, getval = TRUE)
 
-# missing diatom data at a site
+# missing diatom data at sites
 tmp <- merge(demo_algae_tax, STE, all.x = T) \%>\%
   filter(!Class \%in\% 'Bacillariophyceae')
 chkinp(tmp, demo_algae_sitedata)
