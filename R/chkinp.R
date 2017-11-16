@@ -106,8 +106,9 @@ chkinp <- function(taxain, sitein, getval = FALSE){
     }
 
   ## 
-  # check if abundance data available in taxonomy
+  # check if abundance diatom data available in taxonomy
   chk <- taxain %>% 
+    merge(STE, all.x = T) %>% 
     filter(Class %in% 'Bacillariophyceae') %>% 
     group_by(SampleID) %>% 
     summarise(chk = any(is.na(BAResult)))
