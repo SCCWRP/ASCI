@@ -24,7 +24,7 @@
 #' 
 #' @seealso \code{\link{getids}}
 #'
-#' @importFrom dplyr group_by mutate select summarise
+#' @importFrom dplyr arrange filter group_by mutate select summarise
 #' @importFrom magrittr "%>%"
 #' @importFrom tidyr gather
 #' 
