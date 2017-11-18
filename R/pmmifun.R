@@ -14,7 +14,6 @@
 #' @export
 #' 
 #' @importFrom reshape2 acast melt
-#' @importFrom sqldf sqldf
 #' @importFrom dplyr bind_rows filter mutate group_by select summarise ungroup
 #' @importFrom tidyr gather spread nest unnest separate unite
 #' @import purrr

@@ -8,9 +8,11 @@
 #' 
 #' @details \code{tax_dat} is converted to \code{taxonomy_pa} for presence/absence
 #' 
+#' @importFrom dplyr left_join mutate rename
+#' @importFrom magrittr "%>%"
 #' @importFrom vegan diversity specnumber
 #' @importFrom plyr ddply summarize
-#' 
+#'
 #' @return a data.frame of scores for the relevant taxa
 #' 
 #' @examples
@@ -25,8 +27,14 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stat
   # convert taxonomy data to presence/absence
   taxonomy_pa <- as.data.frame(ifelse(tax_dat > 0, 1, 0))
   
-  indicators <- pmmilkup$indicators
+  # indicators
+  indicators <- pmmilkup$indicators %>% 
+    mutate(FinalIDassigned = as.character(FinalIDassigned))
 
+  # traits
+  traits <- pmmilkup$traits %>% 
+    mutate(FinalIDassigned = as.character(FinalIDassigned))
+  
   ##################################################################################################################################################################
   # data prep
   ##################################################################################################################################################################
@@ -35,27 +43,21 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stat
   taxonomy_pa$SampleID<-row.names(taxonomy_pa)
   taxonomy_pa=taxonomy_pa[order(taxonomy_pa$SampleID),] #ordering by SampleID
   taxonomy_pa_melt=melt(taxonomy_pa,id=c('SampleID')) #melting data into long format
-  taxonomy_pa_melt<-as.data.frame(droplevels(subset(taxonomy_pa_melt, value!=0)))
-  #taxonomy_pa_melt=sqldf("select SampleID, variable as FinalIDassigned from taxonomy_pa_melt where value=1 order by SampleID") #selecting only those rows with non-zero values
-  names(taxonomy_pa_melt)[2] <- "FinalIDassigned"
-  
-  # Import traits table
-  traits <- pmmilkup$traits
-  
+  taxonomy_pa_melt<-as.data.frame(droplevels(subset(taxonomy_pa_melt, value!=0))) %>% 
+    rename(FinalIDassigned = variable) %>% 
+    mutate(FinalIDassigned = as.character(FinalIDassigned))
+
   ###Stations Data Prep
   #the next set of lines is the combining of tables to create one gaint table that is to be used in the metrics calculations below
-  stations_combined1=sqldf("select * from (stations left join taxonomy_pa_melt using(SampleID)) left join traits using(FinalIDassigned)")
-  stations_combined2=sqldf("select * from stations_combined1 left join indicators using(FinalIDassigned)")
-  
-  stations_combined3=sqldf("select * from stations_combined2
-                           left join
-                           taxonomy_pa_melt
-                           on stations_combined2.SampleID=taxonomy_pa_melt.SampleID
-                           and stations_combined2.FinalIDassigned=taxonomy_pa_melt.FinalIDassigned") # i edited the .variable to .FinalIDassigned
-  
+  stations_combined = stations %>% 
+    left_join(taxonomy_pa_melt, by = 'SampleID') %>% 
+    left_join(traits, by = 'FinalIDassigned') %>% 
+    left_join(indicators, by = 'FinalIDassigned') %>% 
+    left_join(taxonomy_pa_melt, by = c('SampleID', 'FinalIDassigned', 'value'))
+    
   #the next two lines create a genus variable by splitting the full taxa name
-  stations_list=strsplit(stations_combined3$FinalIDassigned," ")
-  stations_combined3$Genus=lapply(stations_list,FUN=function(x) x[1])
+  stations_list=strsplit(stations_combined$FinalIDassigned," ")
+  stations_combined$Genus=lapply(stations_list,FUN=function(x) x[1])
   
   ################################################################################
   # Metric calculations --------
@@ -66,10 +68,10 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stat
   shannon=diversity(taxonomy_pa[,-z],index='shannon') #Computing Shannon
   simpson=diversity(taxonomy_pa[,-z],index='simpson') #Computing Simpson
   richness=specnumber(taxonomy_pa[,-z]) #Computing Richness
-  specialty_metrics=data.frame(SampleID=taxonomy_pa[,z],shannon,simpson,richness) #Combining the three into one table with SampleIDs attached
+  specialty_metrics=data.frame(SampleID=taxonomy_pa[,z],shannon,simpson,richness, stringsAsFactors = FALSE) #Combining the three into one table with SampleIDs attached
 
   ### Metric Calculations ------------------------------------------------------------------------------------------------------------
-  metrics=ddply(.data = stations_combined3, .variables = ~SampleID,.fun = summarize,
+  metrics=ddply(.data = stations_combined, .variables = ~SampleID,.fun = summarize,
   
                 OrgN.NAHON.richness=sum(na.omit(NitrogenUptakeMetabolism=='NAHON')), #count of NAHON - species
                 OrgN.NALON.richness=sum(na.omit(NitrogenUptakeMetabolism=='NALON')), #count of NALON - species
@@ -228,18 +230,16 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stat
   
   )
   
-  # Combining With Specialty Metrics and Outputting
-  if (taxa == 'sba') {
-    out=sqldf("select * from metrics left join specialty_metrics using(SampleID)") #Linking metrics and specialty_metrics tables
+  # Combining With Specialty Metrics
+  if(taxa %in% c('sba', 'hybrid')){
+    
+    out <- metrics %>% 
+      left_join(specialty_metrics, by = 'SampleID')
   
-    } #Saving completer metrics dataframe as CSV
-  if (taxa == 'hybrid') {
-    out=sqldf("select * from metrics left join specialty_metrics using(SampleID)") #Linking metrics and specialty_metrics tables
-  
-    } #Saving completer metrics dataframe as CSV
+  } 
   
   # now for the one modeled metric
-  if (taxa == 'diatoms') {
+  if(taxa == 'diatoms'){
 
     required.predictors <- row.names(rf_out_top$importance)
     required.predictors
@@ -251,10 +251,12 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stat
     observed<-metrics[,"prop.spp.Salinity.BF"]
     resid<-observed-predicted
     metrics$prop.spp.Salinity.BF<-resid
-  
-    out = sqldf("select * from metrics left join specialty_metrics using(SampleID)") #Linking metrics and specialty_metrics tables
     
-    }
+    # Combining With Specialty Metrics
+    out = metrics %>% 
+      left_join(specialty_metrics, by = 'SampleID')
+    
+  }
 
   return(out)
 

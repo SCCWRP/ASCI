@@ -42,19 +42,7 @@ results
 ```
 ## An object of class asci 
 ## Scores calculated for diatoms, sba, hybrid 
-## Use these functions for access: scores, Supp1_mmi, Supp1_OE, Supp2_OE, Supp3_OE
-```
-
-Output from one index type (diatoms, soft-bodied algae, or hybrid) can be returned with the `tax` argument.
-
-```r
-ASCI(demo_algae_tax, demo_algae_sitedata, tax = 'diatoms')
-```
-
-```
-## An object of class asci 
-## Scores calculated for diatoms 
-## Use these functions for access: scores, Supp1_mmi, Supp1_OE, Supp2_OE, Supp3_OE
+## Use these functions for access: scores, Supp1_mmi, Supp1_OE, Supp2_OE
 ```
 
 The output can be accessed using the defined methods.
@@ -64,7 +52,7 @@ The output can be accessed using the defined methods.
 ```
 
 ```
-## [1] show      scores    Supp1_mmi Supp1_OE  Supp2_OE  Supp3_OE 
+## [1] show      scores    Supp1_mmi Supp1_OE  Supp2_OE 
 ## see '?methods' for accessing help and source code
 ```
 
@@ -76,10 +64,10 @@ scores(results)
 ## # A tibble: 12 x 8
 ##       taxa            SampleID       MMI MMI_Percentile     O         E
 ##  *   <chr>               <chr>     <dbl>          <dbl> <dbl>     <dbl>
-##  1 diatoms 000CAT148_8/10/10_1 0.8134297     0.91470415     8  6.666486
-##  2 diatoms  102PS0139_8/9/10_1 0.7534252     0.36411590     8  7.052908
-##  3 diatoms 105DLCDCC_5/19/09_1 0.7647836     0.49109867     8  6.411555
-##  4 diatoms 105DLCDCC_6/23/09_1 0.7306138     0.15853133     8  6.411555
+##  1 diatoms 000CAT148_8/10/10_1 0.8134297     0.87518058     8  6.666486
+##  2 diatoms  102PS0139_8/9/10_1 0.7534252     0.31270715     8  7.052908
+##  3 diatoms 105DLCDCC_5/19/09_1 0.7877054     0.67306700     8  6.411555
+##  4 diatoms 105DLCDCC_6/23/09_1 0.7306138     0.13319087     8  6.411555
 ##  5  hybrid 000CAT148_8/10/10_1 0.6909954     0.91676192     9  9.639016
 ##  6  hybrid  102PS0139_8/9/10_1 0.5397984     0.20206578    10 10.349072
 ##  7  hybrid 105DLCDCC_5/19/09_1 0.5543945     0.26757698     9  8.757375

@@ -46,11 +46,6 @@ results <- ASCI(demo_algae_tax, demo_algae_sitedata)
 results
 ```
 
-Output from one index type (diatoms, soft-bodied algae, or hybrid) can be returned with the `tax` argument.
-```{r}
-ASCI(demo_algae_tax, demo_algae_sitedata, tax = 'diatoms')
-```
-
 The output can be accessed using the defined methods.
 ```{r}
 .S4methods(class = 'asci')
