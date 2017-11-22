@@ -61,13 +61,13 @@ setMethod('Supp2_OE', 'asci', function(object) object@Supp2_OE)
 #'
 #' @details This functions estimates seven performance measures that evaluate index accuracy, precision, and responsiveness for calibration and validation datasets. The following are estimated:
 #' \itemize{
-#' \item{ave}{Average scores at reference sites}
-#' \item{fst}{F statistic of reference scores between ecoregions}
-#' \item{vrs_nat}{Variance of index scores explained by natural gradients at reference sites}
-#' \item{prc_amg}{Precision among sites as standard deviation of scores at reference sites}
-#' \item{prc_wth}{Precision within sites as standard deviation of within-site residuals for repeat site visits at reference sites}
-#' \item{res_tst}{t-statistic as a measure of precision between scores at reference and stressed sites}
-#' \item{res_var}{Variance of index scores explained by human-activity gradients at all sites as a measure of responsiveness}
+#' \item{\code{ave}} {Average scores at reference sites}
+#' \item{\code{fst}} {F statistic of reference scores between ecoregions}
+#' \item{\code{vrs_nat}} {Variance of index scores explained by natural gradients at reference sites}
+#' \item{\code{prc_amg}} {Precision among sites as standard deviation of scores at reference sites}
+#' \item{\code{prc_wth}} {Precision within sites as standard deviation of within-site residuals for repeat site visits at reference sites}
+#' \item{\code{res_tst}} {t-statistic as a measure of precision between scores at reference and stressed sites}
+#' \item{\code{res_var}} {Variance of index scores explained by human-activity gradients at all sites as a measure of responsiveness}
 #' }
 #' This function requires site classifications as reference (calibration and validation), stressed, and repeat visits.  Regions for each site are also required.
 #' 
