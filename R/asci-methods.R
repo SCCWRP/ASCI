@@ -112,27 +112,6 @@ setMethod('perf', 'asci', function(object){
       typ = 'Null'
     ) 
   
-  # combine predictive and null scores
-  toprf <- rbind(scr, nll) %>% 
-    left_join(sitcat, by = 'SampleID') %>% 
-    na.omit %>% 
-    filter(!psa %in% 'Central_Valley') %>% 
-    filter(cls %in% c('rc', 'rv', 'str', 'notrecent')) %>% 
-    separate(SampleID, c('StationID', 'Replicate'), sep = '_[0-9]+/[0-9]+/[0-9]+_', remove = FALSE) %>% 
-    group_by(grp, ind, typ) %>% 
-    nest
-  
-  # evaluate by grp, ind, typ
-  # combine predictive and null scores
-  toprf <- rbind(scr, nll) %>% 
-    left_join(sitcat, by = 'SampleID') %>% 
-    na.omit %>% 
-    filter(!psa %in% 'Central_Valley') %>% 
-    filter(cls %in% c('rc', 'rv', 'str', 'notrecent')) %>% 
-    separate(SampleID, c('StationID', 'Replicate'), sep = '_[0-9]+/[0-9]+/[0-9]+_', remove = FALSE) %>% 
-    group_by(grp, ind, typ) %>% 
-    nest
-  
   # rf mods
   rfmods <- list(
     diatoms_oe_Predictive = diatom_rf_oe,
@@ -143,8 +122,17 @@ setMethod('perf', 'asci', function(object){
     enframe('val', 'rfmod') %>% 
     separate(val, c('grp', 'ind', 'typ'))
   
-  # join available rf mods with toprf
-  toprf <- toprf %>% 
+  # combine predictive and null scores
+  # add site classification, regions (remove CV)
+  # add rf mods
+  toprf <- rbind(scr, nll) %>% 
+    left_join(sitcat, by = 'SampleID') %>% 
+    na.omit %>% 
+    filter(!psa %in% 'Central_Valley') %>% 
+    filter(cls %in% c('rc', 'rv', 'str', 'notrecent')) %>% 
+    separate(SampleID, c('StationID', 'Replicate'), sep = '_[0-9]+/[0-9]+/[0-9]+_', remove = FALSE) %>% 
+    group_by(grp, ind, typ) %>% 
+    nest %>% 
     left_join(rfmods, by = c('grp', 'ind', 'typ'))
   
   # get performance by grp, ind, typ combo
