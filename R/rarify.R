@@ -27,7 +27,6 @@ rarify <- function(inbug, sample.ID, abund, subsiz){
 
     #extract current sample
     isamp<-sampid[i]
-    flush.console()
 
     onesamp<-inbug[inbug[,sample.ID]==isamp,]
     onesamp<-data.frame(onesamp,row.id=seq(1,dim(onesamp)[[1]])) #add sequence numbers as a new column

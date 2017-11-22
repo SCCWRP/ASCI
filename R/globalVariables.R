@@ -7,12 +7,14 @@ globalVariables(c('STE', 'Class', 'acast', 'oelkup', 'diatom_rf_oe', 'sba_rf_oe'
                   'NitrogenUptakeMetabolism2', 'E', 'O', 'OoverE', 'SampleID', 'met', 'name', 'pnorm', 
                   'results', 'sd', 'taxa', 'val', '.', 'MMI', 'MMI_Percentile', 'OoverE_Percentile', 
                   'Enull', 'Onull', 'OoverE.null', 'Replicate', 'SampleDate', 'StationCode', 'BAResult',
-                  'diaind', 'variable', 'FinalIDassigned'))
+                  'diaind', 'variable', 'FinalIDassigned', 'StationID', 'ave', 'cls', 'data', 'fst', 'grp', 
+                  'ind', 'lm', 'mmi', 'oe', 'prc_amg', 'prc_wth', 'psa', 'res_tst', 'rfmod', 'scr.x', 
+                  'scr.y', 'sitcat', 'typ'))
 
-#' @importFrom stats na.omit pnorm predict runif sd var
+#' @importFrom stats ave lm na.omit pnorm predict runif sd t.test var
 NULL
 
-#' @importFrom utils capture.output flush.console
+#' @importFrom utils data tail
 NULL
 
 #' @importFrom methods .S4methods new

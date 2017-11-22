@@ -42,14 +42,14 @@ The core function is `ASCI` that estimates O/E and pMMI scores.  This provides a
 devtools::load_all()
 ```
 ```{r}
-results <- ASCI(demo_algae_tax, demo_algae_sitedata)
-results
+demo_results <- ASCI(demo_algae_tax, demo_algae_sitedata)
+demo_results
 ```
 
 The output can be accessed using the defined methods.
 ```{r}
 .S4methods(class = 'asci')
-scores(results)
+scores(demo_results)
 ```
 
 
