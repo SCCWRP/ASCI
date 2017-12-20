@@ -20,8 +20,8 @@
 <script src="README_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="README_files/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="README_files/navigation-1.1/tabsets.js"></script>
-<link href="README_files/highlightjs-1.1/default.css" rel="stylesheet" />
-<script src="README_files/highlightjs-1.1/highlight.js"></script>
+<link href="README_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="README_files/highlightjs-9.12.0/highlight.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -30,10 +30,12 @@
   }
 </style>
 <script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
 }
 </script>
 
@@ -146,7 +148,7 @@ library(ASCI)</code></pre>
 <pre class="r"><code>demo_results &lt;- ASCI(demo_algae_tax, demo_algae_sitedata)
 demo_results</code></pre>
 <pre><code>## An object of class asci 
-## Scores calculated for diatoms, sba, hybrid 
+## Scores calculated for diatoms, sba, hybrid indices for 4 unique samples
 ## Use these functions for access: perf, scores, Supp1_mmi, Supp1_OE, Supp2_OE</code></pre>
 <p>The output can be accessed using the defined methods.</p>
 <pre class="r"><code>.S4methods(class = &#39;asci&#39;)</code></pre>

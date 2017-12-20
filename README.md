@@ -1,3 +1,10 @@
+---
+output:
+  html_document:
+    keep_md: yes
+    toc: no
+    self_contained: no
+---
 
 ## ASCI
 
@@ -41,7 +48,7 @@ demo_results
 
 ```
 ## An object of class asci 
-## Scores calculated for diatoms, sba, hybrid 
+## Scores calculated for diatoms, sba, hybrid indices for 4 unique samples
 ## Use these functions for access: perf, scores, Supp1_mmi, Supp1_OE, Supp2_OE
 ```
 
