@@ -9,6 +9,8 @@
 #'
 #' @author John Van Sickle, USEPA, \email{VanSickle.John@epa.gov}
 #' 
+#' @export
+#' 
 #' @note Version 1.0 06/10/05
 #' 
 #' @return A rarified \code{data.frame}.
