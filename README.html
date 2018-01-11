@@ -20,8 +20,8 @@
 <script src="README_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="README_files/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="README_files/navigation-1.1/tabsets.js"></script>
-<link href="README_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="README_files/highlightjs-9.12.0/highlight.js"></script>
+<link href="README_files/highlightjs-1.1/default.css" rel="stylesheet" />
+<script src="README_files/highlightjs-1.1/highlight.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -30,12 +30,10 @@
   }
 </style>
 <script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
 }
 </script>
 
@@ -123,8 +121,8 @@ $(document).ready(function () {
 
 <div id="asci" class="section level2">
 <h2>ASCI</h2>
-<div id="marcus-w.-beck-marcusbsccwrp.org-susanna-theroux-susannatsccwrp.org-john-van-sickle-vansickle.johnepa.gov" class="section level4">
-<h4><em>Marcus W. Beck, <a href="mailto:marcusb@sccwrp.org">marcusb@sccwrp.org</a>, Susanna Theroux, <a href="mailto:susannat@sccwrp.org">susannat@sccwrp.org</a>, John Van Sickle, <a href="mailto:VanSickle.John@epa.gov">VanSickle.John@epa.gov</a></em></h4>
+<div id="marcus-w.-beck-maintainer-marcusbsccwrp.org-susanna-theroux-susannatsccwrp.org" class="section level4">
+<h4><em>Marcus W. Beck (maintainer), <a href="mailto:marcusb@sccwrp.org">marcusb@sccwrp.org</a>, Susanna Theroux, <a href="mailto:susannat@sccwrp.org">susannat@sccwrp.org</a></em></h4>
 <p><a href="https://travis-ci.org/SCCWRP/ASCI"><img src="https://travis-ci.org/SCCWRP/ASCI.svg?branch=master" alt="Travis-CI Build Status" /></a> <a href="https://ci.appveyor.com/project/SCCWRP/ASCI"><img src="https://ci.appveyor.com/api/projects/status/github/SCCWRP/ASCI?branch=master&amp;svg=true" alt="AppVeyor Build Status" /></a> <a href="https://zenodo.org/badge/latestdoi/106055957"><img src="https://zenodo.org/badge/106055957.svg" alt="DOI" /></a></p>
 <p>R package materials to calculate the Algal Stream Condition Index (ASCI) based on O/E and pMMI scores using diatom, soft-bodied algae, or a hybrid appproach.</p>
 </div>
