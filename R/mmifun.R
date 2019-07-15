@@ -54,15 +54,18 @@ mmifun <- function(taxain){
   bugs.d.m <- as.data.frame(acast(bugs.d, 
                                   SampleID ~ FinalIDassigned, 
                                   value.var = "BAResult", 
-                                  fun.aggregate=sum))
+                                  fun.aggregate=sum)) %>% 
+    rownames_to_column()
   bugs.sba.m <- as.data.frame(acast(bugs.sba, 
                                     SampleID ~ FinalIDassigned, 
                                     value.var = "Result", 
-                                    fun.aggregate=sum))
+                                    fun.aggregate=sum)) %>% 
+    rownames_to_column()
   bugs.hybrid.m <- as.data.frame(acast(bugs, 
                                        SampleID ~ FinalIDassigned, 
                                        value.var = "ComboResult", 
-                                       fun.aggregate=sum))
+                                       fun.aggregate=sum)) %>% 
+    rownames_to_column()
   
   # calculate metrics
   # still need stations in Sussy's code, have to confirm -- mmi_calcmetrics might need it
@@ -78,8 +81,37 @@ mmifun <- function(taxain){
   hybrid.win <- mmilkup$hybrid.win
   
   d.results <- d.metrics %>%
+    rownames_to_column() %>% 
     select(d.win) %>%
-    filter()
+    filter(rowname %in% bugs.d.m$rowname) %>% 
+    column_to_rownames()
+    
+  sba.results <- sba.metrics %>% 
+    rownames_to_column() %>% 
+    select(sba.win) %>% 
+    filter(rowname %in% bugs.sba.m$rowname) %>% 
+    column_to_rownames()
+  
+  
+  hybrid.results <- hybrid.metrics %>% 
+    rownames_to_column() %>% 
+    select(hybrid.win) %>% 
+    filter(rowname %in% bugs.hybrid.m$rowname) %>% 
+    column_to_rownames()
+  
+  d.scored <- score_metric(d.results, bugs.d.m, mmilkup$d.in, inc = T) %>% 
+    left_join(score_metric(bugs.d.m, mmilkup$d.dec, inc = F), by = 'rowname') %>% 
+    column_to_rownames()
+  
+  sba.scored <- score_metric(sba.results, bugs.sba.m, mmilkup$sba.in, inc = T) %>% 
+   left_join(score_metric(bugs.sba.m, mmilkup$sba.dec, inc = F), by = 'rowname') %>% 
+    column_to_rownames()
+  
+  hybrid.scored <- score_metric(hybrid.results, bugs.hybrid.m, mmilkup$hybrid.in, inc = T) %>% 
+   left_join(score_metric(bugs.hybrid.m, mmilkup$hybrid.dec, inc = F), by = 'rowname') %>% 
+    column_to_rownames()
+  
+  
   
   
   
