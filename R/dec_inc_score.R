@@ -3,9 +3,9 @@
 #,
 #,
 
-score_metric <- function(win, species_matrix, dir_df, inc = T){
-  scored <- data.frame(row.names(species_matrix))
-  foo <- which(colnames(win) %in% rownames(dir_df))
+score_metric <- function(results, species_matrix, dir_df, inc = T){
+  scored <- data.frame(rowname = row.names(species_matrix))
+  foo <- which(colnames(results) %in% rownames(dir_df))
   cols <- names(win)[foo]
   
   for (i in cols){      # i<-"prop.Cyclotella"
