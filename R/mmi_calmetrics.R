@@ -51,8 +51,21 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat){
   taxonomy_pa_melt <- as.data.frame(droplevels(subset(taxonomy_pa_melt, value != 0)))
   names(taxonomy_pa_melt)[2] <- "FinalIDassigned"
   
-  ## Stations data is still here, need more info -- ask Marcus later
-  # Output something called station_combined
+  ###Stations Data Prep
+  #the next set of lines is the combining of tables to create one gaint table that is to be used in the metrics calculations below
+  stations_combined = stations %>% 
+    left_join(taxonomy_pa_melt, by = 'SampleID') %>% 
+    left_join(traits, by = 'FinalIDassigned') %>% 
+    left_join(indicators, by = 'FinalIDassigned') %>% 
+    left_join(taxonomy_pa_melt, by = c('SampleID', 'FinalIDassigned', 'value'))
+  
+  #the next two lines create a genus variable by splitting the full taxa name
+  stations_list=strsplit(stations_combined$FinalIDassigned," ")
+  stations_combined$Genus=lapply(stations_list,FUN=function(x) x[1])
+  
+  ################################################################################
+  # Metric calculations --------
+  ################################################################################
   
   z <- length(colnames(taxonomy_pa))
   shannon = diversity(taxonomy_pa[ ,-z],
