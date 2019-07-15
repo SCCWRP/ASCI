@@ -99,21 +99,41 @@ mmifun <- function(taxain){
     filter(rowname %in% bugs.hybrid.m$rowname) %>% 
     column_to_rownames()
   
-  d.scored <- score_metric(d.results, bugs.d.m, mmilkup$d.in, inc = T) %>% 
+  d.scored <- score_metric(d.results, bugs.d.m, mmilkup$d.inc, inc = T) %>% 
     left_join(score_metric(bugs.d.m, mmilkup$d.dec, inc = F), by = 'rowname') %>% 
-    column_to_rownames()
+    column_to_rownames() %>% 
+    replace(. > 1, 1) %>% 
+    replace(. < 0, 0) %>% 
+    select(sort(colnames()))
   
-  sba.scored <- score_metric(sba.results, bugs.sba.m, mmilkup$sba.in, inc = T) %>% 
+  sba.scored <- score_metric(sba.results, bugs.sba.m, mmilkup$sba.inc, inc = T) %>% 
    left_join(score_metric(bugs.sba.m, mmilkup$sba.dec, inc = F), by = 'rowname') %>% 
-    column_to_rownames()
+    column_to_rownames() %>% 
+    replace(. > 1, 1) %>% 
+    replace(. < 0, 0) %>% 
+    select(sort(colnames()))
   
-  hybrid.scored <- score_metric(hybrid.results, bugs.hybrid.m, mmilkup$hybrid.in, inc = T) %>% 
+  hybrid.scored <- score_metric(hybrid.results, bugs.hybrid.m, mmilkup$hybrid.inc, inc = T) %>% 
    left_join(score_metric(bugs.hybrid.m, mmilkup$hybrid.dec, inc = F), by = 'rowname') %>% 
-    column_to_rownames()
+    column_to_rownames() %>% 
+    replace(. > 1, 1) %>% 
+    replace(. < 0, 0) %>% 
+    select(sort(colnames()))
   
+  d.rf.mean <- mmilkup$d.rf.mean %>% 
+    select(colnames(d.scored))
   
+  sba.rf.mean <- mmilkup$sba.rf.mean %>% 
+    select(colnames(sba.scored))
   
+  hybrid.rf.mean <- mmilkup$hybrid.rf.mean %>% 
+    select(colnames(hybrid.scored))
   
-  
+  d.scored.scaled <- sweep(d.scored, MARGIN = 2, FUN = "/",
+                           STATS = colMeans(d.rf.mean, na.rm = T)) 
+  sba.scored.scaled <- sweep(sba.scored, MARGIN = 2, FUN = "/",
+                           STATS = colMeans(sba.rf.mean, na.rm = T))
+  hybrid.scored.scaled <- sweep(hybrid.scored, MARGIN = 2, FUN="/",
+                                STATS = colMeans(hybrid.rf.mean, na.rm = T))
   
 }
