@@ -10,7 +10,7 @@
 #' 
 #' @return 
 #' A \code{\link{asci}} object with specific methods.  See the examples for accessing.
-#' 
+#'
 #' @export
 #' 
 #' @importFrom dplyr bind_rows mutate select

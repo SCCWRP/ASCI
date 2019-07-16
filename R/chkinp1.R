@@ -76,7 +76,7 @@
 #' }
 #' 
 #' Remove all codes for sitein, no longer included in the calculation
-chkinp <- function(taxain, getval = FALSE){
+chkinp1 <- function(taxain, getval = FALSE){
   
   ##
   # check if required columns are present in taxain
