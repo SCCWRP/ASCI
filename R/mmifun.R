@@ -21,7 +21,7 @@
 #' @examples 
 #' taxain <- getids(demo_algae_tax)
 #' mmifun(taxain)
-mmifun <- function(taxain){
+mmifun <- function(taxain, sitein){
   
   options(gsubfn.engine = "R")
   
@@ -29,7 +29,7 @@ mmifun <- function(taxain){
   bugs <- taxain 
   
   # Step 2. Get diatom, sba, hybrid --------------------------------------------------------
-  bugs<- merge(bugs, STE, all.x = T) %>% 
+  bugs <- merge(bugs, STE, all.x = T) %>% 
     filter(
       SampleTypeCode != "Qualitative",
       !is.na(FinalIDassigned),
@@ -67,8 +67,9 @@ mmifun <- function(taxain){
                                        fun.aggregate=sum)) %>% 
     rownames_to_column()
   
+  stations <- sitein
+  
   # calculate metrics
-  # still need stations in Sussy's code, have to confirm -- mmi_calcmetrics might need it
   d.metrics <- mmi_calcmetrics('diatoms', bugs.d.m, stations)
   sba.metrics <- mmi_calcmetrics('sba', bugs.sba.m, stations)
   hybrid.metrics <- mmi_calcmetrics('hybrid', bugs.hybrid.m, stations)
