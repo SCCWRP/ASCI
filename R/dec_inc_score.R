@@ -3,17 +3,20 @@
 #,
 #,
 
-score_metric <- function(results, species_matrix, dir_df, inc = T){
-  scored <- data.frame(rowname = row.names(species_matrix))
-  foo <- which(colnames(results) %in% rownames(dir_df))
-  cols <- names(win)[foo]
+
+score_metric <- function(taxa, bugs.m, win.metric, omni.ref){
+  scored <- data.frame(rowname = row.names(bugs.m))
+  foo <- which(colnames(win.metric) %in% omni.ref$Metric)
+  cols <- names(win.metric)[foo]
   
   for (i in cols){      # i<-"prop.Cyclotella"
-    foo <- subset(dir_df, X==i)
-    min <- foo$min[1]
-    max <- foo$max[1]
-    observed<-win[[i]]
-    if(inc = T){
+    foo <- omni.ref %>% 
+      filter(Metric == i, 
+             Assemblage == taxa)
+    min <- foo$Min[1]
+    max <- foo$Max[1]
+    observed<-win.metric[[i]]
+    if(foo$StressResponse == 'inc'){
       a <-(observed-max)
       b <-(min-max)
     } else {
