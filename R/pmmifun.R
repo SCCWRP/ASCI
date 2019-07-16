@@ -29,7 +29,7 @@ pmmifun <- function(taxain, sitein){
   
   # Step 1. Import taxonomy data -----------------------------------------------------------
   bugs <- taxain
-  
+
   # Step 2. Import stations data -----------------------------------------------------------
   stations <- sitein
   
@@ -137,7 +137,7 @@ pmmifun <- function(taxain, sitein){
     split(.$taxa) %>% 
     map(select, -taxa) %>% 
     map(spread, met, val)
-  
+  browser()
   # list of lists for input to ASCI
   out <- list(
     diatoms = list(pmmiout$diatoms, out$diatoms),

@@ -35,7 +35,7 @@ mmifun <- function(taxain, sitein){
       !is.na(FinalIDassigned),
       !is.null(FinalIDassigned))
   
-  # subset into assemblages # Nov 2 right now no zero scores getting thrown out -- add a flag 
+  # subset into assemblages 
   bugs.d <- bugs %>% 
     filter(
       Phylum == 'Bacillariophyta',
