@@ -24,7 +24,7 @@
 #' 
 #' 
 #' 
-mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat){
+mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stations){
   
   # get taxa arg
   taxa <- match.arg(taxa)
@@ -60,8 +60,8 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat){
     left_join(taxonomy_pa_melt, by = c('SampleID', 'FinalIDassigned', 'value'))
   
   #the next two lines create a genus variable by splitting the full taxa name
-  stations_list=strsplit(stations_combined$FinalIDassigned," ")
-  stations_combined$Genus=lapply(stations_list,FUN=function(x) x[1])
+  stations_list = strsplit(stations_combined$FinalIDassigned," ")
+  stations_combined$Genus = lapply(stations_list, FUN=function(x) x[1])
   
   ################################################################################
   # Metric calculations --------
