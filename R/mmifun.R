@@ -71,7 +71,9 @@ mmifun <- function(taxain, sitein){
   stations <- sitein
   
   # calculate metrics
- 
+  d.metrics <- mmi_calcmetrics('diatoms', bugs.d.m, stations)
+  sba.metrics <- mmi_calcmetrics('sba', bugs.sba.m, stations)
+  hybrid.metrics <- mmi_calcmetrics('hybrid', bugs.hybrid.m, stations)
   
   
   # Load winning metrics -----------------------------------------------------------
