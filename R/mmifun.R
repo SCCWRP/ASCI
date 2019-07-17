@@ -20,7 +20,8 @@
 #' 
 #' @examples 
 #' taxain <- getids(demo_algae_tax)
-#' mmifun(taxain)
+#' sitein <- getids(demo_algae_sitedata)
+#' mmifun(taxain, sitein)
 mmifun <- function(taxain, sitein){
   
   options(gsubfn.engine = "R")
@@ -100,41 +101,113 @@ mmifun <- function(taxain, sitein){
     filter(rowname %in% bugs.hybrid.m$rowname) %>% 
     column_to_rownames()
   
-  d.scored <- score_metric(d.results, bugs.d.m, mmilkup$d.inc, inc = T) %>% 
-    left_join(score_metric(bugs.d.m, mmilkup$d.dec, inc = F), by = 'rowname') %>% 
-    column_to_rownames() %>% 
+  omni.ref <- mmilkup$omni.ref
+  
+  d.scored <- score_metric(taxa = 'diatoms', bugs.d.m, d.results, omni.ref) %>% 
     replace(. > 1, 1) %>% 
     replace(. < 0, 0) %>% 
     select(sort(colnames()))
   
-  sba.scored <- score_metric(sba.results, bugs.sba.m, mmilkup$sba.inc, inc = T) %>% 
-   left_join(score_metric(bugs.sba.m, mmilkup$sba.dec, inc = F), by = 'rowname') %>% 
-    column_to_rownames() %>% 
+  sba.scored <- score_metric(taxa = 'sba', bugs.sba.m, sba.results, omni.ref) %>% 
     replace(. > 1, 1) %>% 
     replace(. < 0, 0) %>% 
     select(sort(colnames()))
   
-  hybrid.scored <- score_metric(hybrid.results, bugs.hybrid.m, mmilkup$hybrid.inc, inc = T) %>% 
-   left_join(score_metric(bugs.hybrid.m, mmilkup$hybrid.dec, inc = F), by = 'rowname') %>% 
-    column_to_rownames() %>% 
+  hybrid.scored <- score_metric(taxa = 'hybrid', bugs.hybrid.m, hybrid.results, omni.ref) %>% 
     replace(. > 1, 1) %>% 
     replace(. < 0, 0) %>% 
     select(sort(colnames()))
   
-  d.rf.mean <- mmilkup$d.rf.mean %>% 
-    select(colnames(d.scored))
+  d.rf.mean <- omni.ref %>%
+    filter(Assemblage == 'diatoms',
+           Metrics %in% colnames(d.scored))
+    
+  sba.rf.mean <- omni.ref %>%
+    filter(Assemblage == 'sba',
+           Metrics %in% colnames(sba.scored))
   
-  sba.rf.mean <- mmilkup$sba.rf.mean %>% 
-    select(colnames(sba.scored))
+  hybrid.rf.mean <- omni.ref %>%
+    filter(Assemblage == 'hybrid',
+           Metrics %in% colnames(hybrid.scored))
   
-  hybrid.rf.mean <- mmilkup$hybrid.rf.mean %>% 
-    select(colnames(hybrid.scored))
+  d.scored.scaled <- d.scored %>% 
+    column_to_rownames() %>% 
+    sweep(., MARGIN = 2, FUN = "/",
+          STATS = colMeans(d.rf.mean, na.rm = T)) 
   
-  d.scored.scaled <- sweep(d.scored, MARGIN = 2, FUN = "/",
-                           STATS = colMeans(d.rf.mean, na.rm = T)) 
-  sba.scored.scaled <- sweep(sba.scored, MARGIN = 2, FUN = "/",
-                           STATS = colMeans(sba.rf.mean, na.rm = T))
-  hybrid.scored.scaled <- sweep(hybrid.scored, MARGIN = 2, FUN="/",
-                                STATS = colMeans(hybrid.rf.mean, na.rm = T))
+  sba.scored.scaled <- sba.scored %>% 
+    column_to_rownames() %>% 
+    sweep(., MARGIN = 2, FUN = "/",
+          STATS = colMeans(sba.rf.mean, na.rm = T))
+  
+  hybrid.scored.scaled <- hybrid.scored %>% 
+    column_to_rownames() %>% 
+    sweep(., MARGIN = 2, FUN="/",
+          STATS = colMeans(hybrid.rf.mean, na.rm = T))
+  
+  
+  # put all results in long format
+  out <- list(
+    diatoms_obs = d.results, 
+    diatoms_scr = d.results.scored,
+    sba_obs = sba.results,
+    sba_scr = sba.results.scored,
+    hybrid_obs = hybrid.results, 
+    hybrid_scr = hybrid.results.scored
+  ) %>% 
+    enframe %>% 
+    mutate(
+      value = map(value, rownames_to_column, 'SampleID'),
+      value = map(value, gather, 'met', 'val', -SampleID)
+    ) %>% 
+    unnest %>% 
+    separate(name, c('taxa', 'results'), sep = '_') 
+  
+  # metric housekeeping
+  # still need ceiling?
+  out <- out %>% 
+    mutate(
+      val = ifelse(results == 'scr', pmin(val, 1), val), # ceiling at 1
+      val = ifelse(results == 'scr', pmax(val, 0), val) # floor at 0
+    )
+  
+  # get mmi total score
+  mmiout <- out %>% 
+    filter(results %in% 'scr') %>% 
+    group_by(taxa, SampleID) %>% 
+    summarise(
+      MMI = mean(val)
+    ) %>% 
+    mutate(MMI_Percentile = pnorm(MMI, mean(MMI), sd(MMI))) %>% 
+    ungroup %>% 
+    split(.$taxa) %>% 
+    map(select, -taxa)
+  
+  # make out a list
+  out <- out %>% 
+    unite('met', met, results, sep = '_') %>% 
+    mutate(
+      met = gsub('_obs$', '', met),
+      met = gsub('_scr$', '_score', met)
+    ) %>% 
+    split(.$taxa) %>% 
+    map(select, -taxa) %>% 
+    map(spread, met, val)
+  browser()
+  # list of lists for input to ASCI
+  out <- list(
+    diatoms = list(mmiout$diatoms, out$diatoms),
+    sba = list(mmiout$sba, out$sba),
+    hybrid = list(mmiout$hybrid, out$hybrid)
+  )
+  
+  # assign names to list elements
+  out <- out %>% 
+    map(function(x){
+      names(x) <- c('MMI_scores', 'MMI_supp')
+      return(x)
+    }
+    )
+  
   
 }
