@@ -123,7 +123,7 @@ setMethod('perf', 'asci', function(object){
     hybrid_oe_Predictive = hybrid_rf_oe,
     sba_oe_Predictive = sba_rf_oe,
     diatoms_mmi_Predictive = rf_out_top
-    ) %>% 
+  ) %>% 
     enframe('val', 'rfmod') %>% 
     separate(val, c('grp', 'ind', 'typ'))
   
@@ -143,7 +143,7 @@ setMethod('perf', 'asci', function(object){
   # get performance by grp, ind, typ combo
   prf <- toprf %>% 
     mutate(prf = pmap(list(data, rfmod), function(data, rfmod){
-    
+      
       # nest by cal, val
       ref <- data %>% 
         filter(cls %in% c('rc', 'rv')) %>% 

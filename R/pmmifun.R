@@ -99,7 +99,7 @@ pmmifun <- function(taxain, sitein){
     sba_scr = sba.results.scored,
     hybrid_obs = hybrid.results, 
     hybrid_scr = hybrid.results.scored
-    ) %>% 
+  ) %>% 
     enframe %>% 
     mutate(
       value = map(value, rownames_to_column, 'SampleID'),
@@ -113,7 +113,7 @@ pmmifun <- function(taxain, sitein){
     mutate(
       val = ifelse(results == 'scr', pmin(val, 1), val), # ceiling at 1
       val = ifelse(results == 'scr', pmax(val, 0), val) # floor at 0
-      )
+    )
   
   # get pmmi total score
   pmmiout <- out %>% 
@@ -121,12 +121,12 @@ pmmifun <- function(taxain, sitein){
     group_by(taxa, SampleID) %>% 
     summarise(
       MMI = mean(val)
-      ) %>% 
+    ) %>% 
     mutate(MMI_Percentile = pnorm(MMI, mean(MMI), sd(MMI))) %>% 
     ungroup %>% 
     split(.$taxa) %>% 
     map(select, -taxa)
-
+  
   # make out a list
   out <- out %>% 
     unite('met', met, results, sep = '_') %>% 
@@ -137,7 +137,7 @@ pmmifun <- function(taxain, sitein){
     split(.$taxa) %>% 
     map(select, -taxa) %>% 
     map(spread, met, val)
-  browser()
+  
   # list of lists for input to ASCI
   out <- list(
     diatoms = list(pmmiout$diatoms, out$diatoms),
@@ -150,7 +150,7 @@ pmmifun <- function(taxain, sitein){
     map(function(x){
       names(x) <- c('MMI_scores', 'MMI_supp')
       return(x)
-      }
+    }
     )
   
   return(out)
