@@ -48,8 +48,10 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
   taxonomy_pa$SampleID <- row.names(taxonomy_pa)
   taxonomy_pa = taxonomy_pa[order(taxonomy_pa$SampleID),] #ordering by SampleID
   taxonomy_pa_melt = melt(taxonomy_pa, id = c('SampleID')) #melting data into long format
-  taxonomy_pa_melt <- as.data.frame(droplevels(subset(taxonomy_pa_melt, value != 0)))
-  names(taxonomy_pa_melt)[2] <- "FinalIDassigned"
+  taxonomy_pa_melt <- taxonomy_pa_melt %>% 
+    filter(value != 0) %>% 
+    rename(FinalIDassigned = variable) %>% 
+    mutate(FinalIDassigned = as.character(FinalIDassigned))
   
   ###Stations Data Prep
   #the next set of lines is the combining of tables to create one gaint table that is to be used in the metrics calculations below
@@ -242,8 +244,8 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     prop.spp.IndicatorClass_TP_high = "sum(na.omit(IndicatorClass_TP=='high'))/length(IndicatorClass_TP)", 
     cnt.spp.IndicatorClass_TP_low = "sum(na.omit(IndicatorClass_TP=='low'))", #from betty
     prop.spp.IndicatorClass_TP_low = "sum(na.omit(IndicatorClass_TP=='low'))/length(IndicatorClass_TP)", 
-    cnt.spp.IndicatorClass_TN_low = "sum(na.omit(IndicatorClass_Tn == 'low'))", #from betty
-    prop.spp.IndicatorClass_TN_low = "sum(na.omit(IndicatorClass_Tn == 'low'))/length(IndicatorClass_TN)", 
+    cnt.spp.IndicatorClass_TN_low = "sum(na.omit(IndicatorClass_TN == 'low'))", #from betty
+    prop.spp.IndicatorClass_TN_low = "sum(na.omit(IndicatorClass_TN == 'low'))/length(IndicatorClass_TN)", 
     cnt.spp.IndicatorClass_Cu_high = "sum(na.omit(IndicatorClass_Cu == 'high'))", 
     prop.spp.IndicatorClass_Cu_high = "sum(na.omit(IndicatorClass_Cu == 'high'))/length(IndicatorClass_Cu)", 
     cnt.spp.IndicatorClass_DOC_high = "sum(na.omit(IndicatorClass_DOC == 'high'))", 
@@ -252,8 +254,8 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     prop.spp.IndicatorClass_Ref = "sum(na.omit(IndicatorClass_Ref == 'RF'))/length(IndicatorClass_Ref)", 
     cnt.spp.IndicatorClass_NonRef = "sum(na.omit(IndicatorClass_Ref =='NRF'))", 
     prop.spp.IndicatorClass_NonRef = "sum(na.omit(IndicatorClass_Ref=='NRF'))/length(IndicatorClass_Ref)", 
-    cnt.spp.IndicatorClass_TN_high = "sum(na.omit(IndicatorClass_Tn == 'high'))", 
-    prop.spp.IndicatorClass_TN_high = "sum(na.omit(IndicatorClass_Tn == 'high'))/length(IndicatorClass_TN)", 
+    cnt.spp.IndicatorClass_TN_high = "sum(na.omit(IndicatorClass_TN == 'high'))", 
+    prop.spp.IndicatorClass_TN_high = "sum(na.omit(IndicatorClass_TN == 'high'))/length(IndicatorClass_TN)", 
     cnt.spp.Heterocy = "sum(na.omit(Heterocystous == 'yes'))", 
     prop.spp.Heterocy = "sum(na.omit(Heterocystous == 'yes'))/length(Heterocystous)",
     cnt.spp.NHeterotroph = "sum(na.omit(NitrogenUptakeMetabolism2 == 'Heterotroph'))", 
@@ -262,8 +264,8 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     prop.spp.Halo = "sum(na.omit(Salinity2 == 'Halo'))/length(Salinity2)",
     cnt.spp.ZHR = "sum(na.omit(ZHR == 'yes'))", 
     prop.spp.ZHR = "sum(na.omit(ZHR == 'yes'))/length(ZHR)", 
-    cnt.spp.CRUS = "sum(na.omit(CRUs == 'yes'))", 
-    prop.spp.CRUS = "sum(na.omit(CRUs == 'yes'))/length(CRUS)", 
+    cnt.spp.CRUS = "sum(na.omit(CRUS == 'yes'))", 
+    prop.spp.CRUS = "sum(na.omit(CRUS == 'yes'))/length(CRUS)", 
     cnt.spp.Green = "sum(na.omit(Green == 'yes'))", 
     prop.spp.Green = "sum(na.omit(Green == 'yes'))/length(Green)", 
     
@@ -284,10 +286,9 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     filter(Assemblage %in% taxa) %>% 
     .$Metric %>% 
     met_ls[.] %>% 
-    enframe
-  
+    enframe %>% 
+    na.omit
   # calculate metrics on station data
-  # still missing toclc
   metrics <- stations_combined %>% 
     group_by(SampleID) %>% 
     nest %>% 
@@ -298,6 +299,10 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
         mutate(metest = map(value, function(met){ 
           toprs <- paste0('with(smp, ', met, ')')
           parse(text = toprs) %>% eval
+          # out <- try({eval(parse(text = toprs))})
+          # if(inherits(out, 'try-error')) browser()
+          # else out
+                     
         })
         ) %>% 
         select(-value) %>% 

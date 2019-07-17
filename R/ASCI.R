@@ -46,10 +46,10 @@ ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
   
   # pmmi
   pmmind <- pmmifun(dat$taxa, dat$site, ...)
-    
+  
   ##
   # main output (scores)
-
+  
   # oe
   oescr <- oeind %>% 
     map(function(x){
@@ -58,17 +58,17 @@ ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
         select(SampleID, O, E, OoverE, OoverE_Percentile) %>% 
         gather('met', 'val', -SampleID)
       
-      }) %>% 
+    }) %>% 
     enframe('taxa') %>% 
     unnest
-    
+  
   # pmmi
   pmmiscr <- pmmind %>% 
     map(~ .x$MMI_scores) %>% 
     map(gather, 'met', 'val', -SampleID) %>% 
     enframe('taxa') %>% 
     unnest
-
+  
   # combine scrs, long format
   scr <- bind_rows(oescr, pmmiscr) %>% 
     spread(met, val) %>% 
@@ -76,7 +76,7 @@ ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
   
   ##
   # supplementary info
-
+  
   # pmmi
   Supp1_mmi <- pmmind %>% 
     map(~ .x$MMI_supp) %>% 
@@ -128,11 +128,11 @@ ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
       filter(taxa %in% tax)
     
   }
-    
+  
   ##
   # create asci class output
   out <- asci(scores = scr, Supp1_mmi = Supp1_mmi, Supp1_OE = Supp1_OE, 
-             Supp2_OE = Supp2_OE, null_OE = null_OE, taxa = tax)
+              Supp2_OE = Supp2_OE, null_OE = null_OE, taxa = tax)
   
   return(out)
   
