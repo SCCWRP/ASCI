@@ -280,7 +280,7 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
   
   # metrics to calculate from mmilkup
   # Need to confirm this
-  toclc <- pmmilkup$quants %>% 
+  toclc <- mmilkup$omni.ref %>% 
     filter(Assemblage %in% taxa) %>% 
     .$Metric %>% 
     met_ls[.] %>% 
