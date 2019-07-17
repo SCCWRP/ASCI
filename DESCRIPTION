@@ -35,7 +35,7 @@ Authors@R: c(
     email = "VanSickle.John@epa.gov"
     )
   )
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Collate: 
     'ASCI.R'
     'STE.R'
@@ -43,12 +43,16 @@ Collate:
     'class-asci.R'
     'asci-methods.R'
     'chkinp.R'
+    'chkinp1.R'
+    'dec_inc_score.R'
     'demo_algae_sitedata.R'
     'demo_algae_tax.R'
     'diatom_rf_oe.R'
     'getids.R'
     'globalVariables.R'
     'hybrid_rf_oe.R'
+    'mmi_calmetrics.R'
+    'mmifun.R'
     'oefun.R'
     'oelkup.R'
     'pmmi_calcmetrics.R'
