@@ -77,58 +77,57 @@ mmifun <- function(taxain, sitein){
   
   
   # Load winning metrics -----------------------------------------------------------
-  browser()
   d.win <- mmilkup$d.win 
   sba.win <- mmilkup$sba.win
   hybrid.win <- mmilkup$hybrid.win
   
   d.results <- d.metrics %>%
-    rownames_to_column() %>% 
-    select(d.win) %>%
-    filter(rowname %in% bugs.d.m$rowname) %>% 
-    column_to_rownames()
+    select(SampleID, colnames(d.win)) %>%
+    filter(SampleID %in% bugs.d.m$rowname) %>% 
+    column_to_rownames('SampleID')
     
   sba.results <- sba.metrics %>% 
-    rownames_to_column() %>% 
-    select(sba.win) %>% 
-    filter(rowname %in% bugs.sba.m$rowname) %>% 
-    column_to_rownames()
-  
+    select(SampleID, colnames(sba.win)) %>%
+    filter(SampleID %in% bugs.sba.m$rowname) %>% 
+    column_to_rownames('SampleID') 
   
   hybrid.results <- hybrid.metrics %>% 
-    rownames_to_column() %>% 
-    select(hybrid.win) %>% 
-    filter(rowname %in% bugs.hybrid.m$rowname) %>% 
-    column_to_rownames()
+    select(SampleID, colnames(hybrid.win)) %>%
+    filter(SampleID %in% bugs.hybrid.m$rowname) %>% 
+    column_to_rownames('SampleID')
+  
   
   omni.ref <- mmilkup$omni.ref
   
   d.scored <- score_metric(taxa = 'diatoms', bugs.d.m, d.results, omni.ref) %>% 
     replace(. > 1, 1) %>% 
     replace(. < 0, 0) %>% 
-    select(sort(colnames()))
+    select(sort(colnames(.))) 
   
   sba.scored <- score_metric(taxa = 'sba', bugs.sba.m, sba.results, omni.ref) %>% 
     replace(. > 1, 1) %>% 
     replace(. < 0, 0) %>% 
-    select(sort(colnames()))
+    select(sort(colnames(.)))
   
   hybrid.scored <- score_metric(taxa = 'hybrid', bugs.hybrid.m, hybrid.results, omni.ref) %>% 
     replace(. > 1, 1) %>% 
     replace(. < 0, 0) %>% 
-    select(sort(colnames()))
+    select(sort(colnames(.)))
   
   d.rf.mean <- omni.ref %>%
     filter(Assemblage == 'diatoms',
-           Metrics %in% colnames(d.scored))
+           Metric %in% colnames(d.scored)) %>% 
+    select(RefCalMean)
     
   sba.rf.mean <- omni.ref %>%
     filter(Assemblage == 'sba',
-           Metrics %in% colnames(sba.scored))
+           Metric %in% colnames(sba.scored)) %>% 
+    select(RefCalMean)
   
   hybrid.rf.mean <- omni.ref %>%
     filter(Assemblage == 'hybrid',
-           Metrics %in% colnames(hybrid.scored))
+           Metric %in% colnames(hybrid.scored)) %>% 
+    select(RefCalMean)
   
   d.scored.scaled <- d.scored %>% 
     column_to_rownames() %>% 
@@ -149,11 +148,11 @@ mmifun <- function(taxain, sitein){
   # put all results in long format
   out <- list(
     diatoms_obs = d.results, 
-    diatoms_scr = d.results.scored,
+    diatoms_scr = d.scored.scaled,
     sba_obs = sba.results,
-    sba_scr = sba.results.scored,
+    sba_scr = sba.scored.scaled,
     hybrid_obs = hybrid.results, 
-    hybrid_scr = hybrid.results.scored
+    hybrid_scr = hybrid.scored.scaled
   ) %>% 
     enframe %>% 
     mutate(
@@ -193,7 +192,6 @@ mmifun <- function(taxain, sitein){
     split(.$taxa) %>% 
     map(select, -taxa) %>% 
     map(spread, met, val)
-  browser()
   # list of lists for input to ASCI
   out <- list(
     diatoms = list(mmiout$diatoms, out$diatoms),
@@ -211,3 +209,4 @@ mmifun <- function(taxain, sitein){
   
   
 }
+

@@ -130,7 +130,7 @@ ASCI_1 <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
   
   ##
   # create asci class output
-  out <- asci_1(scores = scr, Supp1_mmi = Supp1_mmi, taxa = tax)
+  out <- asci(scores = scr, Supp1_mmi = Supp1_mmi, taxa = tax)
   
   return(out)
   

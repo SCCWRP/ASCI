@@ -13,7 +13,7 @@
 score_metric <- function(taxa, bugs.m, results.metric, omni.ref){
   scored <- data.frame(rowname = row.names(bugs.m))
   foo <- which(colnames(results.metric) %in% omni.ref$Metric)
-  cols <- names(win.metric)[foo]
+  cols <- names(results.metric)[foo]
   
   for (i in cols){      # i<-"prop.Cyclotella"
     foo <- omni.ref %>% 
@@ -21,7 +21,7 @@ score_metric <- function(taxa, bugs.m, results.metric, omni.ref){
              Assemblage == taxa)
     min <- foo$Min[1]
     max <- foo$Max[1]
-    observed<-win.metric[[i]]
+    observed<-results.metric[[i]]
     if(foo$StressResponse == 'inc'){
       a <-(observed-max)
       b <-(min-max)
