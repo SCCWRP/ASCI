@@ -29,7 +29,8 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
   # get taxa arg
   taxa <- match.arg(taxa)
   
-  # convert taxonomy data to presence/absence
+  browser()
+  # convert taxonomy data to presence/absence 
   taxonomy_pa <- as.data.frame(ifelse(tax_dat > 0, 1, 0))
   
   # indicators
@@ -51,7 +52,10 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
   taxonomy_pa_melt <- taxonomy_pa_melt %>% 
     filter(value != 0) %>% 
     rename(FinalIDassigned = variable) %>% 
-    mutate(FinalIDassigned = as.character(FinalIDassigned))
+    mutate(
+      FinalIDassigned = as.character(FinalIDassigned),
+      SampleID = as.character(SampleID)
+    )
   
   ###Stations Data Prep
   #the next set of lines is the combining of tables to create one gaint table that is to be used in the metrics calculations below
@@ -121,6 +125,10 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     prop.spp.OrgN.NHHONF = "sum(na.omit(NitrogenUptakeMetabolism == 'NHHONF'))/length(NitrogenUptakeMetabolism)", #proportion of NHHONF - species
     prop.spp.OrgN.NHHONForNHHONO = "sum(na.omit(NitrogenUptakeMetabolism == 'NHHONF'|NitrogenUptakeMetabolism == 'NHHONO'))/length(NitrogenUptakeMetabolism)", #proportion of NHHONF and NHHONO - species
     prop.spp.OrgN.NHHONO = "sum(na.omit(NitrogenUptakeMetabolism == 'NHHONO'))/length(NitrogenUptakeMetabolism)", #proportion of NHHONO - species
+    
+
+# Problems here -----------------------------------------------------------
+
     prop.spp.OxyReq.DO_100 = "sum(na.omit(OxygenRequirements == 'DO_100'))/length(OxygenRequirements)", #proportion of DO_100 - species
     prop.spp.OxyReq.DO_100orDO_75 = "sum(na.omit(OxygenRequirements == 'DO_100'|OxygenRequirements == 'DO_75'))/length(OxygenRequirements)", #proportion of DO_100 and DO_75 - species
     prop.spp.OxyReq.DO_75 = "sum(na.omit(OxygenRequirements == 'DO_75'))/length(OxygenRequirements)", #proportion of DO_75 - species
@@ -129,6 +137,9 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     prop.spp.OxyRed.DO_30 = "sum(na.omit(OxygenRequirements == 'DO_30'))/length(OxygenRequirements)", #proportion of DO_30 - species
     prop.spp.OxyReq.DO_30orDO_10 = "sum(na.omit(OxygenRequirements == 'DO_30'|OxygenRequirements == 'DO_10'))/length(OxygenRequirements)", #proportion of DO_30 and DO_10 - species
     prop.spp.OxyReq.DO_10 = "sum(na.omit(OxygenRequirements == 'DO_10'))/length(OxygenRequirements)", #proportion of DO_10 - species
+
+# -------------------------------------------------------------------------
+
     prop.spp.Salinity.B = "sum(na.omit(Salinity == 'B'))/length(Salinity)", #proportion of B - species
     prop.spp.Salinity.BF = "sum(na.omit(Salinity == 'BF'))/length(Salinity)", #proportion of BF - species
     prop.spp.Salinity.F = "sum(na.omit(Salinity == 'F'))/length(Salinity)", #proportion of F - species
@@ -278,6 +289,7 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     #prop.spp.Planktonic.genus = sum(na.omit(Habitat_genus == 'P'))/length(Habitat_genus=='P')
   )
   
+  
   ### Metric Calculations ------------------------------------------------------------------------------------------------------------
   
   # metrics to calculate from mmilkup
@@ -289,6 +301,8 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     met_ls[.] %>% 
     enframe %>% 
     na.omit 
+  
+  browser()
   # calculate metrics on station data
   metrics <- stations_combined %>% 
     group_by(SampleID) %>% 

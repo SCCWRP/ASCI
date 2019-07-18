@@ -30,22 +30,20 @@ mmifun <- function(taxain, sitein){
   bugs <- taxain 
   
   # Step 2. Get diatom, sba, hybrid --------------------------------------------------------
-  bugs <- merge(bugs, STE, all.x = T) %>% 
+  bugs <- merge(bugs, STE[,c("FinalID", "FinalIDassigned", "Genus", "Phylum", "Class")], all.x = T) %>% 
     filter(
       SampleTypeCode != "Qualitative",
-      !is.na(FinalIDassigned),
+      !is.na(FinalIDassigned), 
       !is.null(FinalIDassigned))
   
   # subset into assemblages 
   bugs.d <- bugs %>% 
     filter(
-      Phylum == 'Bacillariophyta',
-      BAResult != 0
+      Phylum == 'Bacillariophyta'
     )
   bugs.sba <- bugs %>% 
     filter(
-      Phylum != 'Bacillariophyta',
-      BAResult != 0
+      Phylum != 'Bacillariophyta'
     )
   bugs <- bugs %>% 
     mutate(ComboResult = as.numeric(pmax(BAResult, BAResult, na.rm = T))) %>% 
