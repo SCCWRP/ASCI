@@ -10,6 +10,7 @@
 #' @export
 #'
 #' @examples
+
 score_metric <- function(taxa, bugs.m, results.metric, omni.ref){
   scored <- data.frame(rowname = row.names(bugs.m))
   foo <- which(colnames(results.metric) %in% omni.ref$Metric)
@@ -21,7 +22,7 @@ score_metric <- function(taxa, bugs.m, results.metric, omni.ref){
              Assemblage == taxa)
     min <- foo$Min[1]
     max <- foo$Max[1]
-    observed<-results.metric[[i]]
+    observed<-results.metric[i]
     if(foo$StressResponse == 'inc'){
       a <-(observed-max)
       b <-(min-max)

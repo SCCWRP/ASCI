@@ -238,7 +238,7 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stat
     .$Metric %>% 
     met_ls[.] %>% 
     enframe
-  
+  browser()
   # calculate metrics on station data
   metrics <- stations_combined %>% 
     group_by(SampleID) %>% 
@@ -255,7 +255,7 @@ pmmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stat
         select(-value) %>% 
         unnest
       
-      return(out)
+      return(out) 
       
     })
     )  %>%

@@ -282,12 +282,13 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
   
   # metrics to calculate from mmilkup
   # Need to confirm this
+   
   toclc <- mmilkup$omni.ref %>% 
     filter(Assemblage %in% taxa) %>% 
     .$Metric %>% 
     met_ls[.] %>% 
     enframe %>% 
-    na.omit
+    na.omit 
   # calculate metrics on station data
   metrics <- stations_combined %>% 
     group_by(SampleID) %>% 

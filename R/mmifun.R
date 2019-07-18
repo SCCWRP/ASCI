@@ -55,21 +55,17 @@ mmifun <- function(taxain, sitein){
   bugs.d.m <- as.data.frame(acast(bugs.d, 
                                   SampleID ~ FinalIDassigned, 
                                   value.var = "BAResult", 
-                                  fun.aggregate=sum)) %>% 
-    rownames_to_column()
+                                  fun.aggregate=sum))
   bugs.sba.m <- as.data.frame(acast(bugs.sba, 
                                     SampleID ~ FinalIDassigned, 
                                     value.var = "Result", 
-                                    fun.aggregate=sum)) %>% 
-    rownames_to_column()
+                                    fun.aggregate=sum))
   bugs.hybrid.m <- as.data.frame(acast(bugs, 
                                        SampleID ~ FinalIDassigned, 
                                        value.var = "ComboResult", 
-                                       fun.aggregate=sum)) %>% 
-    rownames_to_column()
+                                       fun.aggregate=sum))
   
   stations <- sitein
-  
   # calculate metrics
   d.metrics <- mmi_calcmetrics('diatoms', bugs.d.m, stations)
   sba.metrics <- mmi_calcmetrics('sba', bugs.sba.m, stations)
@@ -83,33 +79,36 @@ mmifun <- function(taxain, sitein){
   
   d.results <- d.metrics %>%
     select(SampleID, colnames(d.win)) %>%
-    filter(SampleID %in% bugs.d.m$rowname) %>% 
-    column_to_rownames('SampleID')
+    filter(SampleID %in% rownames(bugs.d.m)) %>% 
+    column_to_rownames('SampleID') 
     
   sba.results <- sba.metrics %>% 
     select(SampleID, colnames(sba.win)) %>%
-    filter(SampleID %in% bugs.sba.m$rowname) %>% 
-    column_to_rownames('SampleID') 
+    filter(SampleID %in% rownames(bugs.sba.m)) %>% 
+    column_to_rownames('SampleID')  
   
   hybrid.results <- hybrid.metrics %>% 
     select(SampleID, colnames(hybrid.win)) %>%
-    filter(SampleID %in% bugs.hybrid.m$rowname) %>% 
+    filter(SampleID %in% rownames(bugs.hybrid.m)) %>% 
     column_to_rownames('SampleID')
   
   
   omni.ref <- mmilkup$omni.ref
   
   d.scored <- score_metric(taxa = 'diatoms', bugs.d.m, d.results, omni.ref) %>% 
+    select(-rowname) %>% 
     replace(. > 1, 1) %>% 
     replace(. < 0, 0) %>% 
     select(sort(colnames(.))) 
   
   sba.scored <- score_metric(taxa = 'sba', bugs.sba.m, sba.results, omni.ref) %>% 
+    select(-rowname) %>% 
     replace(. > 1, 1) %>% 
     replace(. < 0, 0) %>% 
     select(sort(colnames(.)))
   
-  hybrid.scored <- score_metric(taxa = 'hybrid', bugs.hybrid.m, hybrid.results, omni.ref) %>% 
+  hybrid.scored <- score_metric(taxa = 'hybrid', bugs.hybrid.m, hybrid.results, omni.ref) %>%
+    select(-rowname) %>% 
     replace(. > 1, 1) %>% 
     replace(. < 0, 0) %>% 
     select(sort(colnames(.)))
@@ -130,17 +129,17 @@ mmifun <- function(taxain, sitein){
     select(RefCalMean)
   
   d.scored.scaled <- d.scored %>% 
-    column_to_rownames() %>% 
+    # column_to_rownames() %>% 
     sweep(., MARGIN = 2, FUN = "/",
           STATS = colMeans(d.rf.mean, na.rm = T)) 
   
   sba.scored.scaled <- sba.scored %>% 
-    column_to_rownames() %>% 
+    # column_to_rownames() %>% 
     sweep(., MARGIN = 2, FUN = "/",
           STATS = colMeans(sba.rf.mean, na.rm = T))
   
   hybrid.scored.scaled <- hybrid.scored %>% 
-    column_to_rownames() %>% 
+    # column_to_rownames() %>% 
     sweep(., MARGIN = 2, FUN="/",
           STATS = colMeans(hybrid.rf.mean, na.rm = T))
   
@@ -161,14 +160,6 @@ mmifun <- function(taxain, sitein){
     ) %>% 
     unnest %>% 
     separate(name, c('taxa', 'results'), sep = '_') 
-  
-  # metric housekeeping
-  # still need ceiling?
-  out <- out %>% 
-    mutate(
-      val = ifelse(results == 'scr', pmin(val, 1), val), # ceiling at 1
-      val = ifelse(results == 'scr', pmax(val, 0), val) # floor at 0
-    )
   
   # get mmi total score
   mmiout <- out %>% 
