@@ -39,11 +39,13 @@ mmifun <- function(taxain, sitein){
   # subset into assemblages 
   bugs.d <- bugs %>% 
     filter(
-      Phylum == 'Bacillariophyta'
+      Phylum == 'Bacillariophyta',
+      is.na(BAResult) | BAResult != 0
     )
   bugs.sba <- bugs %>% 
     filter(
-      Phylum != 'Bacillariophyta'
+      Phylum != 'Bacillariophyta',
+      is.na(BAResult) | BAResult != 0
     )
   bugs <- bugs %>% 
     mutate(ComboResult = as.numeric(pmax(BAResult, BAResult, na.rm = T))) %>% 
@@ -158,6 +160,13 @@ mmifun <- function(taxain, sitein){
     ) %>% 
     unnest %>% 
     separate(name, c('taxa', 'results'), sep = '_') 
+  
+  # metric housekeeping
+  out <- out %>% 
+    mutate(
+      val = ifelse(results == 'scr', pmin(val, 1), val), # ceiling at 1
+      val = ifelse(results == 'scr', pmax(val, 0), val) # floor at 0
+    )
   
   # get mmi total score
   mmiout <- out %>% 
