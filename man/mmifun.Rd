@@ -20,5 +20,6 @@ Three index scores are calculated and returned as a named list
 }
 \examples{
 taxain <- getids(demo_algae_tax)
-mmifun(taxain)
+sitein <- getids(demo_algae_sitedata)
+mmifun(taxain, sitein)
 }

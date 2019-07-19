@@ -9,10 +9,6 @@
 \alias{scores,asci-method}
 \alias{Supp1_mmi}
 \alias{Supp1_mmi,asci-method}
-\alias{Supp1_OE}
-\alias{Supp1_OE,asci-method}
-\alias{Supp2_OE}
-\alias{Supp2_OE,asci-method}
 \title{An S4 class to represent an \code{asci} object}
 \usage{
 \S4method{show}{asci}(object)
@@ -24,14 +20,6 @@ scores(object)
 Supp1_mmi(object)
 
 \S4method{Supp1_mmi}{asci}(object)
-
-Supp1_OE(object)
-
-\S4method{Supp1_OE}{asci}(object)
-
-Supp2_OE(object)
-
-\S4method{Supp2_OE}{asci}(object)
 }
 \arguments{
 \item{object}{\code{asci} object created with \code{\link{ASCI}}}
@@ -46,12 +34,6 @@ The S4 \code{asci} object includes several methods shown below.
 
 \item{\code{Supp1_mmi}}{\code{data.frame} of supplemental MMI metric scores}
 
-\item{\code{Supp1_OE}}{\code{data.frame} of supplemental taxonomic capture probabilities for OE}
-
-\item{\code{Supp2_OE}}{\code{data.frame} of supplemental group capture probabilities for OE}
-
-\item{\code{null_OE}}{\code{data.frame} of null OE scores}
-
 \item{\code{taxa}}{character string of taxa returned with initial function call}
 }}
 
@@ -59,6 +41,5 @@ The S4 \code{asci} object includes several methods shown below.
 results <- ASCI(demo_algae_tax, demo_algae_sitedata)
 scores(results)
 Supp1_mmi(results)
-Supp1_OE(results)
-Supp2_OE(results)
+
 }

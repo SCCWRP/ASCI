@@ -22,15 +22,14 @@ A \code{\link{asci}} object with specific methods.  See the examples for accessi
 Score samples using the ASCI tool
 }
 \details{
-Two indices for three taxonomy types are scored, pMMI and O/E for diatoms, soft-bodied algae, and hybrid. This function combines output from the \code{\link{pmmifun}} and \code{\link{oefun}} functions in a user-friendly format.
+One index for three taxonomy types are scored, MMI for diatoms, soft-bodied algae, and hybrid. 
+This function outputs the reulsts of \code{\link{mmifun}} functions in a user-friendly format.
 }
 \examples{
 results <- ASCI(demo_algae_tax, demo_algae_sitedata)
 scores(results)
 Supp1_mmi(results)
-Supp1_OE(results)
-Supp2_OE(results)
 }
 \seealso{
-\code{\link{pmmifun}}, \code{\link{oefun}}
+\code{\link{mmifun}}
 }
