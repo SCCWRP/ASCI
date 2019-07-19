@@ -28,8 +28,6 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
   
   # get taxa arg
   taxa <- match.arg(taxa)
-  
-  browser()
   # convert taxonomy data to presence/absence 
   taxonomy_pa <- as.data.frame(ifelse(tax_dat > 0, 1, 0))
   
@@ -80,9 +78,10 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
                       index='simpson') #Computing Simpson
   richness = specnumber(taxonomy_pa[ ,-z]) #Computing Richness
   specialty_metrics = data.frame(SampleID = taxonomy_pa[ ,z],
-                                 shannon,
+                                 shannon, 
                                  simpson,
-                                 richness) #Combining the three into one table with SampleIDs attached
+                                 richness) %>% 
+    mutate(SampleID = as.character(SampleID))#Combining the three into one table with SampleIDs attached
   
   ## Metic list-----------------------------------------------------------------------------------------
   met_ls <- list(
@@ -125,20 +124,17 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     prop.spp.OrgN.NHHONF = "sum(na.omit(NitrogenUptakeMetabolism == 'NHHONF'))/length(NitrogenUptakeMetabolism)", #proportion of NHHONF - species
     prop.spp.OrgN.NHHONForNHHONO = "sum(na.omit(NitrogenUptakeMetabolism == 'NHHONF'|NitrogenUptakeMetabolism == 'NHHONO'))/length(NitrogenUptakeMetabolism)", #proportion of NHHONF and NHHONO - species
     prop.spp.OrgN.NHHONO = "sum(na.omit(NitrogenUptakeMetabolism == 'NHHONO'))/length(NitrogenUptakeMetabolism)", #proportion of NHHONO - species
-    
-
-# Problems here -----------------------------------------------------------
 
     prop.spp.OxyReq.DO_100 = "sum(na.omit(OxygenRequirements == 'DO_100'))/length(OxygenRequirements)", #proportion of DO_100 - species
     prop.spp.OxyReq.DO_100orDO_75 = "sum(na.omit(OxygenRequirements == 'DO_100'|OxygenRequirements == 'DO_75'))/length(OxygenRequirements)", #proportion of DO_100 and DO_75 - species
     prop.spp.OxyReq.DO_75 = "sum(na.omit(OxygenRequirements == 'DO_75'))/length(OxygenRequirements)", #proportion of DO_75 - species
     prop.spp.OxyReq.DO_50 = "sum(na.omit(OxygenRequirements == 'DO_50'))/length(OxygenRequirements)", #proportion of DO_50 - species
-    prop.spp.OxyReq.DO_atleast50 = "sum(na.omit(OxygenRequirements == c('DO_50','DO_75','DO_100')))/length(OxygenRequirements)", #proportion of at least DO_50 - species
+    prop.spp.OxyReq.DO_atleast50 = "sum(sum(na.omit(OxygenRequirements=='DO_50')),
+                                        sum(na.omit(OxygenRequirements=='DO_75')),
+                                        sum(na.omit(OxygenRequirements=='DO_100')))/length(OxygenRequirements)", #proportion of at least DO_50 - species
     prop.spp.OxyRed.DO_30 = "sum(na.omit(OxygenRequirements == 'DO_30'))/length(OxygenRequirements)", #proportion of DO_30 - species
     prop.spp.OxyReq.DO_30orDO_10 = "sum(na.omit(OxygenRequirements == 'DO_30'|OxygenRequirements == 'DO_10'))/length(OxygenRequirements)", #proportion of DO_30 and DO_10 - species
     prop.spp.OxyReq.DO_10 = "sum(na.omit(OxygenRequirements == 'DO_10'))/length(OxygenRequirements)", #proportion of DO_10 - species
-
-# -------------------------------------------------------------------------
 
     prop.spp.Salinity.B = "sum(na.omit(Salinity == 'B'))/length(Salinity)", #proportion of B - species
     prop.spp.Salinity.BF = "sum(na.omit(Salinity == 'BF'))/length(Salinity)", #proportion of BF - species
@@ -302,7 +298,6 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     enframe %>% 
     na.omit 
   
-  browser()
   # calculate metrics on station data
   metrics <- stations_combined %>% 
     group_by(SampleID) %>% 
@@ -333,6 +328,7 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     data.frame(stringsAsFactors = F)
   
   out <- metrics %>% 
+    # mutate_at('SampleID', as.character) %>% 
     left_join(specialty_metrics, by = 'SampleID')
   
   return(out)

@@ -90,32 +90,32 @@ chkinp <- function(taxain, sitein, getval = FALSE){
     stop(msg, call. = FALSE)
     
   }
-  
-  ## 
+
+  ##  
   # check if required columns are present in sitein
-  sitcols <- c(
-    row.names(diatom_rf_oe$importance), 
-    row.names(sba_rf_oe$importance),
-    row.names(hybrid_rf_oe$importance)
-    ) %>% 
-    unique %>% 
-    sort %>% 
-    c('StationCode', 'SampleDate', 'Replicate', .)
-  chk <- sitcols %in% names(sitein)
-  if(any(!chk)){
-    
-    chk <- sitcols[!chk]
-    if(getval) return(chk)
-    
-    msg <- paste(chk, collapse = ', ') %>% 
-      paste('Required columns not found in sitein:', .)
-    stop(msg, call. = FALSE)
-    
-  }
+  # sitcols <- c(
+  #   row.names(diatom_rf_oe$importance), 
+  #   row.names(sba_rf_oe$importance),
+  #   row.names(hybrid_rf_oe$importance)
+  #   ) %>%  
+  #   unique %>% 
+  #   sort %>% 
+  #   c('StationCode', 'SampleDate', 'Replicate', .)
+  # chk <- sitcols %in% names(sitein)
+  # if(any(!chk)){
+  #   
+  #   chk <- sitcols[!chk]
+  #   if(getval) return(chk)
+  #   
+  #   msg <- paste(chk, collapse = ', ') %>% 
+  #     paste('Required columns not found in sitein:', .)
+  #   stop(msg, call. = FALSE)
+  #   
+  # }
   
   ##
   # add id values after columns are checked
-  taxain <- getids(taxain)    
+  taxain <- getids(taxain)      
   sitein <- getids(sitein)
 
   ##
@@ -185,7 +185,7 @@ chkinp <- function(taxain, sitein, getval = FALSE){
 
   ##
   # check if predictor data available for oe rf models
-  chk <- sitein[, c('SampleID', sitcols)] %>% 
+  chk <- sitein %>% 
     gather('var', 'val', -SampleID) %>% 
     filter(is.na(val))
   if(nrow(chk) > 0){
@@ -215,8 +215,7 @@ chkinp <- function(taxain, sitein, getval = FALSE){
   # select only relevant columns
   sitein <- sitein %>%
     filter(SampleID %in% taxain$SampleID) %>% 
-    arrange(SampleID) %>% 
-    .[, c('SampleID', sitcols)]
+    arrange(SampleID)  
   taxain <- taxain %>% 
     arrange(SampleID) %>% 
     .[, c('SampleID', taxcols)]

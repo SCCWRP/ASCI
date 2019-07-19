@@ -40,20 +40,6 @@ setGeneric('Supp1_mmi', function(object) standardGeneric('Supp1_mmi'))
 #' @rdname asci-class
 setMethod('Supp1_mmi', 'asci', function(object) object@Supp1_mmi)
 
-#' @rdname asci-class
-#' @export
-setGeneric('Supp1_OE', function(object) standardGeneric('Supp1_OE'))
-
-#' @rdname asci-class
-setMethod('Supp1_OE', 'asci', function(object) object@Supp1_OE)
-
-#' @rdname asci-class
-#' @export
-setGeneric('Supp2_OE', function(object) standardGeneric('Supp2_OE'))
-
-#' @rdname asci-class
-setMethod('Supp2_OE', 'asci', function(object) object@Supp2_OE)
-
 #' @title Get performance measures for ASCI
 #' 
 #' @description Get performance measures for ASCI using statewide results

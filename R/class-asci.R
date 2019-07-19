@@ -10,8 +10,7 @@
 #' results <- ASCI(demo_algae_tax, demo_algae_sitedata)
 #' scores(results)
 #' Supp1_mmi(results)
-#' Supp1_OE(results)
-#' Supp2_OE(results)
+#' 
 asci <- setClass('asci', 
          slots = list(
            scores = 'data.frame',
