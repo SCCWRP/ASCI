@@ -28,7 +28,7 @@ mmifun <- function(taxain, sitein){
   
   # Step 1. Import taxonomy data -----------------------------------------------------------
   bugs <- taxain 
-  
+
   # Step 2. Get diatom, sba, hybrid --------------------------------------------------------
   bugs <- merge(bugs, STE[,c("FinalID", "FinalIDassigned", "Genus", "Phylum", "Class")], all.x = T) %>% 
     filter(
@@ -40,16 +40,16 @@ mmifun <- function(taxain, sitein){
   bugs.d <- bugs %>% 
     filter(
       Phylum == 'Bacillariophyta',
-      is.na(BAResult) | BAResult != 0
+      BAResult != 0
     )
   bugs.sba <- bugs %>% 
     filter(
       Phylum != 'Bacillariophyta',
-      is.na(BAResult) | BAResult != 0
+      Result != 0
     )
   bugs <- bugs %>% 
-    mutate(ComboResult = as.numeric(pmax(BAResult, BAResult, na.rm = T))) %>% 
-    filter(is.na(ComboResult) | ComboResult != 0)
+    mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T))) %>% 
+    filter(ComboResult != 0)
   
   # Step 3. Convert to species abd matrix at Species level  -----------------------------------------------------------
   bugs.d.m <- as.data.frame(acast(bugs.d, 
@@ -66,6 +66,7 @@ mmifun <- function(taxain, sitein){
                                        fun.aggregate=sum))
   
   stations <- sitein
+
   # calculate metrics
   d.metrics <- mmi_calcmetrics('diatoms', bugs.d.m, stations)
   sba.metrics <- mmi_calcmetrics('sba', bugs.sba.m, stations)
