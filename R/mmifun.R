@@ -49,7 +49,7 @@ mmifun <- function(taxain, sitein){
     )
   bugs <- bugs %>% 
     mutate(ComboResult = as.numeric(pmax(BAResult, BAResult, na.rm = T))) %>% 
-    filter(ComboResult != 0)
+    filter(is.na(ComboResult) | ComboResult != 0)
   
   # Step 3. Convert to species abd matrix at Species level  -----------------------------------------------------------
   bugs.d.m <- as.data.frame(acast(bugs.d, 
