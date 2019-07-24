@@ -95,7 +95,6 @@ mmifun <- function(taxain, sitein){
   
   
   omni.ref <- mmilkup$omni.ref
-  
   d.scored <- score_metric(taxa = 'diatoms', bugs.d.m, d.results, omni.ref) %>% 
     select(-rowname) %>% 
     replace(. > 1, 1) %>% 
@@ -117,18 +116,27 @@ mmifun <- function(taxain, sitein){
   d.rf.mean <- omni.ref %>%
     filter(Assemblage == 'diatoms',
            Metric %in% colnames(d.scored)) %>% 
-    select(RefCalMean)
+    arrange(Metric) %>% 
+    column_to_rownames('Metric') %>% 
+    select(RefCalMean) %>% 
+    t()
     
   sba.rf.mean <- omni.ref %>%
     filter(Assemblage == 'sba',
            Metric %in% colnames(sba.scored)) %>% 
-    select(RefCalMean)
+    arrange(Metric) %>% 
+    column_to_rownames('Metric') %>% 
+    select(RefCalMean) %>% 
+    t()
   
   hybrid.rf.mean <- omni.ref %>%
     filter(Assemblage == 'hybrid',
            Metric %in% colnames(hybrid.scored)) %>% 
-    select(RefCalMean)
-  
+    arrange(Metric) %>% 
+    column_to_rownames('Metric') %>% 
+    select(RefCalMean) %>% 
+    t()
+
   d.scored.scaled <- d.scored %>% 
     # column_to_rownames() %>% 
     sweep(., MARGIN = 2, FUN = "/",
@@ -163,11 +171,11 @@ mmifun <- function(taxain, sitein){
     separate(name, c('taxa', 'results'), sep = '_') 
   
   # metric housekeeping
-  out <- out %>% 
-    mutate(
-      val = ifelse(results == 'scr', pmin(val, 1), val), # ceiling at 1
-      val = ifelse(results == 'scr', pmax(val, 0), val) # floor at 0
-    )
+  # out <- out %>% 
+  #   mutate(
+  #     val = ifelse(results == 'scr', pmin(val, 1), val), # ceiling at 1
+  #     val = ifelse(results == 'scr', pmax(val, 0), val) # floor at 0
+  #   )
   
   # get mmi total score
   mmiout <- out %>% 
