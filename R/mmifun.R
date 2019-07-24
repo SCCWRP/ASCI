@@ -3,6 +3,7 @@
 #' Run the ASCI MMI index for diatoms, soft-bodied algae, and hybrids
 #' 
 #' @param taxain \code{data.frame} for input taxonomy data
+#' @param sitein \code{data.frame} for input site data
 #' 
 #' @details 
 #' Three index scores are calculated and returned as a named list

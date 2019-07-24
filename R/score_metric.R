@@ -1,15 +1,18 @@
 
-#' Title
+#' Create scored metrics
 #'
-#' @param taxa 
-#' @param bugs.m 
-#' @param results.metric 
-#' @param omni.ref 
+#' @param taxa chr string indicating taxa to use to calculate metrics
+#' @param bugs.m species abd matrix at Species level
+#' @param results.metric metrics calculated from \code{mmi_calmetrics} combined with win metrics
+#' @param omni.ref a data frame in \code{mmilkup} indicates directions of the metrics
 #'
-#' @return
-#' @export
+#' @return a data.frame scored
+#' @export 
 #'
 #' @examples
+#' \dontrun{
+#' score_metric(taxa = 'diatoms', bugs.d.m, d.results, omni.ref)
+#' }
 
 score_metric <- function(taxa, bugs.m, results.metric, omni.ref){
   scored <- data.frame(rowname = row.names(bugs.m))
