@@ -24,7 +24,7 @@ Calculate ASCI metrics
 }
 \examples{
 \dontrun{
-mmi_calcmetrics('diatoms', bugs.d.m)
+mmi_calcmetrics('diatoms', bugs.d.m, stations)
 }
 
 

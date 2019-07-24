@@ -2,19 +2,27 @@
 % Please edit documentation in R/score_metric.R
 \name{score_metric}
 \alias{score_metric}
-\title{Title}
+\title{Create scored metrics}
 \usage{
 score_metric(taxa, bugs.m, results.metric, omni.ref)
 }
 \arguments{
-\item{taxa}{}
+\item{taxa}{chr string indicating taxa to use to calculate metrics}
 
-\item{bugs.m}{}
+\item{bugs.m}{species abd matrix at Species level}
 
-\item{results.metric}{}
+\item{results.metric}{metrics calculated from \code{mmi_calmetrics} combined with win metrics}
 
-\item{omni.ref}{}
+\item{omni.ref}{a data frame in \code{mmilkup} indicates directions of the metrics}
+}
+\value{
+a data.frame scored
 }
 \description{
-Title
+Create scored metrics
+}
+\examples{
+\dontrun{
+score_metric(taxa = 'diatoms', bugs.d.m, d.results, omni.ref)
+}
 }
