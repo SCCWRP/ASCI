@@ -45,8 +45,9 @@ demo_results
 The output can be accessed using the defined methods.
 ```{r}
 .S4methods(class = 'asci')
+show(demo_results)
 scores(demo_results)
-# Supp1_mmi(demo_results)
+Supp1_mmi(demo_results)
 ```
 
 <!-- Summary of ASCI peformance statewide: -->
