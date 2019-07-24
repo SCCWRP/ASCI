@@ -39,10 +39,6 @@ data in long format (one row per sample). The `demo_algae_sitedata` file
 is a `data.frame` of site data. Site names must match between the files.
 See the help files for more information (e.g., `?demo_algae_tax`)
 
-The core function is `ASCI` that estimates O/E and pMMI scores. This
-provides a wrapper to the separate `oefun` and `pmmifun` functions. All
-functions require taxonomic and site data as inputs.
-
 ``` r
 demo_results <- ASCI(demo_algae_tax, demo_algae_sitedata)
 demo_results
