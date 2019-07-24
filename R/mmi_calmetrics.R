@@ -8,7 +8,7 @@
 #' 
 #' @details \code{tax_dat} is converted to \code{taxonomy_pa} for presence/absence
 #' 
-#' @importFrom dplyr filter group_by mutate select
+#' @importFrom dplyr filter group_by mutate select rename
 #' @importFrom magrittr "%>%"
 #' @importFrom purrr map
 #' @importFrom tibble enframe
