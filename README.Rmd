@@ -19,7 +19,7 @@ Install the package as follows:
 ```{r, eval = FALSE}
 install.packages('devtools')
 library(devtools)
-install_github('SCCWRP/ASCI')
+install_github('SCCWRP/ASCI', ref = "T")
 library(ASCI)
 ```
 
