@@ -46,12 +46,13 @@ The output can be accessed using the defined methods.
 ```{r}
 .S4methods(class = 'asci')
 scores(demo_results)
+Supp1_mmi(demo_results)
 ```
 
-Summary of ASCI peformance statewide:
-```{r}
-perf(allscr)
-```
+<!-- Summary of ASCI peformance statewide: -->
+<!-- ```{r} -->
+<!-- perf(allscr) -->
+<!-- ``` -->
 
 
 
