@@ -48,10 +48,10 @@ The output can be accessed using the defined methods.
 scores(demo_results)
 ```
 
-Summary of ASCI peformance statewide:
-```{r}
-perf(allscr)
-```
+<!-- Summary of ASCI peformance statewide: -->
+<!-- ```{r} -->
+<!-- perf(allscr) -->
+<!-- ``` -->
 
 
 
