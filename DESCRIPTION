@@ -39,7 +39,6 @@ RoxygenNote: 6.1.1
 Collate: 
     'ASCI.R'
     'STE.R'
-    'allscr.R'
     'class-asci.R'
     'asci-methods.R'
     'chkinp.R'
