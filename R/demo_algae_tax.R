@@ -1,7 +1,7 @@
 ######
 #' Example data for algae taxonomy
 #'
-#' An example dataset for algae taxonomy. Data are in long format, one row per sample. Sites match those in \code{\link{demo_algae_sitedata}}.
+#' An example dataset for algae taxonomy. Data are in long format, one row per sample
 #'  
 #' @format A \code{\link[base]{data.frame}} with 105 rows and 8 variables:
 #' \describe{

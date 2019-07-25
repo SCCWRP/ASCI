@@ -4,16 +4,14 @@
 \alias{ASCI}
 \title{Score samples using the ASCI tool}
 \usage{
-ASCI(taxain, sitein, tax = c("diatoms", "sba", "hybrid"), ...)
+ASCI(taxain, tax = c("diatoms", "sba", "hybrid"), ...)
 }
 \arguments{
 \item{taxain}{\code{data.frame} for input taxonomy data}
 
-\item{sitein}{\code{data.frame} for input site data}
-
 \item{tax}{chr string indicating output to return from a specific taxa, must one to many of \code{'diatoms'}, \code{'sba'}, or \code{'hybrid'}, defaults to all}
 
-\item{...}{additional arguments passed to other funcions, e.g., \code{\link{rfpred}}}
+\item{...}{additional arguments passed to other funcions}
 }
 \value{
 A \code{\link{asci}} object with specific methods.  See the examples for accessing.
@@ -22,15 +20,14 @@ A \code{\link{asci}} object with specific methods.  See the examples for accessi
 Score samples using the ASCI tool
 }
 \details{
-Two indices for three taxonomy types are scored, pMMI and O/E for diatoms, soft-bodied algae, and hybrid. This function combines output from the \code{\link{pmmifun}} and \code{\link{oefun}} functions in a user-friendly format.
+One index for three taxonomy types are scored, MMI for diatoms, soft-bodied algae, and hybrid. 
+This function outputs the reulsts of \code{\link{mmifun}} functions in a user-friendly format.
 }
 \examples{
-results <- ASCI(demo_algae_tax, demo_algae_sitedata)
+results <- ASCI(demo_algae_tax)
 scores(results)
 Supp1_mmi(results)
-Supp1_OE(results)
-Supp2_OE(results)
 }
 \seealso{
-\code{\link{pmmifun}}, \code{\link{oefun}}
+\code{\link{mmifun}}
 }

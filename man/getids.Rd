@@ -19,8 +19,8 @@ Assing unique sample id to rows of taxonomy and site data
 Assigns unique sample id based on a concatenation of StationCode, SampleDate, and Replicate, used internally in \code{\link{chkinp}}
 }
 \examples{
-getids(demo_algae_sitedata)
 getids(demo_algae_tax)
+
 }
 \seealso{
 \code{\link{chkinp}}
