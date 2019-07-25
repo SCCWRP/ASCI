@@ -24,14 +24,6 @@ install_github('SCCWRP/ASCI')
 library(ASCI)
 ```
 
-### Citation
-
-Please cite the current release as follows:
-
-Marcus W Beck, Susanna Theroux, Quynh-Thi Ho, John Van Sickle (2019,
-July 25). SCCWRP/ASCI: v1.0.0. Zenodo.
-<http://doi.org/10.5281/zenodo.1008839>
-
 ### Usage
 
 The sample file `demo_algae_tax` is included to demonstrate the correct
