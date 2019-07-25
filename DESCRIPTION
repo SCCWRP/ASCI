@@ -43,7 +43,6 @@ Collate:
     'class-asci.R'
     'asci-methods.R'
     'chkinp.R'
-    'demo_algae_sitedata.R'
     'demo_algae_tax.R'
     'getids.R'
     'globalVariables.R'

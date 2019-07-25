@@ -16,8 +16,8 @@
 #' @seealso \code{\link{chkinp}}
 #' 
 #' @examples
-#' getids(demo_algae_sitedata)
 #' getids(demo_algae_tax)
+#' 
 getids <- function(datin){
   
   if(!'SampleID' %in% names(datin))

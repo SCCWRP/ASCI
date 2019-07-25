@@ -3,7 +3,6 @@
 #' @description Check input taxonomy and site data for required information
 #' 
 #' @param taxain \code{data.frame} for input taxonomy data
-#' @param sitein \code{data.frame} for input site data
 #' @param getval logical to return a vector of values not satisfied by checks, useful for data prep
 #'
 #' @return The original data with only relevant columns are returned if all checks are met, including a new column for \code{SampleID} (see \code{\link{getids}}).  An error message is returned if the datasets do not meet requirements or a vector of values that caused the error if \code{getval = TRUE}.  Site data will include only those sites in the taxonomic data.
@@ -30,51 +29,34 @@
 #' 
 #' @examples
 #' # all checks passed, data returned with SampleID
-#' chkinp(demo_algae_tax, demo_algae_sitedata)
+#' chkinp(demo_algae_tax)
 #' 
 #' # errors
 #' \dontrun{
 #' # missing columns in taxa data
 #' tmp <- demo_algae_tax[, 1, drop = FALSE]
-#' chkinp(tmp, demo_algae_sitedata)
-#' chkinp(tmp, demo_algae_sitedata, getval = TRUE)
-#' 
-#' # missing columns in site data
-#' tmp <- demo_algae_sitedata[, 1, drop = FALSE]
-#' chkinp(demo_algae_tax, tmp)
-#' chkinp(demo_algae_tax, tmp, getval = TRUE)
-#' 
-#' # site data not found for taxonomic site
-#' tmp <- demo_algae_sitedata[-1, ]
-#' chkinp(demo_algae_tax, tmp)
-#' chkinp(demo_algae_tax, tmp, getval = TRUE)
+#' chkinp(tmp)
+#' chkinp(tmp, getval = TRUE)
 #' 
 #' # incorrect taxonomy
 #' tmp <- demo_algae_tax
 #' tmp[1, 'FinalID'] <- 'asdf'
-#' chkinp(tmp, demo_algae_sitedata)
-#' chkinp(tmp, demo_algae_sitedata, getval = TRUE)
+#' chkinp(tmp)
+#' chkinp(tmp, getval = TRUE)
 #' 
 #' # missing diatom data at sites
 #' tmp <- merge(demo_algae_tax, STE, all.x = T) %>%
 #'   filter(!Class %in% 'Bacillariophyceae')
-#' chkinp(tmp, demo_algae_sitedata)
-#' chkinp(tmp, demo_algae_sitedata, getval = TRUE)
+#' chkinp(tmp)
+#' chkinp(tmp, getval = TRUE)
 #' 
 #' # missing abundance data for diatoms
 #' tmp <- demo_algae_tax
 #' tmp$BAResult <- NA
-#' chkinp(tmp, demo_algae_sitedata)
-#' chkinp(tmp, demo_algae_sitedata, getval = TRUE)
-#' 
-#' # missing environmental data
-#' tmp <- demo_algae_sitedata
-#' tmp$SITE_ELEV <- NA
-#' tmp$AREA_SQKM <- NA
-#' chkinp(demo_algae_tax, tmp)
-#' chkinp(demo_algae_tax, tmp, getval = TRUE)
-#' }
-chkinp <- function(taxain, sitein, getval = FALSE){
+#' chkinp(tmp)
+#' chkinp(tmp, getval = TRUE)
+
+chkinp <- function(taxain, getval = FALSE){
   
   ##
   # check if required columns are present in taxain
@@ -90,47 +72,11 @@ chkinp <- function(taxain, sitein, getval = FALSE){
     stop(msg, call. = FALSE)
     
   }
-
-  ##  
-  # check if required columns are present in sitein
-  # sitcols <- c(
-  #   row.names(diatom_rf_oe$importance), 
-  #   row.names(sba_rf_oe$importance),
-  #   row.names(hybrid_rf_oe$importance)
-  #   ) %>%  
-  #   unique %>% 
-  #   sort %>% 
-  #   c('StationCode', 'SampleDate', 'Replicate', .)
-  # chk <- sitcols %in% names(sitein)
-  # if(any(!chk)){
-  #   
-  #   chk <- sitcols[!chk]
-  #   if(getval) return(chk)
-  #   
-  #   msg <- paste(chk, collapse = ', ') %>% 
-  #     paste('Required columns not found in sitein:', .)
-  #   stop(msg, call. = FALSE)
-  #   
-  # }
   
   ##
   # add id values after columns are checked
-  taxain <- getids(taxain)      
-  sitein <- getids(sitein)
+  taxain <- getids(taxain)  
 
-  ##
-  # check if all sites in taxain are in sitein
-  chk <- unique(taxain$SampleID) %in% sitein$SampleID
-  if(any(!chk)){
-
-    chk <- unique(taxain$SampleID)[!chk]
-    if(getval) return(chk)
-
-    msg <- paste(chk, collapse = ', ') %>%
-      paste('SampleID in taxonomic data not found in site data: ', .)
-    stop(msg, call. = FALSE)
-
-  }
 
   ##
   # check taxonomy names
@@ -183,49 +129,10 @@ chkinp <- function(taxain, sitein, getval = FALSE){
     
   }
 
-  ##
-  # check if predictor data available for oe rf models
-  chk <- sitein %>% 
-    gather('var', 'val', -SampleID) %>% 
-    filter(is.na(val))
-  if(nrow(chk) > 0){
-    
-    if(getval) return(chk)
-    
-    msg <- unique(chk$SampleID)
-    for(i in seq_along(msg)){
-
-      vrs <- chk %>% 
-        filter(SampleID %in% msg[i]) %>% 
-        .$var
-      msg[i] <- paste(vrs, collapse = ', ') %>% 
-        paste0(msg[i], ':\t', .)
-      
-    }
-
-    msg <- paste(msg, collapse = '\n\n') %>% 
-      paste('\n\nMissing environmental data:\n\n', .)
-    stop(msg, .call = FALSE)
-    
-  }
-
-  ##
-  # final subset of sitein to include only sites in taxain
-  # order by SampleID
-  # select only relevant columns
-  sitein <- sitein %>%
-    filter(SampleID %in% taxain$SampleID) %>% 
-    arrange(SampleID)  
-  taxain <- taxain %>% 
-    arrange(SampleID) %>% 
-    .[, c('SampleID', taxcols)]
   
   ##
   # return if all checks met
-  out <- list(
-    taxa = taxain,
-    site = sitein
-  )
+  out <- taxain
   
   return(out)
   

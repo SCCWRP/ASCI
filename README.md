@@ -20,7 +20,7 @@ Install the package as follows:
 ``` r
 install.packages('devtools')
 library(devtools)
-install_github('SCCWRP/ASCI', ref = "T")
+install_github('SCCWRP/ASCI', ref = "TT")
 library(ASCI)
 ```
 
@@ -33,14 +33,13 @@ SCCWRP/ASCI: v0.0.1. Zenodo. <http://doi.org/10.5281/zenodo.1008839>
 
 ### Usage
 
-Two sample files are included to demonstrate the correct format for
-input data. The `demo_algae_tax` file is a `data.frame` of taxonomic
-data in long format (one row per sample). The `demo_algae_sitedata` file
-is a `data.frame` of site data. Site names must match between the files.
-See the help files for more information (e.g., `?demo_algae_tax`)
+The sample file `demo_algae_tax` is included to demonstrate the correct
+format for input data. It is a `data.frame` of taxonomic data in long
+format (one row per sample). See the help files for more information
+(e.g., `?demo_algae_tax`)
 
 ``` r
-demo_results <- ASCI(demo_algae_tax, demo_algae_sitedata)
+demo_results <- ASCI(demo_algae_tax)
 demo_results
 ```
 

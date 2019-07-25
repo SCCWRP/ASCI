@@ -19,7 +19,7 @@
 demo_algae_tax
 }
 \description{
-An example dataset for algae taxonomy. Data are in long format, one row per sample. Sites match those in \code{\link{demo_algae_sitedata}}.
+An example dataset for algae taxonomy. Data are in long format, one row per sample
 }
 \examples{
 data(demo_algae_tax)

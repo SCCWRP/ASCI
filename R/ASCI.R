@@ -1,7 +1,6 @@
 #' Score samples using the ASCI tool
 #'
 #' @param taxain \code{data.frame} for input taxonomy data
-#' @param sitein \code{data.frame} for input site data
 #' @param tax chr string indicating output to return from a specific taxa, must one to many of \code{'diatoms'}, \code{'sba'}, or \code{'hybrid'}, defaults to all
 #' @param ... additional arguments passed to other funcions
 #' 
@@ -23,20 +22,20 @@
 #' @seealso  \code{\link{mmifun}}
 #' 
 #' @examples 
-#' results <- ASCI(demo_algae_tax, demo_algae_sitedata)
+#' results <- ASCI(demo_algae_tax)
 #' scores(results)
 #' Supp1_mmi(results)
-ASCI <- function(taxain, sitein, tax = c('diatoms', 'sba', 'hybrid'), ...){
+ASCI <- function(taxain, tax = c('diatoms', 'sba', 'hybrid'), ...){
   
   # check tax argument
   if(any(!tax %in% c('diatoms', 'sba', 'hybrid')))
     stop('tax must match diatoms, sba, and/or hybrid')
   
   # run all other checks, get output if passed
-  dat <- chkinp(taxain, sitein)
+  dat <- chkinp(taxain)
   
   # mmi
-  mmind <- mmifun(dat$taxa, dat$site, ...)
+  mmind <- mmifun(dat, ...)
   
   ##
   # main output (scores)
