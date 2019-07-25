@@ -13,7 +13,7 @@ ASCI(taxain, sitein, tax = c("diatoms", "sba", "hybrid"), ...)
 
 \item{tax}{chr string indicating output to return from a specific taxa, must one to many of \code{'diatoms'}, \code{'sba'}, or \code{'hybrid'}, defaults to all}
 
-\item{...}{additional arguments passed to other funcions, e.g., \code{\link{rfpred}}}
+\item{...}{additional arguments passed to other funcions}
 }
 \value{
 A \code{\link{asci}} object with specific methods.  See the examples for accessing.

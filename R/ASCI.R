@@ -3,7 +3,7 @@
 #' @param taxain \code{data.frame} for input taxonomy data
 #' @param sitein \code{data.frame} for input site data
 #' @param tax chr string indicating output to return from a specific taxa, must one to many of \code{'diatoms'}, \code{'sba'}, or \code{'hybrid'}, defaults to all
-#' @param ... additional arguments passed to other funcions, e.g., \code{\link{rfpred}}
+#' @param ... additional arguments passed to other funcions
 #' 
 #' @details 
 #' One index for three taxonomy types are scored, MMI for diatoms, soft-bodied algae, and hybrid. 

@@ -49,6 +49,6 @@ Collate:
     'globalVariables.R'
     'mmi_calmetrics.R'
     'mmifun.R'
+    'mmilkup.R'
     'rarify.R'
     'score_metric.R'
-    'sitcat.R'
