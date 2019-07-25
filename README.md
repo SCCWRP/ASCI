@@ -1,7 +1,7 @@
 
 ## ASCI
 
-#### *Marcus W. Beck (maintainer), <marcusb@sccwrp.org>, Susanna Theroux, <susannat@sccwrp.org>*
+#### *Marcus W. Beck (maintainer), <marcusb@sccwrp.org>, Susanna Theroux, <susannat@sccwrp.org>, Quynh-Thi Ho, <qthi.ho@gmail.com>, John Van Sickle*
 
 [![Travis-CI Build
 Status](https://travis-ci.org/SCCWRP/ASCI.svg?branch=master)](https://travis-ci.org/SCCWRP/ASCI)
@@ -20,7 +20,7 @@ Install the package as follows:
 ``` r
 install.packages('devtools')
 library(devtools)
-install_github('SCCWRP/ASCI', ref = "TT")
+install_github('SCCWRP/ASCI')
 library(ASCI)
 ```
 
@@ -28,8 +28,9 @@ library(ASCI)
 
 Please cite the current release as follows:
 
-Marcus W Beck, Susanna Theroux, John Van Sickle (2017, October 11).
-SCCWRP/ASCI: v0.0.1. Zenodo. <http://doi.org/10.5281/zenodo.1008839>
+Marcus W Beck, Susanna Theroux, Quynh-Thi Ho, John Van Sickle (2019,
+July 25). SCCWRP/ASCI: v1.0.0. Zenodo.
+<http://doi.org/10.5281/zenodo.1008839>
 
 ### Usage
 
