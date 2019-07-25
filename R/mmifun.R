@@ -3,7 +3,6 @@
 #' Run the ASCI MMI index for diatoms, soft-bodied algae, and hybrids
 #' 
 #' @param taxain \code{data.frame} for input taxonomy data
-#' @param sitein \code{data.frame} for input site data
 #' 
 #' @details 
 #' Three index scores are calculated and returned as a named list
@@ -21,10 +20,9 @@
 #' 
 #' @examples 
 #' taxain <- getids(demo_algae_tax)
-#' sitein <- getids(demo_algae_sitedata)
-#' mmifun(taxain, sitein)
-mmifun <- function(taxain, sitein){
-  
+#' mmifun(taxain)
+mmifun <- function(taxain){
+
   options(gsubfn.engine = "R")
   
   # Step 1. Import taxonomy data -----------------------------------------------------------
@@ -66,7 +64,9 @@ mmifun <- function(taxain, sitein){
                                        value.var = "ComboResult", 
                                        fun.aggregate=sum))
   
-  stations <- sitein
+  stations <- taxain %>% 
+    select(StationCode, SampleDate, Replicate, SampleID) %>% 
+    unique()
 
   # calculate metrics
   d.metrics <- mmi_calcmetrics('diatoms', bugs.d.m, stations)
@@ -171,12 +171,6 @@ mmifun <- function(taxain, sitein){
     unnest %>% 
     separate(name, c('taxa', 'results'), sep = '_') 
   
-  # metric housekeeping
-  # out <- out %>% 
-  #   mutate(
-  #     val = ifelse(results == 'scr', pmin(val, 1), val), # ceiling at 1
-  #     val = ifelse(results == 'scr', pmax(val, 0), val) # floor at 0
-  #   )
   
   # get mmi total score
   mmiout <- out %>% 
