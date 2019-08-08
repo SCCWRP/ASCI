@@ -4,12 +4,10 @@
 \alias{chkinp}
 \title{Check input taxonomy and site data}
 \usage{
-chkinp(taxain, sitein, getval = FALSE)
+chkinp(taxain, getval = FALSE)
 }
 \arguments{
 \item{taxain}{\code{data.frame} for input taxonomy data}
-
-\item{sitein}{\code{data.frame} for input site data}
 
 \item{getval}{logical to return a vector of values not satisfied by checks, useful for data prep}
 }
@@ -29,53 +27,6 @@ The following are checked:
 \item Sites include both diatom and soft-bodied algae data
 \item No missing abundance values for diatoms (for rarification)
 \item No missing values for environmental predictor variables
-}
-}
-\examples{
-# all checks passed, data returned with SampleID
-chkinp(demo_algae_tax, demo_algae_sitedata)
-
-# errors
-\dontrun{
-# missing columns in taxa data
-tmp <- demo_algae_tax[, 1, drop = FALSE]
-chkinp(tmp, demo_algae_sitedata)
-chkinp(tmp, demo_algae_sitedata, getval = TRUE)
-
-# missing columns in site data
-tmp <- demo_algae_sitedata[, 1, drop = FALSE]
-chkinp(demo_algae_tax, tmp)
-chkinp(demo_algae_tax, tmp, getval = TRUE)
-
-# site data not found for taxonomic site
-tmp <- demo_algae_sitedata[-1, ]
-chkinp(demo_algae_tax, tmp)
-chkinp(demo_algae_tax, tmp, getval = TRUE)
-
-# incorrect taxonomy
-tmp <- demo_algae_tax
-tmp[1, 'FinalID'] <- 'asdf'
-chkinp(tmp, demo_algae_sitedata)
-chkinp(tmp, demo_algae_sitedata, getval = TRUE)
-
-# missing diatom data at sites
-tmp <- merge(demo_algae_tax, STE, all.x = T) \%>\%
-  filter(!Class \%in\% 'Bacillariophyceae')
-chkinp(tmp, demo_algae_sitedata)
-chkinp(tmp, demo_algae_sitedata, getval = TRUE)
-
-# missing abundance data for diatoms
-tmp <- demo_algae_tax
-tmp$BAResult <- NA
-chkinp(tmp, demo_algae_sitedata)
-chkinp(tmp, demo_algae_sitedata, getval = TRUE)
-
-# missing environmental data
-tmp <- demo_algae_sitedata
-tmp$SITE_ELEV <- NA
-tmp$AREA_SQKM <- NA
-chkinp(demo_algae_tax, tmp)
-chkinp(demo_algae_tax, tmp, getval = TRUE)
 }
 }
 \seealso{

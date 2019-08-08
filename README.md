@@ -1,7 +1,7 @@
 
 ## ASCI
 
-#### *Marcus W. Beck (maintainer), <marcusb@sccwrp.org>, Susanna Theroux, <susannat@sccwrp.org>*
+#### *Marcus W. Beck (maintainer), <marcusb@sccwrp.org>, Susanna Theroux, <susannat@sccwrp.org>, Quynh-Thi Ho, <qthi.ho@gmail.com>, John Van Sickle*
 
 [![Travis-CI Build
 Status](https://travis-ci.org/SCCWRP/ASCI.svg?branch=master)](https://travis-ci.org/SCCWRP/ASCI)
@@ -9,9 +9,7 @@ Status](https://travis-ci.org/SCCWRP/ASCI.svg?branch=master)](https://travis-ci.
 Status](https://ci.appveyor.com/api/projects/status/github/SCCWRP/ASCI?branch=master&svg=true)](https://ci.appveyor.com/project/SCCWRP/ASCI)
 [![DOI](https://zenodo.org/badge/106055957.svg)](https://zenodo.org/badge/latestdoi/106055957)
 
-R package materials to calculate the Algal Stream Condition Index (ASCI)
-based on O/E and pMMI scores using diatom, soft-bodied algae, or a
-hybrid appproach.
+R package materials to calculate the Algal Stream Condition Index (ASCI) using diatom, soft-bodied algae, or a hybrid appproach.
 
 ### Installation
 
@@ -20,27 +18,19 @@ Install the package as follows:
 ``` r
 install.packages('devtools')
 library(devtools)
-install_github('SCCWRP/ASCI', ref = "T")
+install_github('SCCWRP/ASCI')
 library(ASCI)
 ```
 
-### Citation
-
-Please cite the current release as follows:
-
-Marcus W Beck, Susanna Theroux, John Van Sickle (2017, October 11).
-SCCWRP/ASCI: v0.0.1. Zenodo. <http://doi.org/10.5281/zenodo.1008839>
-
 ### Usage
 
-Two sample files are included to demonstrate the correct format for
-input data. The `demo_algae_tax` file is a `data.frame` of taxonomic
-data in long format (one row per sample). The `demo_algae_sitedata` file
-is a `data.frame` of site data. Site names must match between the files.
-See the help files for more information (e.g., `?demo_algae_tax`)
+The sample file `demo_algae_tax` is included to demonstrate the correct
+format for input data. It is a `data.frame` of taxonomic data in long
+format (one row per sample). See the help files for more information
+(e.g., `?demo_algae_tax`)
 
 ``` r
-demo_results <- ASCI(demo_algae_tax, demo_algae_sitedata)
+demo_results <- ASCI(demo_algae_tax)
 demo_results
 ```
 

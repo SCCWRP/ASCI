@@ -4,12 +4,10 @@
 \alias{mmifun}
 \title{Run the ASCI MMI}
 \usage{
-mmifun(taxain, sitein)
+mmifun(taxain)
 }
 \arguments{
 \item{taxain}{\code{data.frame} for input taxonomy data}
-
-\item{sitein}{\code{data.frame} for input site data}
 }
 \value{
 A list with three elements named as \code{d.results.scored}, \code{sba.results.scored}, and \code{hybrid.results.scored}. Each element is a \code{data.frame} with metric scores by site.
@@ -22,6 +20,5 @@ Three index scores are calculated and returned as a named list
 }
 \examples{
 taxain <- getids(demo_algae_tax)
-sitein <- getids(demo_algae_sitedata)
-mmifun(taxain, sitein)
+mmifun(taxain)
 }

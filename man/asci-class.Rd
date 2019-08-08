@@ -38,7 +38,7 @@ The S4 \code{asci} object includes several methods shown below.
 }}
 
 \examples{
-results <- ASCI(demo_algae_tax, demo_algae_sitedata)
+results <- ASCI(demo_algae_tax)
 scores(results)
 Supp1_mmi(results)
 
