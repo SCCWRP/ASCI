@@ -58,10 +58,12 @@ ASCI <- function(taxain, tax = c('diatoms', 'sba', 'hybrid'), ...){
   if(length(tax) < 3){
     
     mmiscr <- mmiscr %>% 
-      filter(taxa %in% tax)
+      filter(taxa %in% tax) %>% 
+      mutate_all(~ replace(., . < 0 | is.na(.), NA))
     
     Supp1_mmi <- Supp1_mmi %>% 
-      filter(taxa %in% tax)
+      filter(taxa %in% tax) %>% 
+      mutate_all(~ replace(., . < 0 | is.na(.), NA))
     
   }
   
