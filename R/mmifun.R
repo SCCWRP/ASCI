@@ -66,8 +66,10 @@ mmifun <- function(taxain){
       mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T)))
   } else {
     bugs <- bugs %>% 
-              mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T))) %>% 
-              filter(ComboResult != 0)
+      group_by(SampleID) %>% 
+      mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T))) %>% 
+      filter(ComboResult != 0) %>% 
+      ungroup()
   }
   
   # Step 3. Convert to species abd matrix at Species level  -----------------------------------------------------------
