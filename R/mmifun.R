@@ -177,8 +177,7 @@ mmifun <- function(taxain){
     sba.scored.scaled <- sba.scored.scaled[1,]
     sba.scored.scaled[1,] <- rep(-88)
   }
-  
-  ## Need to fix
+
   hybrid.scored.scaled <- hybrid.scored %>% 
     sweep(., MARGIN = 2, FUN="/",
           STATS = colMeans(hybrid.rf.mean, na.rm = T))
@@ -186,7 +185,11 @@ mmifun <- function(taxain){
     hybrid.scored.scaled <- hybrid.scored.scaled[1, ]
     hybrid.scored.scaled[1, ] <- rep(-88)
   } else {
-    hybrid.scored.scaled <- hybrid.scored.scaled
+    smpid <- intersect(rownames(sba.scored.scaled), rownames(d.scored.scaled))
+    hybrid.scored.scaled <- hybrid.scored.scaled %>% 
+      rownames_to_column() %>% 
+      filter(rowname %in% smpid) %>% 
+      column_to_rownames()
   }
   
   
