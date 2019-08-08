@@ -178,13 +178,17 @@ mmifun <- function(taxain){
     sba.scored.scaled[1,] <- rep(-88)
   }
   
+  ## Need to fix
   hybrid.scored.scaled <- hybrid.scored %>% 
     sweep(., MARGIN = 2, FUN="/",
           STATS = colMeans(hybrid.rf.mean, na.rm = T))
   if(bugs[1,1] == -88){
-    hybrid.scored.scaled <- hybrid.scored.scaled[1,]
-    hybrid.scored.scaled[1,] <- rep(-88)
+    hybrid.scored.scaled <- hybrid.scored.scaled[1, ]
+    hybrid.scored.scaled[1, ] <- rep(-88)
+  } else {
+    hybrid.scored.scaled <- hybrid.scored.scaled
   }
+  
   
   # put all results in long format
   out <- list(
