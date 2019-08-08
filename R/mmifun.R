@@ -36,19 +36,39 @@ mmifun <- function(taxain){
       !is.null(FinalIDassigned))
   
   # subset into assemblages 
+  
+  chkmt <- function(df) {
+    if(nrow(df) == 0) {
+      df[1,] = rep(-88)
+    }
+    return(df)
+  }
+  
   bugs.d <- bugs %>% 
     filter(
       Phylum == 'Bacillariophyta',
       BAResult != 0
     )
+  bugs.d <- chkmt(bugs.d)
+  
+  
   bugs.sba <- bugs %>% 
     filter(
       Phylum != 'Bacillariophyta',
       Result != 0
     )
-  bugs <- bugs %>% 
-    mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T))) %>% 
-    filter(ComboResult != 0)
+  bugs.sba <- chkmt(bugs.sba)
+  
+  if(bugs.d$FinalID[1] == -88 | bugs.sba$FinalID[1] == -88) {
+    bugs <- bugs[1,]
+    bugs[1, ] <- rep(-88)
+    bugs <- bugs %>% 
+      mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T)))
+  } else {
+    bugs <- bugs %>% 
+              mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T))) %>% 
+              filter(ComboResult != 0)
+  }
   
   # Step 3. Convert to species abd matrix at Species level  -----------------------------------------------------------
   bugs.d.m <- as.data.frame(acast(bugs.d, 
@@ -83,16 +103,19 @@ mmifun <- function(taxain){
     select(SampleID, colnames(d.win)) %>%
     filter(SampleID %in% rownames(bugs.d.m)) %>% 
     column_to_rownames('SampleID') 
+  d.results <- chkmt(d.results)
     
   sba.results <- sba.metrics %>% 
     select(SampleID, colnames(sba.win)) %>%
     filter(SampleID %in% rownames(bugs.sba.m)) %>% 
-    column_to_rownames('SampleID')  
+    column_to_rownames('SampleID')
+  sba.results <- chkmt(sba.results)
   
   hybrid.results <- hybrid.metrics %>% 
     select(SampleID, colnames(hybrid.win)) %>%
     filter(SampleID %in% rownames(bugs.hybrid.m)) %>% 
     column_to_rownames('SampleID')
+  hybrid.results <- chkmt(hybrid.results)
   
   
   omni.ref <- mmilkup$omni.ref
@@ -142,17 +165,26 @@ mmifun <- function(taxain){
     # column_to_rownames() %>% 
     sweep(., MARGIN = 2, FUN = "/",
           STATS = colMeans(d.rf.mean, na.rm = T)) 
+  if(bugs.d[1,1] == -88){
+    d.scored.scaled <- d.scored.scaled[1,] 
+    d.scored.scaled[1,] <- rep(-88)
+  }
   
   sba.scored.scaled <- sba.scored %>% 
-    # column_to_rownames() %>% 
     sweep(., MARGIN = 2, FUN = "/",
           STATS = colMeans(sba.rf.mean, na.rm = T))
+  if(bugs.sba[1,1] == -88){
+    sba.scored.scaled <- sba.scored.scaled[1,]
+    sba.scored.scaled[1,] <- rep(-88)
+  }
   
   hybrid.scored.scaled <- hybrid.scored %>% 
-    # column_to_rownames() %>% 
     sweep(., MARGIN = 2, FUN="/",
           STATS = colMeans(hybrid.rf.mean, na.rm = T))
-  
+  if(bugs[1,1] == -88){
+    hybrid.scored.scaled <- hybrid.scored.scaled[1,]
+    hybrid.scored.scaled[1,] <- rep(-88)
+  }
   
   # put all results in long format
   out <- list(
@@ -208,7 +240,5 @@ mmifun <- function(taxain){
       return(x)
     }
     )
-  
-  
 }
 
