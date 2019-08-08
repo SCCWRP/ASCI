@@ -60,7 +60,8 @@ chkinp <- function(taxain, getval = FALSE){
   
   ##
   # check if required columns are present in taxain
-  taxcols <- c('StationCode', 'SampleDate', 'Replicate','SampleTypeCode', 'BAResult', 'Result', 'FinalID')
+  taxcols <- c('StationCode', 'SampleDate', 'Replicate',
+               'SampleTypeCode', 'BAResult', 'Result', 'FinalID')
   chk <- taxcols %in% names(taxain)
   if(any(!chk)){
     
@@ -70,7 +71,6 @@ chkinp <- function(taxain, getval = FALSE){
     msg <- paste(chk, collapse = ', ') %>% 
       paste('Required columns not found taxain:', .)
     stop(msg, call. = FALSE)
-    
   }
   
   ##
@@ -103,12 +103,9 @@ chkinp <- function(taxain, getval = FALSE){
     
     chk <- tmp[chk, ] %>% 
       .$SampleID
-    if(getval) return(chk)
-    
     msg <- paste(chk, collapse = ', ') %>% 
-      paste('Missing both diatom or soft-bodied algae at sites:', .)
-    stop(msg, .call = FALSE)
-    
+      paste('Only diatom or soft-bodied algae present at sites:', .)
+    warning(msg)
   }
   
   ## 
