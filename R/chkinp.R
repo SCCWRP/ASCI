@@ -95,7 +95,7 @@ chkinp <- function(taxain, getval = FALSE){
   # check if sites have both diatom and sba data
   tmp <-taxain %>% 
     merge(STE, all.x = TRUE) %>% 
-    mutate(diaind = ifelse(Class %in% 'Bacillariophyceae', 'dia', 'sba')) %>% 
+    mutate(diaind = ifelse(SampleTypeCode %in% 'Integrated', 'dia', 'sba')) %>% 
     group_by(SampleID) %>%
     summarise(n = length(unique(diaind)))
   chk <- tmp$n < 2
