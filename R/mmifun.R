@@ -65,7 +65,9 @@ mmifun <- function(taxain){
     bugs <- bugs %>% 
       mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T)))
   } else {
+    smpid <- intersect(bugs.d$SampleID, bugs.sba$SampleID)
     bugs <- bugs %>% 
+      filter(SampleID %in% smpid) %>% 
       group_by(SampleID) %>% 
       mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T))) %>% 
       filter(ComboResult != 0) %>% 
@@ -186,12 +188,6 @@ mmifun <- function(taxain){
   if(bugs[1,1] == -88){
     hybrid.scored.scaled <- hybrid.scored.scaled[1, ]
     hybrid.scored.scaled[1, ] <- rep(-88)
-  } else {
-    smpid <- intersect(rownames(sba.scored.scaled), rownames(d.scored.scaled))
-    hybrid.scored.scaled <- hybrid.scored.scaled %>% 
-      rownames_to_column() %>% 
-      filter(rowname %in% smpid) %>% 
-      column_to_rownames()
   }
   
   
