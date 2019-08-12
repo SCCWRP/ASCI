@@ -17,5 +17,5 @@ asci <- setClass('asci',
            Supp1_mmi = 'data.frame', 
            taxa = 'character'
            )
-)
+         )
 
