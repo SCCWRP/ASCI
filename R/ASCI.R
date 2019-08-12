@@ -79,8 +79,6 @@ ASCI <- function(taxain, tax = c('diatoms', 'sba', 'hybrid'), ...){
     
   }
   
-  ##
-  # create asci class output
   out <- rbind(mmiscr, Supp1_mmi) %>% 
     unite('Met', c('taxa', 'Metric'), sep = '_') %>% 
     group_by(SampleID, Met) %>% 

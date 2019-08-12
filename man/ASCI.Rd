@@ -14,7 +14,7 @@ ASCI(taxain, tax = c("diatoms", "sba", "hybrid"), ...)
 \item{...}{additional arguments passed to other funcions}
 }
 \value{
-A \code{\link{asci}} object with specific methods.  See the examples for accessing.
+A dataframe with all metrics calculated for each provided taxa
 }
 \description{
 Score samples using the ASCI tool
@@ -25,8 +25,7 @@ This function outputs the reulsts of \code{\link{mmifun}} functions in a user-fr
 }
 \examples{
 results <- ASCI(demo_algae_tax)
-scores(results)
-Supp1_mmi(results)
+
 }
 \seealso{
 \code{\link{mmifun}}

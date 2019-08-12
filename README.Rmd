@@ -31,23 +31,12 @@ The sample file `demo_algae_tax` is included to demonstrate the correct format f
 ```{r, message = F, warning = F, echo = F}
 devtools::load_all()
 ```
+
+The output is in a wide format.
 ```{r}
 demo_results <- ASCI(demo_algae_tax)
 demo_results
 ```
-
-The output can be accessed using the defined methods.
-```{r}
-.S4methods(class = 'asci')
-show(demo_results)
-scores(demo_results)
-Supp1_mmi(demo_results)
-```
-
-<!-- Summary of ASCI peformance statewide: -->
-<!-- ```{r} -->
-<!-- perf(allscr) -->
-<!-- ``` -->
 
 
 

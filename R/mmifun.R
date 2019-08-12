@@ -46,7 +46,7 @@ mmifun <- function(taxain){
   
   bugs.d <- bugs %>% 
     filter(
-      SampleTypeCode == 'Integrated',
+      Phylum == "Bacillariophyta",
       BAResult != 0
     )
   bugs.d <- chkmt(bugs.d)
@@ -54,7 +54,7 @@ mmifun <- function(taxain){
   
   bugs.sba <- bugs %>% 
     filter(
-      SampleTypeCode != 'Integrated',
+      Phylum != "Bacillariophyta",
       Result != 0
     )
   bugs.sba <- chkmt(bugs.sba)
@@ -99,24 +99,27 @@ mmifun <- function(taxain){
   
   
   # Load winning metrics -----------------------------------------------------------
-  d.win <- mmilkup$d.win 
-  sba.win <- mmilkup$sba.win
-  hybrid.win <- mmilkup$hybrid.win
+  d.win <- c('cnt.spp.BCG3', 'prop.Cyclotella', 
+             'prop.Surirella', 'prop.spp.OxyReq.DO_10')
+  sba.win <- c('cnt.spp.BCG5', 'cnt.spp.IndicatorClass_Cu_high', 
+               'cnt.spp.IndicatorClass_DOC_high', 'cnt.spp.IndicatorClass_TP_high')
+  hybrid.win <- c('cnt.ind.most.tol', 'cnt.spp.IndicatorClass_Cu_high',
+                  'prop.spp.OrgN.NHHONF', 'prop.Cyclotella')
   
   d.results <- d.metrics %>%
-    select(SampleID, colnames(d.win)) %>%
+    select(SampleID, d.win) %>%
     filter(SampleID %in% rownames(bugs.d.m)) %>% 
     column_to_rownames('SampleID') 
   d.results <- chkmt(d.results)
     
   sba.results <- sba.metrics %>% 
-    select(SampleID, colnames(sba.win)) %>%
+    select(SampleID, sba.win) %>%
     filter(SampleID %in% rownames(bugs.sba.m)) %>% 
     column_to_rownames('SampleID')
   sba.results <- chkmt(sba.results)
   
   hybrid.results <- hybrid.metrics %>% 
-    select(SampleID, colnames(hybrid.win)) %>%
+    select(SampleID, hybrid.win) %>%
     filter(SampleID %in% rownames(bugs.hybrid.m)) %>% 
     column_to_rownames('SampleID')
   hybrid.results <- chkmt(hybrid.results)
