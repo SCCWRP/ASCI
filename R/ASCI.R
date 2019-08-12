@@ -9,13 +9,13 @@
 #' This function outputs the reulsts of \code{\link{mmifun}} functions in a user-friendly format.
 #' 
 #' @return 
-#' A \code{\link{asci}} object with specific methods.  See the examples for accessing.
+#' A dataframe with all metrics calculated for each provided taxa
 #'
 #' @export
 #' 
-#' @importFrom dplyr bind_rows mutate select
+#' @importFrom dplyr bind_rows mutate select case_when mutate_all group_by ungroup
 #' @importFrom magrittr "%>%"
-#' @importFrom tidyr gather spread unnest
+#' @importFrom tidyr gather spread unnest unite
 #' @import purrr
 #' @import tibble
 #' 
@@ -23,8 +23,7 @@
 #' 
 #' @examples 
 #' results <- ASCI(demo_algae_tax)
-#' scores(results)
-#' Supp1_mmi(results)
+#' 
 ASCI <- function(taxain, tax = c('diatoms', 'sba', 'hybrid'), ...){
   
   # check tax argument
@@ -41,10 +40,16 @@ ASCI <- function(taxain, tax = c('diatoms', 'sba', 'hybrid'), ...){
   # main output (scores)
   mmiscr <- mmind %>% 
     map(~ .x$MMI_scores) %>% 
-    map(gather, 'met', 'val', -SampleID) %>% 
+    map(gather, 'Metric', 'Value', -SampleID) %>% 
     enframe('taxa') %>% 
     unnest %>% 
-    spread(met, val)
+    mutate(
+      taxa = case_when(
+        taxa == 'diatoms' ~ 'D',
+        taxa == 'sba' ~ 'S',
+        TRUE ~ 'H'
+      )
+    )
   
   ##
   # supplementary info
@@ -52,7 +57,14 @@ ASCI <- function(taxain, tax = c('diatoms', 'sba', 'hybrid'), ...){
     map(~ .x$MMI_supp) %>% 
     map(gather, 'Metric', 'Value', -SampleID) %>% 
     enframe('taxa') %>% 
-    unnest
+    unnest %>% 
+    mutate(
+      taxa = case_when(
+        taxa == 'diatoms' ~ 'D',
+        taxa == 'sba' ~ 'S',
+        TRUE ~ 'H'
+      )
+    )
   
   # subset taxa if needed
   if(length(tax) < 3){
@@ -69,7 +81,13 @@ ASCI <- function(taxain, tax = c('diatoms', 'sba', 'hybrid'), ...){
   
   ##
   # create asci class output
-  out <- asci(scores = mmiscr, Supp1_mmi = Supp1_mmi, taxa = tax)
+  out <- rbind(mmiscr, Supp1_mmi) %>% 
+    unite('Met', c('taxa', 'Metric'), sep = '_') %>% 
+    group_by(SampleID, Met) %>% 
+    mutate(grouped_id = row_number()) %>% 
+    spread(Met, Value) %>% 
+    select(-grouped_id) %>% 
+    ungroup()
   
   return(out)
   
