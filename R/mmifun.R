@@ -120,8 +120,9 @@ mmifun <- function(taxain){
       pcnt.attributed.Surirella = Surirella.richness/richness,
       pcnt.attributed.OxyReg.DO_10 = OxyReq.DO_10.richness/richness
     ) %>% 
-    select(-c('richness', 'Cyclotella.richness', 
+    select(-c('Cyclotella.richness', 
               'Surirella.richness', 'OxyReq.DO_10.richness')) %>% 
+    rename(NumberTaxa = richness) %>% 
     column_to_rownames('SampleID')
   d.results <- chkmt(d.results)
     
@@ -134,7 +135,7 @@ mmifun <- function(taxain){
       pcnt.attributed.HiDOC = cnt.spp.IndicatorClass_DOC_high/richness,
       pcnt.attributed.HiTP.DO_10 = cnt.spp.IndicatorClass_TP_high/richness
     ) %>% 
-    select(-richness) %>% 
+    rename(NumberTaxa = richness) %>% 
     column_to_rownames('SampleID')
   sba.results <- chkmt(sba.results)
   
@@ -147,8 +148,9 @@ mmifun <- function(taxain){
       pcnt.attributed.HiCu = cnt.spp.IndicatorClass_Cu_high/richness,
       pcnt.attributed.NHHONF = OrgN.NHHONF.richness/richness
     ) %>% 
-    select(-c('richness', 'Cyclotella.richness', 
+    select(-c('Cyclotella.richness', 
               'OrgN.NHHONF.richness')) %>% 
+    rename(NumberTaxa = richness) %>% 
     column_to_rownames('SampleID')
   hybrid.results <- chkmt(hybrid.results)
   
@@ -273,7 +275,7 @@ mmifun <- function(taxain){
     map(function(x){
       names(x) <- c('MMI_scores', 'MMI_supp')
       return(x)
-    }
+      }
     )
 }
 

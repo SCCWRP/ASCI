@@ -13,7 +13,7 @@
 #'
 #' @export
 #' 
-#' @importFrom dplyr bind_rows mutate select case_when mutate_all group_by ungroup
+#' @importFrom dplyr bind_rows mutate select case_when mutate_all group_by ungroup inner_join summarize
 #' @importFrom magrittr "%>%"
 #' @importFrom tidyr gather spread unnest unite
 #' @import purrr
@@ -79,14 +79,36 @@ ASCI <- function(taxain, tax = c('diatoms', 'sba', 'hybrid'), ...){
     
   }
   
+  extra <- dat %>% 
+    group_by(SampleID) %>% 
+    summarize(
+      SampleType = paste0(unique(SampleTypeCode), collapse = '|'),
+      S_EntityCount = sum(BAResult, na.rm = T),
+      S_Biovolume = sum(Result, na.rm = T),
+      UnrecognizedTaxa = paste0(setdiff(FinalID, STE$FinalID), collapse = '|')
+    )
+  
+  extra1 <- dat %>% 
+    filter(SampleTypeCode == 'Integrated') %>% 
+    group_by(SampleID) %>%
+    summarize(
+      D_ValveCount = sum(BAResult, na.rm = T)
+    )
+  
   out <- rbind(mmiscr, Supp1_mmi) %>% 
     unite('Met', c('taxa', 'Metric'), sep = '_') %>% 
     group_by(SampleID, Met) %>% 
-    mutate(grouped_id = row_number()) %>% 
+    mutate(grouped_id = dplyr::row_number()) %>% 
     spread(Met, Value) %>% 
     select(-grouped_id) %>% 
     ungroup()
+  out1 <- extra %>% 
+    inner_join(extra1, by = 'SampleID') %>% 
+    inner_join(out, by = 'SampleID')
   
-  return(out)
+  return(out1)
   
 }
+
+
+    
