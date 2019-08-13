@@ -41,17 +41,4 @@ Authors@R: c(
     )
   )
 RoxygenNote: 6.1.1.9000
-Collate: 
-    'ASCI.R'
-    'STE.R'
-    'class-asci.R'
-    'asci-methods.R'
-    'chkinp.R'
-    'demo_algae_tax.R'
-    'getids.R'
-    'globalVariables.R'
-    'mmi_calmetrics.R'
-    'mmifun.R'
-    'mmilkup.R'
-    'rarify.R'
-    'score_metric.R'
+
