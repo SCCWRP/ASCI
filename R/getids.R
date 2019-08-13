@@ -4,7 +4,7 @@
 #'
 #' @param datin \code{data.frame} of taxonomy or site data
 #'
-#' @details Assigns unique sample id based on a concatenation of StationCode, SampleDate, and Replicate, used internally in \code{\link{chkinp}}
+#' @details Assigns unique sample id based on a concatenation of StationCode, SampleDate, and Replicate, used internally in \code{\link{chkinp}} and \code{\link{ASCI}}
 #'
 #' @return The original input with a new 'SampleID' column
 #' 

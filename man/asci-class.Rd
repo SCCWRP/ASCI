@@ -37,9 +37,3 @@ The S4 \code{asci} object includes several methods shown below.
 \item{\code{taxa}}{character string of taxa returned with initial function call}
 }}
 
-\examples{
-results <- ASCI(demo_algae_tax)
-scores(results)
-Supp1_mmi(results)
-
-}

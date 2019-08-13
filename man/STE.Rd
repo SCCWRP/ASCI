@@ -12,7 +12,7 @@ STE
 Taxonomic nomenclature for comparison and standardization of sample data
 }
 \details{
-The object is used internally in \code{\link{mmifun}}.
+The object is used internally in \code{\link{mmifun}} and in \code{\link{ASCI}}
 }
 \examples{
 data(STE)

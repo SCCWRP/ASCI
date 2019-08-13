@@ -29,6 +29,36 @@ The following are checked:
 \item No missing values for environmental predictor variables
 }
 }
+\examples{
+# all checks passed, data returned with SampleID
+chkinp(demo_algae_tax)
+
+# errors
+\dontrun{
+# missing columns in taxa data
+tmp <- demo_algae_tax[, 1, drop = FALSE]
+chkinp(tmp)
+chkinp(tmp, getval = TRUE)
+
+# incorrect taxonomy
+tmp <- demo_algae_tax
+tmp[1, 'FinalID'] <- 'asdf'
+chkinp(tmp)
+chkinp(tmp, getval = TRUE)
+
+# missing diatom data at sites
+tmp <- merge(demo_algae_tax, STE, all.x = T) \%>\%
+  filter(!Class \%in\% 'Bacillariophyceae')
+chkinp(tmp)
+chkinp(tmp, getval = TRUE)
+
+# missing abundance data for diatoms
+tmp <- demo_algae_tax
+tmp$BAResult <- NA
+chkinp(tmp)
+chkinp(tmp, getval = TRUE)
+}
+}
 \seealso{
 \code{\link{getids}}
 }

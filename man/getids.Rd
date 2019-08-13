@@ -16,7 +16,7 @@ The original input with a new 'SampleID' column
 Assing unique sample id to rows of taxonomy and site data
 }
 \details{
-Assigns unique sample id based on a concatenation of StationCode, SampleDate, and Replicate, used internally in \code{\link{chkinp}}
+Assigns unique sample id based on a concatenation of StationCode, SampleDate, and Replicate, used internally in \code{\link{chkinp}} and \code{\link{ASCI}}
 }
 \examples{
 getids(demo_algae_tax)

@@ -55,6 +55,7 @@
 #' tmp$BAResult <- NA
 #' chkinp(tmp)
 #' chkinp(tmp, getval = TRUE)
+#' }
 
 chkinp <- function(taxain, getval = FALSE){
   

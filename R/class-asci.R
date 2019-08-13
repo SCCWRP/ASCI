@@ -6,11 +6,7 @@
 #' @slot Supp1_mmi \code{data.frame} of supplemental MMI metric scores
 #' @slot taxa character string of taxa returned with initial function call
 #' 
-#' @examples 
-#' results <- ASCI(demo_algae_tax)
-#' scores(results)
-#' Supp1_mmi(results)
-#' 
+
 asci <- setClass('asci', 
          slots = list(
            scores = 'data.frame',
