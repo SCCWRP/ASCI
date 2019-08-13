@@ -46,16 +46,14 @@ mmifun <- function(taxain){
   
   bugs.d <- bugs %>% 
     filter(
-      Phylum == "Bacillariophyta",
-      BAResult != 0
+      SampleTypeCode == 'Integrated'
     )
   bugs.d <- chkmt(bugs.d)
   
   
   bugs.sba <- bugs %>% 
     filter(
-      Phylum != "Bacillariophyta",
-      Result != 0
+      SampleTypeCode != 'Integrated'
     )
   bugs.sba <- chkmt(bugs.sba)
   
