@@ -1,7 +1,4 @@
-#' @include class-asci.R
-NULL
 
-#' @rdname asci-class
 setMethod('show', 
           signature = 'asci', 
           definition = function(object){
@@ -24,18 +21,3 @@ setMethod('show',
             
           })
 
-#' @param object \code{asci} object created with \code{\link{ASCI}}
-#' @rdname asci-class
-#' 
-#' @export
-setGeneric('scores', function(object) standardGeneric('scores'))
-
-#' @rdname asci-class
-setMethod('scores', 'asci', function(object) object@scores)
-
-#' @rdname asci-class
-#' @export
-setGeneric('Supp1_mmi', function(object) standardGeneric('Supp1_mmi'))
-
-#' @rdname asci-class
-setMethod('Supp1_mmi', 'asci', function(object) object@Supp1_mmi)
