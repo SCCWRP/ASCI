@@ -4,13 +4,15 @@
 \alias{getids}
 \title{Assign unique sample id}
 \usage{
-getids(datin)
+getids(datin, concatenate = T)
 }
 \arguments{
 \item{datin}{\code{data.frame} of taxonomy or site data}
+
+\item{concatenate}{logical indicating if \code{SampleID} is created or parsed}
 }
 \value{
-The original input with a new 'SampleID' column
+The original input with a new \code{SampleID} column if \code{concatenate = TRUE}, or the original input with columns for \code{StationCode}, \code{Date}, and \code{Replicate} if \code{concatenate = FALSE}
 }
 \description{
 Assing unique sample id to rows of taxonomy and site data

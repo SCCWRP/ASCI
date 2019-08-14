@@ -33,9 +33,9 @@ getids <- function(datin, concatenate = T){
         Replicate = gsub('.*_([0-9]+)$', '\\1', col),
         Replicate = as.numeric(Replicate),
         col = gsub('_[0-9]+$', '', col),
-        Date = gsub('.*_(.*)$', '\\1', col), 
-        Station = gsub(paste(Date, collapse = '|'), '', col), 
-        Station = gsub('_$', '', Station)
+        SampleDate = gsub('.*_(.*)$', '\\1', col), 
+        StationCode = gsub(paste(SampleDate, collapse = '|'), '', col), 
+        StationCode = gsub('_$', '', StationCode)
       ) %>% 
       dplyr::select(-col)
         

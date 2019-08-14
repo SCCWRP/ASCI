@@ -27,9 +27,11 @@ library(ASCI)
 
 The sample file `demo_algae_tax` is included to demonstrate the correct format for input data. It is a `data.frame` of taxonomic data in long format (one row per sample). See the help files for more information (e.g., `?demo_algae_tax`)
 
-
 ```{r, message = F, warning = F, echo = F}
 devtools::load_all()
+```
+```{r}
+head(demo_algae_tax)
 ```
 
 The output is in a wide format.

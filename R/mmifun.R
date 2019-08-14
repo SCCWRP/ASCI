@@ -44,25 +44,27 @@ mmifun <- function(taxain){
     return(df)
   }
   
+  # diatoms only in integrated
   bugs.d <- bugs %>% 
     filter(
       SampleTypeCode == 'Integrated'
     )
   bugs.d <- chkmt(bugs.d)
   
-  
+  # soft-bodied not in integrated
   bugs.sba <- bugs %>% 
     filter(
       SampleTypeCode != 'Integrated'
     )
   bugs.sba <- chkmt(bugs.sba)
   
+  # create hybrid, but first see if both exist, if not create dummy data frame
   if(bugs.d$FinalID[1] == -88 | bugs.sba$FinalID[1] == -88) {
     bugs <- bugs[1,]
     bugs[1, ] <- rep(-88)
     bugs <- bugs %>% 
       mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T)))
-  } else {
+  } else { # otherwise subset both
     smpid <- intersect(bugs.d$SampleID, bugs.sba$SampleID)
     bugs <- bugs %>% 
       filter(SampleID %in% smpid) %>% 
@@ -109,6 +111,7 @@ mmifun <- function(taxain){
                   'richness', 'Cyclotella.richness', 
                   'OrgN.NHHONF.richness')
   
+  # get diatom metrics and percent attributed
   d.results <- d.metrics %>%
     select(SampleID, d.win) %>%
     filter(SampleID %in% rownames(bugs.d.m)) %>%
@@ -123,7 +126,8 @@ mmifun <- function(taxain){
     rename(NumberTaxa = richness) %>% 
     column_to_rownames('SampleID')
   d.results <- chkmt(d.results)
-    
+  
+  # get soft-bodied metrics and percent attributed  
   sba.results <- sba.metrics %>% 
     select(SampleID, sba.win) %>%
     filter(SampleID %in% rownames(bugs.sba.m)) %>% 
@@ -137,6 +141,7 @@ mmifun <- function(taxain){
     column_to_rownames('SampleID')
   sba.results <- chkmt(sba.results)
   
+  # get hybrid results and percent attributed
   hybrid.results <- hybrid.metrics %>% 
     select(SampleID, hybrid.win) %>%
     filter(SampleID %in% rownames(bugs.hybrid.m)) %>% 

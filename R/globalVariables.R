@@ -13,7 +13,9 @@ globalVariables(c('STE', 'Class', 'acast', 'mmilkup', 'SampleTypeCode', 'Phylum'
                   'grouped_id', 'cnt.spp.BCG3', 'richness', 'Cyclotella.richness', 'Surirella.richness',
                   'OxyReq.DO_10.richness', 'cnt.spp.BCG5', 'cnt.spp.IndicatorClass_Cu_high', 
                   'cnt.spp.IndicatorClass_DOC_high', 'cnt.spp.IndicatorClass_TP_high', 
-                  'cnt.ind.most.tol', 'OrgN.NHHONF.richness', 'scores'))
+                  'cnt.ind.most.tol', 'OrgN.NHHONF.richness', 'scores', 'D_ASCI', 'D_NumberTaxa',
+                  'D_ValveCount', 'H_ASCI', 'H_NumberTaxa', 'S_ASCI', 'S_Biovolume', 'S_EntityCount',
+                  'S_NumberTaxa', 'SampleType', 'UnrecognizedTaxa'))
 
 #' @importFrom stats ave lm na.omit pnorm predict runif sd t.test var
 NULL

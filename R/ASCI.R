@@ -67,6 +67,7 @@ ASCI <- function(taxain, tax = c('diatoms', 'sba', 'hybrid'), ...){
     
   }
   
+  # get diatom valve counts
   extra1 <- dat %>% 
     filter(SampleTypeCode == 'Integrated') %>% 
     group_by(SampleID) %>%
@@ -74,6 +75,7 @@ ASCI <- function(taxain, tax = c('diatoms', 'sba', 'hybrid'), ...){
       D_ValveCount = sum(BAResult, na.rm = T)
     )
   
+  # get sampletype concatenated column, soft-bodied entity and biovolume count
   extra2 <- dat %>% 
     group_by(SampleID) %>% 
     summarize(
@@ -84,7 +86,7 @@ ASCI <- function(taxain, tax = c('diatoms', 'sba', 'hybrid'), ...){
     ) %>% 
     full_join(extra1, by = 'SampleID')
 
-  
+  # combine all
   out <- rbind(mmiscr, Supp1_mmi) %>% 
     mutate(
     taxa = case_when(
@@ -102,6 +104,16 @@ ASCI <- function(taxain, tax = c('diatoms', 'sba', 'hybrid'), ...){
   out1 <- extra2 %>% 
     inner_join(out, by = 'SampleID') %>% 
     filter(SampleID != 1)
+  
+  # get original stationcode, date, and replicate
+  out1 <- getids(out1, concatenate = FALSE)
+  
+  # reorder columns
+  out1 <- out1 %>% 
+    select(SampleID, StationCode, SampleDate, Replicate, SampleType, D_ValveCount, S_EntityCount, S_Biovolume, 
+           D_NumberTaxa, S_NumberTaxa, H_NumberTaxa, UnrecognizedTaxa, D_ASCI, S_ASCI, H_ASCI, dplyr::contains('D_'), 
+           dplyr::contains('S_'), dplyr::contains('H_'), dplyr::everything()
+    )
   
   return(out1)
   
