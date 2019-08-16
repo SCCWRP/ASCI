@@ -50,6 +50,7 @@
 #' chkinp(tmp)
 #' chkinp(tmp, getval = TRUE)
 #' 
+#' 
 #' # missing abundance data for diatoms
 #' tmp <- demo_algae_tax
 #' tmp$BAResult <- NA
