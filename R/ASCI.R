@@ -80,8 +80,8 @@ ASCI <- function(taxain, tax = c('diatoms', 'sba', 'hybrid'), ...){
     group_by(SampleID) %>% 
     summarize(
       SampleType = paste0(unique(SampleTypeCode), collapse = '|'),
-      S_EntityCount = sum(BAResult, na.rm = T),
-      S_Biovolume = sum(Result, na.rm = T),
+      S_EntityCount = sum(Result[SampleTypeCode == 'Macroalgae'], na.rm = T),
+      S_Biovolume = sum(Result[SampleTypeCode == 'Microalgae'], na.rm = T),
       UnrecognizedTaxa = paste0(setdiff(FinalID, STE$FinalID), collapse = '|')
     ) %>% 
     full_join(extra1, by = 'SampleID')
