@@ -47,14 +47,16 @@ mmifun <- function(taxain){
   # diatoms only in integrated
   bugs.d <- bugs %>% 
     filter(
-      SampleTypeCode == 'Integrated'
+      SampleTypeCode == 'Integrated',
+      !is.na(BAResult)
     )
   bugs.d <- chkmt(bugs.d)
   
   # soft-bodied not in integrated
   bugs.sba <- bugs %>% 
     filter(
-      SampleTypeCode != 'Integrated'
+      SampleTypeCode != 'Integrated',
+      !is.na(Result)
     )
   bugs.sba <- chkmt(bugs.sba)
   
