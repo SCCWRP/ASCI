@@ -20,7 +20,7 @@ Imports:
     tidyr,
     vegan
 Depends:
-    R (>= 3.4.1), 
+    R (>= 3.4.0), 
     methods
 Authors@R: c(
   person(given = "Marcus W.", family = "Beck",
