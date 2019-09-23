@@ -2,12 +2,12 @@
 % Please edit documentation in R/chkinp.R
 \name{chkinp}
 \alias{chkinp}
-\title{Check input taxonomy and site data}
+\title{Check input taxonomy data}
 \usage{
-chkinp(taxain, getval = FALSE)
+chkinp(taxa, getval = FALSE)
 }
 \arguments{
-\item{taxain}{\code{data.frame} for input taxonomy data}
+\item{taxa}{\code{data.frame} for input taxonomy data}
 
 \item{getval}{logical to return a vector of values not satisfied by checks, useful for data prep}
 }
@@ -15,18 +15,15 @@ chkinp(taxain, getval = FALSE)
 The original data with only relevant columns are returned if all checks are met, including a new column for \code{SampleID} (see \code{\link{getids}}).  An error message is returned if the datasets do not meet requirements or a vector of values that caused the error if \code{getval = TRUE}.  Site data will include only those sites in the taxonomic data.
 }
 \description{
-Check input taxonomy and site data for required information
+Check input taxonomy for required information
 }
 \details{
 The following are checked:
 \itemize{
 \item Required columns in taxonomy data: StationCode, SampleDate, Replicate, SampleTypeCode, BAResult, Result, FinalID
-\item Required columns in site data: StationCode, SampleDate, Replicate, AREA_SQKM, AtmCa, CondQR50, DayOfYear, KFCT_AVE, LogWSA, LST32AVE, MAX_ELEV, MEANP_WS, MINP_WS, New_Lat, New_Long, PPT_00_09, SITE_ELEV, TMAX_WS, XWD_WS 
-\item SampleID in taxonomic data are present in site data
 \item Taxonomic names are present in the \code{\link{STE}} reference file
-\item Sites include both diatom and soft-bodied algae data
+\item Sites include both diatom and soft-bodied algae data (warning if not)
 \item No missing abundance values for diatoms (for rarification)
-\item No missing values for environmental predictor variables
 }
 }
 \examples{
@@ -48,7 +45,7 @@ chkinp(tmp, getval = TRUE)
 
 # missing diatom data at sites
 tmp <- merge(demo_algae_tax, STE, all.x = T) \%>\%
-  filter(!Class \%in\% 'Bacillariophyceae')
+  filter(Class \%in\% 'Bacillariophyceae')
 chkinp(tmp)
 chkinp(tmp, getval = TRUE)
 

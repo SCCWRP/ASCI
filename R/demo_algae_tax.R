@@ -3,12 +3,11 @@
 #'
 #' An example dataset for algae taxonomy. Data are in long format, one row per sample
 #'  
-#' @format A \code{\link[base]{data.frame}} with 105 rows and 8 variables:
+#' @format A \code{\link[base]{data.frame}} with 208 rows and 7 variables:
 #' \describe{
 #'   \item{\code{StationCode}}{chr}
 #'   \item{\code{SampleDate}}{chr}
 #'   \item{\code{Replicate}}{int}
-#'   \item{\code{CollectionMethodCode}}{chr}
 #'   \item{\code{SampleTypeCode}}{chr}
 #'   \item{\code{BAResult}}{num}
 #'   \item{\code{Result}}{num}
