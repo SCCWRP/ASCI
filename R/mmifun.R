@@ -99,30 +99,26 @@ mmifun <- function(taxain){
   
   
   # Load winning metrics -----------------------------------------------------------
-  d.win <- c('cnt.spp.BCG3', 'prop.Cyclotella', 
-             'prop.Surirella', 'prop.spp.OxyReq.DO_10',
-             'richness', 'Cyclotella.richness', 
-             'Surirella.richness', 'OxyReq.DO_10.richness')
-  sba.win <- c('cnt.spp.BCG5', 'cnt.spp.IndicatorClass_Cu_high', 
-               'cnt.spp.IndicatorClass_DOC_high', 'cnt.spp.IndicatorClass_TP_high',
-               'richness')
-  hybrid.win <- c('cnt.ind.most.tol', 'cnt.spp.IndicatorClass_Cu_high',
-                  'prop.spp.OrgN.NHHONF', 'prop.Cyclotella',
-                  'richness', 'Cyclotella.richness', 
-                  'OrgN.NHHONF.richness')
+  d.win <- c('prop.spp.SPIspecies4', 'Salinity.BF.richness', 
+             'prop.spp.Saprobic.BM', 'cnt.spp.IndicatorClass_TP_low',
+             'richness', 'cnt.spp.SPIspecies4', 'Saprobic.BM.richness')
+  sba.win <- c('prop.spp.Green', 'cnt.spp.IndicatorClass_DOC_high', 
+               'prop.spp.BCG45', 'richness', 'cnt.spp.Green', 'cnt.spp.BCG45')
+  hybrid.win <- c('prop.spp.BCG4', 'Salinity.BF.richness', 
+                  'prop.spp.IndicatorClass_DOC_high', 'OxyRed.DO_30.richness', 
+                  'richness', 'cnt.spp.BCG4', 'cnt.spp.IndicatorClass_DOC_high')
   
   # get diatom metrics and percent attributed
   d.results <- d.metrics %>%
     select(SampleID, d.win) %>%
     filter(SampleID %in% rownames(bugs.d.m)) %>%
     mutate(
-      pcnt.attributed.BCG3 = cnt.spp.BCG3/richness,
-      pcnt.attributed.Cyclotella = Cyclotella.richness/richness,
-      pcnt.attributed.Surirella = Surirella.richness/richness,
-      pcnt.attributed.OxyReg.DO_10 = OxyReq.DO_10.richness/richness
+      pcnt.attributed.SPIspecies4 = cnt.spp.SPIspecies4/richness,
+      pcnt.attributed.Salinity.BF = Salinity.BF.richness/richness,
+      pcnt.attributed.Saprobic.BM = Saprobic.BM.richness/richness,
+      pcnt.attributed.IndicatorClass_TP_Low = cnt.spp.IndicatorClass_TP_low/richness,
     ) %>% 
-    select(-c('Cyclotella.richness', 
-              'Surirella.richness', 'OxyReq.DO_10.richness')) %>% 
+    select(-c('cnt.spp.SPIspecies4', 'Saprobic.BM.richness')) %>% 
     rename(NumberTaxa = richness) %>% 
     column_to_rownames('SampleID')
   d.results <- chkmt(d.results)
@@ -132,11 +128,11 @@ mmifun <- function(taxain){
     select(SampleID, sba.win) %>%
     filter(SampleID %in% rownames(bugs.sba.m)) %>% 
     mutate(
-      pcnt.attributed.BCG5 = cnt.spp.BCG5/richness,
-      pcnt.attributed.HiCu = cnt.spp.IndicatorClass_Cu_high/richness,
-      pcnt.attributed.HiDOC = cnt.spp.IndicatorClass_DOC_high/richness,
-      pcnt.attributed.HiTP.DO_10 = cnt.spp.IndicatorClass_TP_high/richness
+      pcnt.attributed.Green = cnt.spp.Green/richness,
+      pcnt.attributed.IndicatorClass_DOC_high = cnt.spp.IndicatorClass_DOC_high/richness,
+      pcnt.attributed.BCG45 = cnt.spp.BCG45/richness,
     ) %>% 
+    select(-c('cnt.spp.Green', 'cnt.spp.BCG45')) %>% 
     rename(NumberTaxa = richness) %>% 
     column_to_rownames('SampleID')
   sba.results <- chkmt(sba.results)
@@ -146,13 +142,12 @@ mmifun <- function(taxain){
     select(SampleID, hybrid.win) %>%
     filter(SampleID %in% rownames(bugs.hybrid.m)) %>% 
     mutate(
-      pcnt.attributed.HiTolerance = cnt.ind.most.tol/richness,
-      pcnt.attributed.Cyclotella = Cyclotella.richness/richness,
-      pcnt.attributed.HiCu = cnt.spp.IndicatorClass_Cu_high/richness,
-      pcnt.attributed.NHHONF = OrgN.NHHONF.richness/richness
+      pcnt.attributed.BCG4 = cnt.spp.BCG4/richness,
+      pcnt.attributed.Salinity.BF = Salinity.BF.richness/richness,
+      pcnt.attributed.IndicatorClass_DOC_high = cnt.spp.IndicatorClass_DOC_high/richness,
+      pcnt.attributed.OxyRed.DO_30 = OxyRed.DO_30.richness/richness
     ) %>% 
-    select(-c('Cyclotella.richness', 
-              'OrgN.NHHONF.richness')) %>% 
+    select(-c('cnt.spp.BCG4', 'cnt.spp.IndicatorClass_DOC_high')) %>% 
     rename(NumberTaxa = richness) %>% 
     column_to_rownames('SampleID')
   hybrid.results <- chkmt(hybrid.results)
