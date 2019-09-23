@@ -10,12 +10,12 @@ globalVariables(c('STE', 'Class', 'acast', 'mmilkup', 'SampleTypeCode', 'Phylum'
                   'diaind', 'variable', 'FinalIDassigned', 'StationID', 'ave', 'cls', 'data', 'fst', 'grp', 
                   'ind', 'lm', 'mmi', 'prc_amg', 'prc_wth', 'psa', 'res_tst', 'rfmod', 'scr.x', 
                   'scr.y', 'typ', 'metest', 'Assemblage', 'rowname', 'Metric', 'FinalID', 'Met', 'Value',
-                  'grouped_id', 'cnt.spp.BCG3', 'richness', 'Cyclotella.richness', 'Surirella.richness',
-                  'OxyReq.DO_10.richness', 'cnt.spp.BCG5', 'cnt.spp.IndicatorClass_Cu_high', 
-                  'cnt.spp.IndicatorClass_DOC_high', 'cnt.spp.IndicatorClass_TP_high', 
-                  'cnt.ind.most.tol', 'OrgN.NHHONF.richness', 'scores', 'D_ASCI', 'D_NumberTaxa',
+                  'grouped_id', 'richness', 'scores', 'D_ASCI', 'D_NumberTaxa',
                   'D_ValveCount', 'H_ASCI', 'H_NumberTaxa', 'S_ASCI', 'S_Biovolume', 'S_EntityCount',
-                  'S_NumberTaxa', 'SampleType', 'UnrecognizedTaxa'))
+                  'S_NumberTaxa', 'SampleType', 'UnrecognizedTaxa', 'cnt.spp.BCG4', 'cnt.spp.BCG45',
+                  'cnt.spp.Green', 'cnt.spp.IndicatorClass_TP_low', 'cnt.spp.SPIspecies4', 
+                  'OxyRed.DO_30.richness', 'Salinity.BF.richness', 'Saprobic.BM.richness',
+                  'cnt.spp.IndicatorClass_DOC_high'))
 
 #' @importFrom stats ave lm na.omit pnorm predict runif sd t.test var
 NULL
