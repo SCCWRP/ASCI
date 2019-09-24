@@ -3,6 +3,7 @@
 #' @description Check input taxonomy for required information
 #' 
 #' @param taxa \code{data.frame} for input taxonomy data
+#' @param station \code{data.frame} for input station data
 #' @param getval logical to return a vector of values not satisfied by checks, useful for data prep
 #'
 #' @return The original data with only relevant columns are returned if all checks are met, including a new column for \code{SampleID} (see \code{\link{getids}}).  An error message is returned if the datasets do not meet requirements or a vector of values that caused the error if \code{getval = TRUE}.  Site data will include only those sites in the taxonomic data.
@@ -29,32 +30,31 @@
 #' 
 #' @examples
 #' # all checks passed, data returned with SampleID
-#' chkinp(demo_algae_tax)
+#' chkinp(demo_algae_tax, demo_station)
 #' 
 #' # errors
 #' \dontrun{
 #' # missing columns in taxa data
 #' tmp <- demo_algae_tax[, 1, drop = FALSE]
-#' chkinp(tmp)
-#' chkinp(tmp, getval = TRUE)
+#' chkinp(tmp, demo_station)
+#' chkinp(tmp, demo_station, getval = TRUE)
 #' 
 #' # incorrect taxonomy
 #' tmp <- demo_algae_tax
 #' tmp[1, 'FinalID'] <- 'asdf'
-#' chkinp(tmp)
-#' chkinp(tmp, getval = TRUE)
+#' chkinp(tmp, demo_station)
+#' chkinp(tmp, demo_station, getval = TRUE)
 #' 
-#' # missing diatom data at sites
+#' # missing diatom data at sites, returns only a warning
 #' tmp <- merge(demo_algae_tax, STE, all.x = T) %>%
 #'   filter(Class %in% 'Bacillariophyceae')
-#' chkinp(tmp)
-#' chkinp(tmp, getval = TRUE)
+#' chkinp(tmp, demo_station)
 #' 
 #' # missing abundance data for diatoms
 #' tmp <- demo_algae_tax
 #' tmp$BAResult <- NA
-#' chkinp(tmp)
-#' chkinp(tmp, getval = TRUE)
+#' chkinp(tmp, demo_station)
+#' chkinp(tmp, demo_station, getval = TRUE)
 #' 
 #' # stations not shared between taxa and station
 #' tmp <- demo_station[-1, ]
@@ -149,7 +149,7 @@ chkinp <- function(taxa, station, getval = FALSE){
     if(getval) return(chk)
       
     msg <- paste(chk, collapse = ', ') %>% 
-      paste('Stations not shared between taxa and station:', .)
+      paste('Station names not shared between taxa and station:', .)
     stop(msg, call. = FALSE)
     
   }
@@ -169,7 +169,7 @@ chkinp <- function(taxa, station, getval = FALSE){
   chk <- c('XerMtn', 'PSA6C') %in% names(station)
   if(sum(chk) == 0){
     
-    stop('Station must include one of XerMtn or PSA6c', call. = FALSE)
+    stop('Station data must include one of XerMtn or PSA6c', call. = FALSE)
     
   }
   
@@ -177,7 +177,7 @@ chkinp <- function(taxa, station, getval = FALSE){
   if(chk){
 
     msg <- paste(condvals, collapse = ', ') %>% 
-      paste('Station must include ConQR50 or all of the following:', .)
+      paste('Station data must include CondQR50 or all of the following:', .)
     stop(msg, call. = FALSE)
     
   }
@@ -186,7 +186,7 @@ chkinp <- function(taxa, station, getval = FALSE){
   if(length(chk) != 0){
     
     msg <- paste(chk, collapse = ', ') %>% 
-      paste('Station missing the following:', .)
+      paste('Station data missing the following:', .)
     stop(msg, call. = FALSE)    
     
   }

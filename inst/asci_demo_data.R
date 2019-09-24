@@ -32,6 +32,9 @@ demo_algae_tax <- datalgcon %>%
     BAResult = baresult,
     Result = result,
     FinalID = finalid
+  ) %>% 
+  mutate(
+    Result = as.numeric(Result)
   )
 
 demo_station <- datgiscon %>%

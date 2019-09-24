@@ -26,7 +26,7 @@ One index for three taxonomy types are scored, MMI for diatoms, soft-bodied alga
 This function outputs the reulsts of \code{\link{mmifun}} functions in a user-friendly format.
 }
 \examples{
-results <- ASCI(demo_algae_tax)
+results <- ASCI(demo_algae_tax, demo_station)
 
 }
 \seealso{

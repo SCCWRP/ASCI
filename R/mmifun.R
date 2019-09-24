@@ -153,7 +153,6 @@ mmifun <- function(taxa, station){
     column_to_rownames('SampleID')
   hybrid.results <- chkmt(hybrid.results)
   
-  
   omni.ref <- mmilkup$omni.ref
   d.scored <- score_metric(taxa = 'diatoms', bugs.d.m, d.results, omni.ref) %>% 
     select(-rowname) %>% 

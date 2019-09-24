@@ -23,7 +23,7 @@
 #' @seealso  \code{\link{mmifun}}
 #' 
 #' @examples 
-#' results <- ASCI(demo_algae_tax)
+#' results <- ASCI(demo_algae_tax, demo_station)
 #' 
 ASCI <- function(taxa, station, tax = c('diatoms', 'sba', 'hybrid'), ...){
   
@@ -32,7 +32,10 @@ ASCI <- function(taxa, station, tax = c('diatoms', 'sba', 'hybrid'), ...){
     stop('tax must match diatoms, sba, and/or hybrid')
   
   # run all other checks, get output if passed
-  dat <- chkinp(taxa)
+  dat <- chkinp(taxa, station)
+  
+  # calculate GIS from stations
+  station <- calcgis(station)
   
   # mmi
   mmind <- mmifun(dat, station, ...)

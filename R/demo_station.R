@@ -6,5 +6,5 @@
 #' @format A \code{\link[base]{data.frame}} with 3 rows and 26 variables:
 #'
 #' @examples 
-#' data(demo_algae_tax)
-"demo_algae_tax"
+#' data(demo_station)
+"demo_station"

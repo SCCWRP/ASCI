@@ -4,10 +4,12 @@
 \alias{chkinp}
 \title{Check input taxonomy data}
 \usage{
-chkinp(taxa, getval = FALSE)
+chkinp(taxa, station, getval = FALSE)
 }
 \arguments{
 \item{taxa}{\code{data.frame} for input taxonomy data}
+
+\item{station}{\code{data.frame} for input station data}
 
 \item{getval}{logical to return a vector of values not satisfied by checks, useful for data prep}
 }
@@ -24,36 +26,54 @@ The following are checked:
 \item Taxonomic names are present in the \code{\link{STE}} reference file
 \item Sites include both diatom and soft-bodied algae data (warning if not)
 \item No missing abundance values for diatoms (for rarification)
+\item One of \code{CondQR50} or all predictors for the conductivity model in the station data
+\item One of \code{XerMtn} or {PSA6C} in the station data
+\item Additional required columns for the station data: StationCode, CondQR50, SITE_ELEV, TEMP_00_09, KFCT_AVE, AtmCa, PPT_00_09, MAX_ELEV
 }
 }
 \examples{
 # all checks passed, data returned with SampleID
-chkinp(demo_algae_tax)
+chkinp(demo_algae_tax, demo_station)
 
 # errors
 \dontrun{
 # missing columns in taxa data
 tmp <- demo_algae_tax[, 1, drop = FALSE]
-chkinp(tmp)
-chkinp(tmp, getval = TRUE)
+chkinp(tmp, demo_station)
+chkinp(tmp, demo_station, getval = TRUE)
 
 # incorrect taxonomy
 tmp <- demo_algae_tax
 tmp[1, 'FinalID'] <- 'asdf'
-chkinp(tmp)
-chkinp(tmp, getval = TRUE)
+chkinp(tmp, demo_station)
+chkinp(tmp, demo_station, getval = TRUE)
 
-# missing diatom data at sites
+# missing diatom data at sites, returns only a warning
 tmp <- merge(demo_algae_tax, STE, all.x = T) \%>\%
   filter(Class \%in\% 'Bacillariophyceae')
-chkinp(tmp)
-chkinp(tmp, getval = TRUE)
+chkinp(tmp, demo_station)
 
 # missing abundance data for diatoms
 tmp <- demo_algae_tax
 tmp$BAResult <- NA
-chkinp(tmp)
-chkinp(tmp, getval = TRUE)
+chkinp(tmp, demo_station)
+chkinp(tmp, demo_station, getval = TRUE)
+
+# stations not shared between taxa and station
+tmp <- demo_station[-1, ]
+chkinp(demo_algae_tax, tmp)
+
+# missing both of XerMtn and PSA6c in station
+tmp <- demo_station[, !names(demo_station) \%in\% c('XerMtn', 'PSA6C')]
+chkinp(demo_algae_tax, tmp)
+
+# missing CondQR50 and incomplete predictor fields
+tmp <- demo_station[, !names(demo_station) \%in\% c('CondQR50', 'TMAX_WS')]
+chkinp(demo_algae_tax, tmp)
+
+# missing remaining station predictors
+tmp <- demo_station[, !names(demo_station) \%in\% c('AtmCa')]
+chkinp(demo_algae_tax, tmp)
 }
 }
 \seealso{
