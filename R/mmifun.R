@@ -26,10 +26,10 @@ mmifun <- function(taxa, station){
 
   options(gsubfn.engine = "R")
   
-  # Step 1. Import taxonomy data -----------------------------------------------------------
+  # Import taxonomy data -----------------------------------------------------------
   bugs <- taxa 
 
-  # Step 2. Get diatom, sba, hybrid --------------------------------------------------------
+  # Get diatom, sba, hybrid --------------------------------------------------------
   bugs <- merge(bugs, STE[,c("FinalID", "FinalIDassigned", "Genus", "Phylum", "Class")], all.x = T) %>% 
     filter(
       SampleTypeCode != "Qualitative",
@@ -75,19 +75,19 @@ mmifun <- function(taxa, station){
       ungroup()
   }
   
-  # Step 3. Convert to species abd matrix at Species level  -----------------------------------------------------------
+  # Convert to species abd matrix at Species level  -----------------------------------------------------------
   bugs.d.m <- as.data.frame(acast(bugs.d, 
                                   SampleID ~ FinalIDassigned, 
                                   value.var = "BAResult", 
-                                  fun.aggregate=sum))
+                                  fun.aggregate=sum, na.rm = T))
   bugs.sba.m <- as.data.frame(acast(bugs.sba, 
                                     SampleID ~ FinalIDassigned, 
                                     value.var = "Result", 
-                                    fun.aggregate=sum))
+                                    fun.aggregate=sum, na.rm = T))
   bugs.hybrid.m <- as.data.frame(acast(bugs, 
                                        SampleID ~ FinalIDassigned, 
                                        value.var = "ComboResult", 
-                                       fun.aggregate=sum))
+                                       fun.aggregate=sum, na.rm = T))
   
   stations <- taxa %>% 
     select(StationCode, SampleDate, Replicate, SampleID) %>% 
@@ -98,8 +98,15 @@ mmifun <- function(taxa, station){
   sba.metrics <- mmi_calcmetrics('sba', bugs.sba.m, stations)
   hybrid.metrics <- mmi_calcmetrics('hybrid', bugs.hybrid.m, stations)
   
+  # Setup GIS predictors by station id --------------------------------------
+
+  stationid <- taxa %>% 
+    select(SampleID, StationCode) %>% 
+    unique %>% 
+    full_join(station, by ='StationCode')
   
   # Load winning metrics -----------------------------------------------------------
+  
   d.win <- c('prop.spp.SPIspecies4', 'Salinity.BF.richness', 
              'prop.spp.Saprobic.BM', 'cnt.spp.IndicatorClass_TP_low',
              'richness', 'cnt.spp.SPIspecies4', 'Saprobic.BM.richness')
@@ -108,8 +115,13 @@ mmifun <- function(taxa, station){
   hybrid.win <- c('prop.spp.BCG4', 'Salinity.BF.richness', 
                   'prop.spp.IndicatorClass_DOC_high', 'OxyRed.DO_30.richness', 
                   'richness', 'cnt.spp.BCG4', 'cnt.spp.IndicatorClass_DOC_high')
+
+  # Calculated observed and predicted metrics -------------------------------
+
+  ##
+  # diatoms
   
-  # get diatom metrics and percent attributed
+  # get observe diatom metrics and percent attributed
   d.results <- d.metrics %>%
     select(SampleID, d.win) %>%
     filter(SampleID %in% rownames(bugs.d.m)) %>%
@@ -117,14 +129,37 @@ mmifun <- function(taxa, station){
       pcnt.attributed.SPIspecies4 = cnt.spp.SPIspecies4/richness,
       pcnt.attributed.Salinity.BF = Salinity.BF.richness/richness,
       pcnt.attributed.Saprobic.BM = Saprobic.BM.richness/richness,
-      pcnt.attributed.IndicatorClass_TP_Low = cnt.spp.IndicatorClass_TP_low/richness,
+      pcnt.attributed.IndicatorClass_TP_Low = cnt.spp.IndicatorClass_TP_low/richness
     ) %>% 
     select(-c('cnt.spp.SPIspecies4', 'Saprobic.BM.richness')) %>% 
-    rename(NumberTaxa = richness) %>% 
+    rename(NumberTaxa = richness) 
+
+  # predicted diatom metrics
+  d.predmet <- stationid %>% 
+    mutate(
+      prop.spp.SPI.species4_pred = predict(rfmods$d.prop.spp.SPIspecies4, newdata = .[, c('CondQR50', 'SITE_ELEV', 'TEMP_00_09')]),
+      Salinity.BF.richness_pred = predict(rfmods$d.Salinity.BF.richness, newdata = .[, c('XerMtn', 'KFCT_AVE')])
+    ) %>% 
+    select(SampleID, prop.spp.SPI.species4_pred, Salinity.BF.richness_pred)
+  
+  # join with observed, take residuals for raw/pred metrics
+  d.results <- d.results %>% 
+    left_join(d.predmet, by = 'SampleID') %>%
+    rename(
+      prop.spp.SPIspecies4_raw = prop.spp.SPIspecies4, 
+      Salinity.BF.richess_raw = Salinity.BF.richness
+    ) %>% 
+    mutate(
+      prop.spp.SPIspecies4 = prop.spp.SPIspecies4_raw - prop.spp.SPI.species4_pred, 
+      Salinity.BF.richness = Salinity.BF.richess_raw - Salinity.BF.richness_pred
+    ) %>% 
     column_to_rownames('SampleID')
   d.results <- chkmt(d.results)
   
-  # get soft-bodied metrics and percent attributed  
+  ##
+  # sba, no predicted metrics
+  
+  # get observed soft-bodied metrics and percent attributed  
   sba.results <- sba.metrics %>% 
     select(SampleID, sba.win) %>%
     filter(SampleID %in% rownames(bugs.sba.m)) %>% 
@@ -138,7 +173,10 @@ mmifun <- function(taxa, station){
     column_to_rownames('SampleID')
   sba.results <- chkmt(sba.results)
   
-  # get hybrid results and percent attributed
+  ##
+  # hybrid
+  
+  # get observed hybrid results and percent attributed
   hybrid.results <- hybrid.metrics %>% 
     select(SampleID, hybrid.win) %>%
     filter(SampleID %in% rownames(bugs.hybrid.m)) %>% 
@@ -149,10 +187,35 @@ mmifun <- function(taxa, station){
       pcnt.attributed.OxyRed.DO_30 = OxyRed.DO_30.richness/richness
     ) %>% 
     select(-c('cnt.spp.BCG4', 'cnt.spp.IndicatorClass_DOC_high')) %>% 
-    rename(NumberTaxa = richness) %>% 
+    rename(NumberTaxa = richness) 
+  
+  # predicted hybrid metrics
+  hybrid.predmet <- stationid %>% 
+    mutate(
+      prop.spp.BCG4_pred = predict(rfmods$h.prop.spp.BCG4, newdata = .[, c('MAX_ELEV', 'CondQR50')]),
+      Salinity.BF.richness_pred = predict(rfmods$h.Salinity.BF.richness, newdata = .[, c('XerMtn', 'KFCT_AVE')]),
+      OxyRed.DO_30.richness_pred = predict(rfmods$h.OxyRed.DO_30.richness, newdata = .[, c('AtmCa', 'PPT_00_09')])
+    ) %>% 
+    select(SampleID, prop.spp.BCG4_pred, Salinity.BF.richness_pred, OxyRed.DO_30.richness_pred)
+  
+  # join with observed, take residuals for raw/pred metrics
+  hybrid.results <- hybrid.results %>% 
+    left_join(hybrid.predmet, by = 'SampleID') %>%
+    rename(
+      prop.spp.BCG4_raw = prop.spp.BCG4, 
+      Salinity.BF.richess_raw = Salinity.BF.richness, 
+      OxyRed.DO_30.richness_raw = OxyRed.DO_30.richness
+    ) %>% 
+    mutate(
+      prop.spp.BCG4 = prop.spp.BCG4_raw - prop.spp.BCG4_pred, 
+      Salinity.BF.richness = Salinity.BF.richess_raw - Salinity.BF.richness_pred, 
+      OxyRed.DO_30.richness = OxyRed.DO_30.richness_raw - OxyRed.DO_30.richness_pred
+    ) %>% 
     column_to_rownames('SampleID')
   hybrid.results <- chkmt(hybrid.results)
-  
+
+  # Score metrics -----------------------------------------------------------
+
   omni.ref <- mmilkup$omni.ref
   d.scored <- score_metric(taxa = 'diatoms', bugs.d.m, d.results, omni.ref) %>% 
     select(-rowname) %>% 
@@ -221,25 +284,24 @@ mmifun <- function(taxa, station){
     hybrid.scored.scaled[1, ] <- rep(-88)
   }
   
-  
   # put all results in long format
   out <- list(
-    diatoms_obs = d.results, 
-    diatoms_scr = d.scored.scaled,
-    sba_obs = sba.results,
-    sba_scr = sba.scored.scaled,
-    hybrid_obs = hybrid.results, 
-    hybrid_scr = hybrid.scored.scaled
-  ) %>% 
+      diatoms_obs = d.results, 
+      diatoms_scr = d.scored.scaled,
+      sba_obs = sba.results,
+      sba_scr = sba.scored.scaled,
+      hybrid_obs = hybrid.results, 
+      hybrid_scr = hybrid.scored.scaled
+    ) %>% 
     enframe %>% 
     mutate(
       value = map(value, rownames_to_column, 'SampleID'),
       value = map(value, gather, 'met', 'val', -SampleID)
     ) %>% 
-    unnest %>% 
-    separate(name, c('taxa', 'results'), sep = '_') 
-  
-  
+    unnest(cols = value) %>% 
+    separate(name, c('taxa', 'results'), sep = '_') %>% 
+    filter(!grepl('\\_raw$|\\_pred$', met)) # removed raw and predicted metrics
+
   # get mmi total score
   mmiout <- out %>% 
     filter(results %in% 'scr') %>% 
@@ -261,6 +323,7 @@ mmifun <- function(taxa, station){
     split(.$taxa) %>% 
     map(select, -taxa) %>% 
     map(spread, met, val)
+  
   # list of lists for input to ASCI
   out <- list(
     diatoms = list(mmiout$diatoms, out$diatoms),

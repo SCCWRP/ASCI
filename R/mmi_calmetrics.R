@@ -70,7 +70,7 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
   ################################################################################
   # Metric calculations --------
   ################################################################################
-  
+
   z <- length(colnames(taxonomy_pa))
   shannon = diversity(taxonomy_pa[ ,-z],
                       index='shannon') #Computing Shannon
@@ -316,14 +316,14 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
         })
         ) %>% 
         select(-value) %>% 
-        unnest
+        unnest(cols = c(metest))
       
       return(out)
       
     })
     )  %>%
     select(-data) %>%
-    unnest %>%
+    unnest(cols = c(mets)) %>%
     spread(name, metest) %>% 
     data.frame(stringsAsFactors = F)
   

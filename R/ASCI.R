@@ -46,8 +46,8 @@ ASCI <- function(taxa, station, tax = c('diatoms', 'sba', 'hybrid'), ...){
     map(~ .x$MMI_scores) %>% 
     map(gather, 'Metric', 'Value', -SampleID) %>% 
     enframe('taxa') %>% 
-    unnest %>% 
-    mutate_all(~ replace(., . < 0 | is.na(.), NA))
+    unnest(cols = value) %>% 
+    mutate_all(~ replace(., is.na(.), NA))
   
   ##
   # supplementary info
@@ -55,19 +55,19 @@ ASCI <- function(taxa, station, tax = c('diatoms', 'sba', 'hybrid'), ...){
     map(~ .x$MMI_supp) %>% 
     map(gather, 'Metric', 'Value', -SampleID) %>% 
     enframe('taxa') %>% 
-    unnest %>% 
-    mutate_all(~ replace(., . < 0 | is.na(.), NA))
+    unnest(cols = value) %>% 
+    mutate_all(~ replace(., is.na(.), NA))
   
   # subset taxa if needed
   if(length(tax) < 3){
     
     mmiscr <- mmiscr %>% 
       filter(taxa %in% tax) %>% 
-      mutate_all(~ replace(., . < 0 | is.na(.), NA))
+      mutate_all(~ replace(., is.na(.), NA))
     
     Supp1_mmi <- Supp1_mmi %>% 
       filter(taxa %in% tax) %>% 
-      mutate_all(~ replace(., . < 0 | is.na(.), NA))
+      mutate_all(~ replace(., is.na(.), NA))
     
   }
   
