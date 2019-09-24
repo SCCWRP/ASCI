@@ -18,6 +18,7 @@
 #' \item One of \code{CondQR50} or all predictors for the conductivity model in the station data
 #' \item One of \code{XerMtn} or {PSA6C} in the station data
 #' \item Additional required columns for the station data: StationCode, CondQR50, SITE_ELEV, TEMP_00_09, KFCT_AVE, AtmCa, PPT_00_09, MAX_ELEV
+#' \item No missing data in additional required columns for stationdata
 #' }
 #' 
 #' @export
@@ -70,6 +71,11 @@
 #' 
 #' # missing remaining station predictors
 #' tmp <- demo_station[, !names(demo_station) %in% c('AtmCa')]
+#' chkinp(demo_algae_tax, tmp)
+#' 
+#' # missing data in remaining station predictors
+#' tmp <- demo_station
+#' tmp$AtmCa[2] <- NA
 #' chkinp(demo_algae_tax, tmp)
 #' }
 
@@ -154,25 +160,25 @@ chkinp <- function(taxa, station, getval = FALSE){
     
   }
   
+  ##
   # check station columns
-  # the following must be satisifed:
-  # must have one of or both CondQR50 and condvals
-  # must have one of or both XerMtn and PSA6c
-  # must have all of regvals
+  
   condvals <- c("CaO_Mean", "MgO_Mean", "S_Mean", "UCS_Mean", "LPREM_mean", 
                 "AtmCa", "AtmMg", "AtmSO4", "MINP_WS", "MEANP_WS", "SumAve_P", 
                 "TMAX_WS", "XWD_WS", "MAXWD_WS", "LST32AVE", "BDH_AVE", "KFCT_AVE", 
                 "PRMH_AVE")
-  regvals <- c("StationCode", "CondQR50", "SITE_ELEV", "TEMP_00_09", "KFCT_AVE", 
+  regvals <- c("StationCode", "SITE_ELEV", "TEMP_00_09", "KFCT_AVE", 
                "AtmCa", "PPT_00_09", "MAX_ELEV")
 
+  # must have one of or both XerMtn and PSA6c
   chk <- c('XerMtn', 'PSA6C') %in% names(station)
   if(sum(chk) == 0){
     
     stop('Station data must include one of XerMtn or PSA6c', call. = FALSE)
     
   }
-  
+
+  # must have one of or both CondQR50 and condvals  
   chk <- !'CondQR50' %in% names(station) & sum(names(station) %in% condvals) < 18
   if(chk){
 
@@ -182,12 +188,28 @@ chkinp <- function(taxa, station, getval = FALSE){
     
   }
   
+  # must have all of regvals
   chk <- setdiff(regvals, names(station))
   if(length(chk) != 0){
     
     msg <- paste(chk, collapse = ', ') %>% 
       paste('Station data missing the following:', .)
     stop(msg, call. = FALSE)    
+    
+  }
+  
+  # for regvals, no missing data
+  # message if NA values in conductivity predictors
+  chk <- station[, names(station) %in% regvals] %>% 
+    apply(2, anyNA) %>% 
+    which %>% 
+    names
+  if(length(chk) > 0){
+    
+    msg <- chk %>% 
+      paste(collapse = ', ') %>% 
+      paste('Missing values in GIS predictors:', .)
+    stop(msg, call. = FALSE)
     
   }
   
