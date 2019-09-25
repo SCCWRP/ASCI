@@ -294,6 +294,8 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
   toclc <- mmilkup$omni.ref %>% 
     filter(Assemblage %in% taxa) %>% 
     .$Metric %>% 
+    gsub('\\_mod$|\\_raw$', '', .) %>% 
+    unique %>% 
     met_ls[.] %>% 
     enframe %>% 
     na.omit 
