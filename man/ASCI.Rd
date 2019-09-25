@@ -4,14 +4,12 @@
 \alias{ASCI}
 \title{Score samples using the ASCI tool}
 \usage{
-ASCI(taxa, station, tax = c("diatoms", "sba", "hybrid"), ...)
+ASCI(taxa, station, ...)
 }
 \arguments{
 \item{taxa}{\code{data.frame} for input taxonomy data}
 
 \item{station}{\code{data.frame} for input station data}
-
-\item{tax}{chr string indicating output to return from a specific taxa, must one to many of \code{'diatoms'}, \code{'sba'}, or \code{'hybrid'}, defaults to all}
 
 \item{...}{additional arguments passed to other functions}
 }

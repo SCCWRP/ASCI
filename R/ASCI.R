@@ -2,7 +2,6 @@
 #'
 #' @param taxa \code{data.frame} for input taxonomy data
 #' @param station \code{data.frame} for input station data
-#' @param tax chr string indicating output to return from a specific taxa, must one to many of \code{'diatoms'}, \code{'sba'}, or \code{'hybrid'}, defaults to all
 #' @param ... additional arguments passed to other functions
 #' 
 #' @details 
@@ -25,12 +24,8 @@
 #' @examples 
 #' results <- ASCI(demo_algae_tax, demo_station)
 #' 
-ASCI <- function(taxa, station, tax = c('diatoms', 'sba', 'hybrid'), ...){
-  
-  # check tax argument
-  if(any(!tax %in% c('diatoms', 'sba', 'hybrid')))
-    stop('tax must match diatoms, sba, and/or hybrid')
-  
+ASCI <- function(taxa, station,  ...){
+
   # run all other checks, get output if passed
   dat <- chkinp(taxa, station)
   txrmv <- dat$txrmv
@@ -59,19 +54,6 @@ ASCI <- function(taxa, station, tax = c('diatoms', 'sba', 'hybrid'), ...){
     enframe('taxa') %>% 
     unnest(cols = value) %>% 
     mutate_all(~ replace(., is.na(.), NA))
-  
-  # subset taxa if needed
-  if(length(tax) < 3){
-    
-    mmiscr <- mmiscr %>% 
-      filter(taxa %in% tax) %>% 
-      mutate_all(~ replace(., is.na(.), NA))
-    
-    Supp1_mmi <- Supp1_mmi %>% 
-      filter(taxa %in% tax) %>% 
-      mutate_all(~ replace(., is.na(.), NA))
-    
-  }
   
   # get diatom valve counts
   extra1 <- dat %>% 
