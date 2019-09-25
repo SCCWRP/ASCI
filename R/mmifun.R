@@ -107,6 +107,7 @@ mmifun <- function(taxa, station){
   
   # Load winning metrics -----------------------------------------------------------
   
+  # metric names for mmi_calcmetrics
   d.win <- c('prop.spp.SPIspecies4', 'Salinity.BF.richness', 
              'prop.spp.Saprobic.BM', 'cnt.spp.IndicatorClass_TP_low',
              'richness', 'cnt.spp.SPIspecies4', 'Saprobic.BM.richness')
@@ -115,7 +116,15 @@ mmifun <- function(taxa, station){
   hybrid.win <- c('prop.spp.BCG4', 'Salinity.BF.richness', 
                   'prop.spp.IndicatorClass_DOC_high', 'OxyRed.DO_30.richness', 
                   'richness', 'cnt.spp.BCG4', 'cnt.spp.IndicatorClass_DOC_high')
-
+  
+  # names with suffix
+  d.win.suf <- c('prop.spp.SPIspecies4_mod', 'Salinity.BF.richness_mod', 
+             'prop.spp.Saprobic.BM_raw', 'cnt.spp.IndicatorClass_TP_low_raw')
+  sba.win.suf <- c('prop.spp.Green_raw', 'cnt.spp.IndicatorClass_DOC_high_raw', 
+               'prop.spp.BCG45_raw')
+  hybrid.win.suf <- c('prop.spp.BCG4_mod', 'Salinity.BF.richness_mod', 
+                  'prop.spp.IndicatorClass_DOC_high_raw', 'OxyRed.DO_30.richness_mod')
+  
   # Calculated observed and predicted metrics -------------------------------
 
   ##
@@ -131,8 +140,13 @@ mmifun <- function(taxa, station){
       pcnt.attributed.Saprobic.BM = Saprobic.BM.richness/richness,
       pcnt.attributed.IndicatorClass_TP_Low = cnt.spp.IndicatorClass_TP_low/richness
     ) %>% 
-    select(-c('cnt.spp.SPIspecies4', 'Saprobic.BM.richness')) %>% 
-    rename(NumberTaxa = richness) 
+    select(-c('cnt.spp.SPIspecies4', 'Saprobic.BM.richness'))
+  names(d.results) <- paste0(names(d.results), '_raw') 
+  d.results <- d.results %>% 
+    rename(
+      NumberTaxa = richness_raw, 
+      SampleID = SampleID_raw
+    )
 
   # predicted diatom metrics
   d.predmet <- stationid %>% 
@@ -145,15 +159,16 @@ mmifun <- function(taxa, station){
   # join with observed, take residuals for raw/pred metrics
   d.results <- d.results %>% 
     left_join(d.predmet, by = 'SampleID') %>%
-    rename(
-      prop.spp.SPIspecies4_raw = prop.spp.SPIspecies4, 
-      Salinity.BF.richess_raw = Salinity.BF.richness
-    ) %>% 
     mutate(
-      prop.spp.SPIspecies4 = prop.spp.SPIspecies4_raw - prop.spp.SPI.species4_pred, 
-      Salinity.BF.richness = Salinity.BF.richess_raw - Salinity.BF.richness_pred
+      prop.spp.SPIspecies4_mod = prop.spp.SPIspecies4_raw - prop.spp.SPI.species4_pred, 
+      Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness_pred
     ) %>% 
     column_to_rownames('SampleID')
+  
+  # final selection
+  colsel <- names(d.results) %in% d.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(d.results))
+  d.results <- d.results[, colsel] %>% 
+    rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
   d.results <- chkmt(d.results)
   
   ##
@@ -168,9 +183,19 @@ mmifun <- function(taxa, station){
       pcnt.attributed.IndicatorClass_DOC_high = cnt.spp.IndicatorClass_DOC_high/richness,
       pcnt.attributed.BCG45 = cnt.spp.BCG45/richness,
     ) %>% 
-    select(-c('cnt.spp.Green', 'cnt.spp.BCG45')) %>% 
-    rename(NumberTaxa = richness) %>% 
+    select(-c('cnt.spp.Green', 'cnt.spp.BCG45')) 
+  names(sba.results) <- paste0(names(sba.results), '_raw') 
+  sba.results <- sba.results %>% 
+    rename(
+      NumberTaxa = richness_raw, 
+      SampleID = SampleID_raw
+    ) %>% 
     column_to_rownames('SampleID')
+  
+  # final selection
+  colsel <- names(sba.results) %in% sba.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(sba.results))
+  sba.results <- sba.results[, colsel] %>% 
+    rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
   sba.results <- chkmt(sba.results)
   
   ##
@@ -186,8 +211,13 @@ mmifun <- function(taxa, station){
       pcnt.attributed.IndicatorClass_DOC_high = cnt.spp.IndicatorClass_DOC_high/richness,
       pcnt.attributed.OxyRed.DO_30 = OxyRed.DO_30.richness/richness
     ) %>% 
-    select(-c('cnt.spp.BCG4', 'cnt.spp.IndicatorClass_DOC_high')) %>% 
-    rename(NumberTaxa = richness) 
+    select(-c('cnt.spp.BCG4', 'cnt.spp.IndicatorClass_DOC_high'))
+  names(hybrid.results) <- paste0(names(hybrid.results), '_raw') 
+  hybrid.results <- hybrid.results %>% 
+    rename(
+      NumberTaxa = richness_raw, 
+      SampleID = SampleID_raw
+    )
   
   # predicted hybrid metrics
   hybrid.predmet <- stationid %>% 
@@ -201,21 +231,22 @@ mmifun <- function(taxa, station){
   # join with observed, take residuals for raw/pred metrics
   hybrid.results <- hybrid.results %>% 
     left_join(hybrid.predmet, by = 'SampleID') %>%
-    rename(
-      prop.spp.BCG4_raw = prop.spp.BCG4, 
-      Salinity.BF.richess_raw = Salinity.BF.richness, 
-      OxyRed.DO_30.richness_raw = OxyRed.DO_30.richness
-    ) %>% 
     mutate(
-      prop.spp.BCG4 = prop.spp.BCG4_raw - prop.spp.BCG4_pred, 
-      Salinity.BF.richness = Salinity.BF.richess_raw - Salinity.BF.richness_pred, 
-      OxyRed.DO_30.richness = OxyRed.DO_30.richness_raw - OxyRed.DO_30.richness_pred
+      prop.spp.BCG4_mod = prop.spp.BCG4_raw - prop.spp.BCG4_pred, 
+      Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness_pred, 
+      OxyRed.DO_30.richness_mod = OxyRed.DO_30.richness_raw - OxyRed.DO_30.richness_pred
     ) %>% 
-    column_to_rownames('SampleID')
+    column_to_rownames('SampleID') %>% 
+    select_at(vars(-contains('pred')))
+  
+  # final selection
+  colsel <- names(hybrid.results) %in% hybrid.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(hybrid.results))
+  hybrid.results <- hybrid.results[, colsel] %>% 
+    rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
   hybrid.results <- chkmt(hybrid.results)
 
   # Score metrics -----------------------------------------------------------
-
+browser()
   omni.ref <- mmilkup$omni.ref
   d.scored <- score_metric(taxa = 'diatoms', bugs.d.m, d.results, omni.ref) %>% 
     select(-rowname) %>% 
@@ -299,8 +330,7 @@ mmifun <- function(taxa, station){
       value = map(value, gather, 'met', 'val', -SampleID)
     ) %>% 
     unnest(cols = value) %>% 
-    separate(name, c('taxa', 'results'), sep = '_') %>% 
-    filter(!grepl('\\_raw$|\\_pred$', met)) # removed raw and predicted metrics
+    separate(name, c('taxa', 'results'), sep = '_') 
 
   # get mmi total score
   mmiout <- out %>% 
