@@ -86,5 +86,5 @@ chkinp(demo_algae_tax, tmp)
 }
 }
 \seealso{
-\code{\link{getids}}
+\code{\link{getids}}, \code{\link{calcgis}}
 }

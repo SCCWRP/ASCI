@@ -25,5 +25,5 @@ getids(demo_algae_tax)
 
 }
 \seealso{
-\code{\link{chkinp}}
+\code{\link{chkinp}}, \code{\link{calcgis}}
 }

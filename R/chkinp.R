@@ -26,7 +26,7 @@
 #' 
 #' @export
 #' 
-#' @seealso \code{\link{getids}}
+#' @seealso \code{\link{getids}}, \code{\link{calcgis}}
 #'
 #' @importFrom dplyr arrange filter group_by mutate select summarise
 #' @importFrom magrittr "%>%"

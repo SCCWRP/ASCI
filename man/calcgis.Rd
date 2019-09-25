@@ -27,6 +27,10 @@ if all predictors are present in stations and no missing values are in the predi
 'TMAX_WS', 'XWD_WS', 'MAXWD_WS', 'LST32AVE', 'BDH_AVE', 'KFCT_AVE', 'PRMH_AVE'}.
 }
 \examples{
+
+# this calculates CondQR50 and XerMtn
+calcgis(demo_station)
+
 \dontrun{
 # get XerMtn from PSA6c
 tmp <- demo_station[, !names(demo_station) \%in\% 'XerMtn']
@@ -57,5 +61,5 @@ calcgis(tmp)
 }
 }
 \seealso{
-\code{\link{chkinp}}
+\code{\link{chkinp}}, \code{\link{getids}}
 }

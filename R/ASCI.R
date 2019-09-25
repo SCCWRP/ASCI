@@ -2,10 +2,10 @@
 #'
 #' @param taxa \code{data.frame} for input taxonomy data
 #' @param station \code{data.frame} for input station data
-#' @param ... additional arguments passed to other functions
 #' 
 #' @details 
 #' One index for three taxonomy types are scored, MMI for diatoms, soft-bodied algae, and hybrid. 
+#' If only soft-bodied algae or diatoms are present, only the respective ASCI and metrics are returned.
 #' This function outputs the results of \code{\link{mmifun}} functions in a user-friendly format.
 #' 
 #' @return 
@@ -22,9 +22,19 @@
 #' @seealso  \code{\link{mmifun}}
 #' 
 #' @examples 
-#' results <- ASCI(demo_algae_tax, demo_station)
+#' # calculate all
+#' ASCI(demo_algae_tax, demo_station)
 #' 
-ASCI <- function(taxa, station,  ...){
+#' # works if either soft-bodied or diatoms are missing
+#' # remove diatoms from station sample 909M24937
+#' tmp <- subset(demo_algae_tax, !(StationCode == '909M24937' & SampleTypeCode == 'Integrated'))
+#' ASCI(tmp, demo_station)
+#' 
+#' # works if either soft-bodied or diatoms are missing
+#' # remove soft-bodied from station sample 801M16916
+#' tmp <- subset(demo_algae_tax, !(StationCode == '801M16916' & SampleTypeCode != 'Integrated'))
+#' ASCI(tmp, demo_station)
+ASCI <- function(taxa, station){
 
   # run all other checks, get output if passed
   dat <- chkinp(taxa, station)
@@ -35,7 +45,7 @@ ASCI <- function(taxa, station,  ...){
   station <- calcgis(station)
   
   # mmi
-  mmind <- mmifun(dat, station, ...)
+  mmind <- mmifun(dat, station)
   
   ##
   # main output (scores)
@@ -67,7 +77,7 @@ ASCI <- function(taxa, station,  ...){
   extra2 <- dat %>% 
     group_by(SampleID) %>% 
     summarize(
-      SampleType = paste0(unique(SampleTypeCode), collapse = '|'),
+      SampleType = paste0(unique(SampleTypeCode), collapse = ', '),
       S_EntityCount = sum(BAResult, na.rm = T),
       S_Biovolume = sum(Result, na.rm = T)
     ) %>% 
@@ -95,7 +105,7 @@ ASCI <- function(taxa, station,  ...){
   # get original stationcode, date, and replicate
   # add unrecognized taxa
   out1 <- getids(out1, concatenate = FALSE) %>% 
-    inner_join(txrmv, by = 'SampleID')
+    left_join(txrmv, by = 'SampleID')
   
   # unholy column selection
   colsel <- c("SampleID", "StationCode", "SampleDate", "Replicate", "SampleType", 

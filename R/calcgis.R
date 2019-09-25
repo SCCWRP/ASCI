@@ -19,13 +19,17 @@
 #' 
 #' @export
 #' 
-#' @seealso \code{\link{chkinp}}
+#' @seealso \code{\link{chkinp}}, \code{\link{getids}}
 #'
 #' @importFrom dplyr mutate
 #' @importFrom magrittr "%>%"
 #' @import quantregForest
 #' 
 #' @examples
+#' 
+#' # this calculates CondQR50 and XerMtn
+#' calcgis(demo_station)
+#' 
 #' \dontrun{
 #' # get XerMtn from PSA6c
 #' tmp <- demo_station[, !names(demo_station) %in% 'XerMtn']
