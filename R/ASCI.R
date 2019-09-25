@@ -3,11 +3,11 @@
 #' @param taxa \code{data.frame} for input taxonomy data
 #' @param station \code{data.frame} for input station data
 #' @param tax chr string indicating output to return from a specific taxa, must one to many of \code{'diatoms'}, \code{'sba'}, or \code{'hybrid'}, defaults to all
-#' @param ... additional arguments passed to other funcions
+#' @param ... additional arguments passed to other functions
 #' 
 #' @details 
 #' One index for three taxonomy types are scored, MMI for diatoms, soft-bodied algae, and hybrid. 
-#' This function outputs the reulsts of \code{\link{mmifun}} functions in a user-friendly format.
+#' This function outputs the results of \code{\link{mmifun}} functions in a user-friendly format.
 #' 
 #' @return 
 #' A dataframe with all metrics calculated for each provided taxa
@@ -33,6 +33,8 @@ ASCI <- function(taxa, station, tax = c('diatoms', 'sba', 'hybrid'), ...){
   
   # run all other checks, get output if passed
   dat <- chkinp(taxa, station)
+  txrmv <- dat$txrmv
+  dat <- dat$taxa
   
   # calculate GIS from stations
   station <- calcgis(station)
@@ -85,8 +87,7 @@ ASCI <- function(taxa, station, tax = c('diatoms', 'sba', 'hybrid'), ...){
     summarize(
       SampleType = paste0(unique(SampleTypeCode), collapse = '|'),
       S_EntityCount = sum(BAResult, na.rm = T),
-      S_Biovolume = sum(Result, na.rm = T),
-      UnrecognizedTaxa = paste0(setdiff(FinalID, STE$FinalID), collapse = '|')
+      S_Biovolume = sum(Result, na.rm = T)
     ) %>% 
     full_join(extra1, by = 'SampleID')
 
@@ -110,7 +111,9 @@ ASCI <- function(taxa, station, tax = c('diatoms', 'sba', 'hybrid'), ...){
     filter(SampleID != 1)
   
   # get original stationcode, date, and replicate
-  out1 <- getids(out1, concatenate = FALSE)
+  # add unrecognized taxa
+  out1 <- getids(out1, concatenate = FALSE) %>% 
+    inner_join(txrmv, by = 'SampleID')
   
   # unholy column selection
   colsel <- c("SampleID", "StationCode", "SampleDate", "Replicate", "SampleType", 
@@ -132,9 +135,9 @@ ASCI <- function(taxa, station, tax = c('diatoms', 'sba', 'hybrid'), ...){
               "S_cnt.spp.IndicatorClass_DOC_high_raw_score", "S_pcnt.attributed.BCG45", "S_pcnt.attributed.Green", 
               "S_pcnt.attributed.IndicatorClass_DOC_high"
               )
-  
+
   out1 <- out1[, colsel]
-  
+
   return(out1)
   
 }

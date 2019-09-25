@@ -13,7 +13,7 @@ ASCI(taxa, station, tax = c("diatoms", "sba", "hybrid"), ...)
 
 \item{tax}{chr string indicating output to return from a specific taxa, must one to many of \code{'diatoms'}, \code{'sba'}, or \code{'hybrid'}, defaults to all}
 
-\item{...}{additional arguments passed to other funcions}
+\item{...}{additional arguments passed to other functions}
 }
 \value{
 A dataframe with all metrics calculated for each provided taxa
@@ -23,7 +23,7 @@ Score samples using the ASCI tool
 }
 \details{
 One index for three taxonomy types are scored, MMI for diatoms, soft-bodied algae, and hybrid. 
-This function outputs the reulsts of \code{\link{mmifun}} functions in a user-friendly format.
+This function outputs the results of \code{\link{mmifun}} functions in a user-friendly format.
 }
 \examples{
 results <- ASCI(demo_algae_tax, demo_station)

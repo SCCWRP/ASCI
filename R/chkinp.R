@@ -1,12 +1,15 @@
-#' @title Check input taxonomy data
+#' @title Check input taxonomy and site data
 #'
-#' @description Check input taxonomy for required information
+#' @description Check input taxonomy and site for required information
 #' 
 #' @param taxa \code{data.frame} for input taxonomy data
 #' @param station \code{data.frame} for input station data
 #' @param getval logical to return a vector of values not satisfied by checks, useful for data prep
 #'
-#' @return The original data with only relevant columns are returned if all checks are met, including a new column for \code{SampleID} (see \code{\link{getids}}).  An error message is returned if the datasets do not meet requirements or a vector of values that caused the error if \code{getval = TRUE}.  Site data will include only those sites in the taxonomic data.
+#' @return A two element list of the original data (named \code{taxa}) and removed taxa by \code{SampleID} (named \code{txrmv})
+#' if all checks are met.  The original data also includes a new column for \code{SampleID} (see \code{\link{getids}}).  An 
+#' error message is returned if the datasetsdo not meet requirements or a vector of values that caused the error if \code{getval = TRUE}.  
+#' Site data will include only those sites in the taxonomic data.
 #' 
 #' @details 
 #' The following are checked:
@@ -99,19 +102,6 @@ chkinp <- function(taxa, station, getval = FALSE){
   ##
   # add id values after columns are checked
   taxa <- getids(taxa)  
-
-  ##
-  # check taxonomy names
-  chk <- setdiff(taxa$FinalID, STE$FinalID)
-  if(length(chk) > 0){
-
-    if(getval) return(chk)
-
-    msg <- paste(chk, collapse = ', ') %>%
-      paste('Unrecognized taxa:', .)
-    stop(msg, call. = FALSE)
-
-    }
 
   ##
   # check if sites have both diatom and sba data
@@ -212,10 +202,34 @@ chkinp <- function(taxa, station, getval = FALSE){
     stop(msg, call. = FALSE)
     
   }
+
+  ##
+  # find and remove unidentified taxonomy
+  chk <- setdiff(taxa$FinalID, STE$FinalID)
+  if(length(chk) > 0){
+    
+    # removed FinalID by SampleID
+    txrmv <- taxa %>% 
+      filter(FinalID %in% chk) %>% 
+      select(SampleID, FinalID) %>% 
+      unique %>% 
+      group_by(SampleID) %>% 
+      summarise(
+        UnrecognizedTaxa = paste(FinalID, collapse = ', ')
+      )
+    
+    # purge unidentified from taxa
+    taxa <- taxa %>% 
+      filter(!FinalID %in% chk)
+    
+  }
   
   ##
-  # return if all checks met
-  out <- taxa
+  # return list of taxa and removed FinalID by SampleID
+  out <- list(
+    taxa = taxa,
+    txrmv = txrmv
+  )
   
   return(out)
   

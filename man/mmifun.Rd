@@ -23,6 +23,7 @@ Three index scores are calculated and returned as a named list
 \examples{
 # check input taxonomy data
 dat <- chkinp(demo_algae_tax, demo_station)
+dat <- dat$taxa
 
 # calculate GIS from stations
 station <- calcgis(demo_station)
