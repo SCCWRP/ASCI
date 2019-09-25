@@ -29,6 +29,7 @@ The following are checked:
 \item One of \code{CondQR50} or all predictors for the conductivity model in the station data
 \item One of \code{XerMtn} or {PSA6C} in the station data
 \item Additional required columns for the station data: StationCode, CondQR50, SITE_ELEV, TEMP_00_09, KFCT_AVE, AtmCa, PPT_00_09, MAX_ELEV
+\item No missing data in additional required columns for stationdata
 }
 }
 \examples{
@@ -73,6 +74,11 @@ chkinp(demo_algae_tax, tmp)
 
 # missing remaining station predictors
 tmp <- demo_station[, !names(demo_station) \%in\% c('AtmCa')]
+chkinp(demo_algae_tax, tmp)
+
+# missing data in remaining station predictors
+tmp <- demo_station
+tmp$AtmCa[2] <- NA
 chkinp(demo_algae_tax, tmp)
 }
 }

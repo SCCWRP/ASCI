@@ -14,14 +14,21 @@
 #' @export
 #' 
 #' @importFrom reshape2 acast melt
-#' @importFrom dplyr bind_rows filter mutate group_by select summarise ungroup
+#' @importFrom dplyr bind_rows contains filter mutate group_by rename_at select select_at summarise vars ungroup
 #' @importFrom tidyr gather spread nest unnest separate unite
 #' @import purrr
 #' @import tibble
 #' 
 #' @examples 
-#' taxa <- getids(demo_algae_tax)
-#' mmifun(taxa, station)
+#' # check input taxonomy data
+#' dat <- chkinp(demo_algae_tax, demo_station)
+#'
+#' # calculate GIS from stations
+#' station <- calcgis(demo_station)
+#' 
+#' # calc metrics
+#' out <- mmifun(dat, station)
+#' out
 mmifun <- function(taxa, station){
 
   options(gsubfn.engine = "R")

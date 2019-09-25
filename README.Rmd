@@ -25,18 +25,19 @@ library(ASCI)
 
 ### Usage
 
-The sample file `demo_algae_tax` is included to demonstrate the correct format for input data. It is a `data.frame` of taxonomic data in long format (one row per sample). See the help files for more information (e.g., `?demo_algae_tax`)
+The sample files `demo_algae_tax` and `demo_station` are included to demonstrate the correct formats for the input data. The `demo_algae_tax` file is a `data.frame` of taxonomic data in long format (one row per sample). The `demo_station` file is a `data.frame` of GIS predictors in wide format, one row per station. See the help files for more information (e.g., `?demo_algae_tax`).  Also see the help file for `chkinp()` and `calcgis()` for requirements of each file to work with the ASCI.
 
 ```{r, message = F, warning = F, echo = F}
 devtools::load_all()
 ```
 ```{r}
 head(demo_algae_tax)
+head(demo_station)
 ```
 
 The output is in a wide format.
 ```{r}
-demo_results <- ASCI(demo_algae_tax)
+demo_results <- ASCI(demo_algae_tax, demo_station)
 demo_results
 ```
 

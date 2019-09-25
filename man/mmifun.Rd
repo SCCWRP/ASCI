@@ -21,6 +21,13 @@ Run the ASCI MMI index for diatoms, soft-bodied algae, and hybrids
 Three index scores are calculated and returned as a named list
 }
 \examples{
-taxa <- getids(demo_algae_tax)
-mmifun(taxa, station)
+# check input taxonomy data
+dat <- chkinp(demo_algae_tax, demo_station)
+
+# calculate GIS from stations
+station <- calcgis(demo_station)
+
+# calc metrics
+out <- mmifun(dat, station)
+out
 }

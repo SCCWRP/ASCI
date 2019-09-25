@@ -15,7 +15,10 @@ globalVariables(c('STE', 'Class', 'acast', 'mmilkup', 'SampleTypeCode', 'Phylum'
                   'S_NumberTaxa', 'SampleType', 'UnrecognizedTaxa', 'cnt.spp.BCG4', 'cnt.spp.BCG45',
                   'cnt.spp.Green', 'cnt.spp.IndicatorClass_TP_low', 'cnt.spp.SPIspecies4', 
                   'OxyRed.DO_30.richness', 'Salinity.BF.richness', 'Saprobic.BM.richness',
-                  'cnt.spp.IndicatorClass_DOC_high', 'rfmods'))
+                  'cnt.spp.IndicatorClass_DOC_high', 'rfmods', 'OxyRed.DO_30.richness_pred', 
+                  'OxyRed.DO_30.richness_raw', 'Salinity.BF.richness_pred', 'Salinity.BF.richness_raw',
+                  'SampleID_raw', 'mets', 'prop.spp.BCG4_pred', 'prop.spp.BCG4_raw', 'prop.spp.SPI.species4_pred',
+                  'prop.spp.SPIspecies4_raw', 'richness_raw'))
 
 #' @importFrom stats ave lm na.omit pnorm predict runif sd t.test var
 NULL

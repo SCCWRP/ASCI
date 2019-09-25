@@ -112,12 +112,28 @@ ASCI <- function(taxa, station, tax = c('diatoms', 'sba', 'hybrid'), ...){
   # get original stationcode, date, and replicate
   out1 <- getids(out1, concatenate = FALSE)
   
-  # reorder columns
-  out1 <- out1 %>% 
-    select(SampleID, StationCode, SampleDate, Replicate, SampleType, D_ValveCount, S_EntityCount, S_Biovolume, 
-           D_NumberTaxa, S_NumberTaxa, H_NumberTaxa, UnrecognizedTaxa, D_ASCI, S_ASCI, H_ASCI, dplyr::contains('D_'), 
-           dplyr::contains('S_'), dplyr::contains('H_'), dplyr::everything()
-    )
+  # unholy column selection
+  colsel <- c("SampleID", "StationCode", "SampleDate", "Replicate", "SampleType", 
+              "D_ValveCount", "S_EntityCount", "S_Biovolume", "D_NumberTaxa", 
+              "S_NumberTaxa", "H_NumberTaxa", "UnrecognizedTaxa", "D_ASCI", "S_ASCI", "H_ASCI", 
+              "D_cnt.spp.IndicatorClass_TP_low_raw", "D_cnt.spp.IndicatorClass_TP_low_raw_score", 
+              "D_prop.spp.Saprobic.BM_raw", "D_prop.spp.Saprobic.BM_raw_score", 
+              "D_prop.spp.SPIspecies4_mod", "D_prop.spp.SPIspecies4_mod_score", 
+              "D_Salinity.BF.richness_mod", "D_Salinity.BF.richness_mod_score", 
+              "D_pcnt.attributed.IndicatorClass_TP_Low", "D_pcnt.attributed.Salinity.BF", 
+              "D_pcnt.attributed.Saprobic.BM", "D_pcnt.attributed.SPIspecies4", 
+              "H_OxyRed.DO_30.richness_mod", "H_OxyRed.DO_30.richness_mod_score", "H_prop.spp.BCG4_mod",
+              "H_prop.spp.BCG4_mod_score",  "H_prop.spp.IndicatorClass_DOC_high_raw","H_prop.spp.IndicatorClass_DOC_high_raw_score", 
+              "H_Salinity.BF.richness_mod", "H_Salinity.BF.richness_mod_score",  
+              "H_pcnt.attributed.OxyRed.DO_30", "H_pcnt.attributed.BCG4", "H_pcnt.attributed.IndicatorClass_DOC_high",
+              "H_pcnt.attributed.Salinity.BF",
+              "S_prop.spp.BCG45_raw", "S_prop.spp.BCG45_raw_score", "S_prop.spp.Green_raw", 
+              "S_prop.spp.Green_raw_score", "S_cnt.spp.IndicatorClass_DOC_high_raw", 
+              "S_cnt.spp.IndicatorClass_DOC_high_raw_score", "S_pcnt.attributed.BCG45", "S_pcnt.attributed.Green", 
+              "S_pcnt.attributed.IndicatorClass_DOC_high"
+              )
+  
+  out1 <- out1[, colsel]
   
   return(out1)
   
