@@ -68,9 +68,9 @@ demo_station <- datgiscon %>%
   ) %>%
   mutate(XerMtn = NA)
 
-rmv <- chkinp(demo_algae_tax, demo_station, getval  = T)
-demo_algae_tax <- demo_algae_tax %>% 
-  filter(!FinalID %in% rmv)
+# rmv <- chkinp(demo_algae_tax, demo_station, getval  = T)
+# demo_algae_tax <- demo_algae_tax %>% 
+#   filter(!FinalID %in% rmv)
 
 save(demo_algae_tax, file = 'data/demo_algae_tax.RData', compress = 'xz', version = 2)
 save(demo_station, file = 'data/demo_station.RData', compress = 'xz', version = 2)
