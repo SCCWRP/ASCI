@@ -85,7 +85,7 @@
 <div id="usage" class="section level3">
 <h3 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h3>
-<p>The sample files <code>demo_algae_tax</code> and <code>demo_station</code> are included to demonstrate the correct formats for the input data. The <code>demo_algae_tax</code> file is a <code>data.frame</code> of taxonomic data in long format (one row per sample). The <code>demo_station</code> file is a <code>data.frame</code> of GIS predictors in wide format, one row per station. See the help files for more information (e.g., <code>?demo_algae_tax</code>). Also see the help file for <code>chkinp()</code> and <code>calcgis()</code> for requirements of each file to work with the ASCI.</p>
+<p>The sample files <code>demo_algae_tax</code> and <code>demo_station</code> are included to demonstrate the correct formats for the input data. The <code>demo_algae_tax</code> file is a <code>data.frame</code> of taxonomic data in long format (one row per sample). The <code>demo_station</code> file is a <code>data.frame</code> of GIS predictors in wide format, one row per station. See the help files for more information (e.g., <code><a href="reference/demo_algae_tax.html">?demo_algae_tax</a></code>). Also see the help file for <code><a href="reference/chkinp.html">chkinp()</a></code> and <code><a href="reference/calcgis.html">calcgis()</a></code> for requirements of each file to work with the ASCI.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(demo_algae_tax)</a></code></pre></div>
 <pre><code>## # A tibble: 6 x 7
 ##   StationCode SampleDate          Replicate SampleTypeCode BAResult  Result
@@ -111,7 +111,7 @@
 ## #   LST32AVE &lt;dbl&gt;, BDH_AVE &lt;dbl&gt;, PRMH_AVE &lt;dbl&gt;, PSA6C &lt;chr&gt;,
 ## #   XerMtn &lt;lgl&gt;</code></pre>
 <p>The output is in a wide format.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">demo_results &lt;-<span class="st"> </span><span class="kw">ASCI</span>(demo_algae_tax, demo_station)</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">demo_results &lt;-<span class="st"> </span><span class="kw"><a href="reference/ASCI.html">ASCI</a></span>(demo_algae_tax, demo_station)</a>
 <a class="sourceLine" id="cb6-2" title="2">demo_results</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 48
 ##   SampleID StationCode SampleDate Replicate SampleType D_ValveCount

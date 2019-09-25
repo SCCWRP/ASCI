@@ -127,7 +127,7 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A two element list of the original data (named <code>taxa</code>) and removed taxa by <code>SampleID</code> (named <code>txrmv</code>)
-if all checks are met.  The original data also includes a new column for <code>SampleID</code> (see <code>getids</code>).  An 
+if all checks are met.  The original data also includes a new column for <code>SampleID</code> (see <code><a href='getids.html'>getids</a></code>).  An 
 error message is returned if the datasetsdo not meet requirements or a vector of values that caused the error if <code>getval = TRUE</code>.  
 Site data will include only those sites in the taxonomic data.</p>
     
@@ -135,7 +135,7 @@ Site data will include only those sites in the taxonomic data.</p>
 
     <p>The following are checked:</p><ul>
 <li><p>Required columns in taxonomy data: StationCode, SampleDate, Replicate, SampleTypeCode, BAResult, Result, FinalID</p></li>
-<li><p>Taxonomic names are present in the <code>STE</code> reference file</p></li>
+<li><p>Taxonomic names are present in the <code><a href='STE.html'>STE</a></code> reference file</p></li>
 <li><p>Sites include both diatom and soft-bodied algae data (warning if not)</p></li>
 <li><p>No missing abundance values for diatoms (for rarification)</p></li>
 <li><p>One of <code>CondQR50</code> or all predictors for the conductivity model in the station data</p></li>
@@ -146,7 +146,7 @@ Site data will include only those sites in the taxonomic data.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>getids</code>, <code>calcgis</code></p></div>
+    <div class='dont-index'><p><code><a href='getids.html'>getids</a></code>, <code><a href='calcgis.html'>calcgis</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

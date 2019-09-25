@@ -125,7 +125,7 @@
     <p><code>XerMtn</code> is calculated from <code>PSA6C</code> if the latter is present with no <code>NA</code> value. If <code>XerMtn</code> is 
 present with <code>NA</code> values, <code>PSA6C</code> is used if present with no <code>NA</code> values. <code>XerMtn = 1</code> if
 <code>PSA6C</code> is <code>'SN', 'NC'</code>, otherwise <code>XerMtn = 0</code> if <code>PSA6C</code> is <code>'CH', 'CV', 'DM', 'SC'</code>.</p>
-<p><code>CondQR50</code> is calculated from the <code><a href='https://www.rdocumentation.org/packages/quantregForest/topics/quantregForest'>quantregForest</a></code> object in <code>rfmods</code>
+<p><code>CondQR50</code> is calculated from the <code><a href='https://www.rdocumentation.org/packages/quantregForest/topics/quantregForest'>quantregForest</a></code> object in <code><a href='rfmods.html'>rfmods</a></code>
 if all predictors are present in stations and no missing values are in the predictors.  Similar to <code>XerMtn</code>, 
 <code>NA</code> values will be predicted per row only if the column already exists.  The required predictors are <code>'CaO_Mean', 
 'MgO_Mean', 'S_Mean', 'UCS_Mean', 'LPREM_mean', 'AtmCa', 'AtmMg', 'AtmSO4', 'MINP_WS', 'MEANP_WS', 'SumAve_P',
@@ -133,7 +133,7 @@ if all predictors are present in stations and no missing values are in the predi
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>chkinp</code>, <code>getids</code></p></div>
+    <div class='dont-index'><p><code><a href='chkinp.html'>chkinp</a></code>, <code><a href='getids.html'>getids</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
