@@ -30,7 +30,7 @@ The following are checked:
 \item Sites include both diatom and soft-bodied algae data (warning if not)
 \item No missing abundance values for diatoms (for rarification)
 \item One of \code{CondQR50} or all predictors for the conductivity model in the station data
-\item One of \code{XerMtn} or {PSA6C} in the station data
+\item One of \code{XerMtn} or \code{PSA6C} in the station data
 \item Additional required columns for the station data: StationCode, CondQR50, SITE_ELEV, TEMP_00_09, KFCT_AVE, AtmCa, PPT_00_09, MAX_ELEV
 \item No missing data in additional required columns for stationdata
 }
@@ -67,7 +67,7 @@ chkinp(tmp, demo_station, getval = TRUE)
 tmp <- demo_station[-1, ]
 chkinp(demo_algae_tax, tmp)
 
-# missing both of XerMtn and PSA6c in station
+# missing both of XerMtn and PSA6C in station
 tmp <- demo_station[, !names(demo_station) \%in\% c('XerMtn', 'PSA6C')]
 chkinp(demo_algae_tax, tmp)
 

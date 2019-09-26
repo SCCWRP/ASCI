@@ -155,7 +155,7 @@ if all predictors are present in stations and no missing values are in the predi
 <span class='no'>tmp</span> <span class='kw'>&lt;-</span> <span class='no'>demo_station</span>[, !<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>demo_station</span>) <span class='kw'>%in%</span> <span class='st'>'XerMtn'</span>]
 <span class='fu'>calcgis</span>(<span class='no'>tmp</span>)
 
-<span class='co'># error, cannot get XerMtn if PSA6c not found</span>
+<span class='co'># error, cannot get XerMtn if PSA6C not found</span>
 <span class='no'>tmp</span> <span class='kw'>&lt;-</span> <span class='no'>demo_station</span>[, !<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>demo_station</span>) <span class='kw'>%in%</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'XerMtn'</span>, <span class='st'>'PSA6C'</span>)]
 <span class='fu'>calcgis</span>(<span class='no'>tmp</span>)
 

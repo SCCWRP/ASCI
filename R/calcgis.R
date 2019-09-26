@@ -35,7 +35,7 @@
 #' tmp <- demo_station[, !names(demo_station) %in% 'XerMtn']
 #' calcgis(tmp)
 #' 
-#' # error, cannot get XerMtn if PSA6c not found
+#' # error, cannot get XerMtn if PSA6C not found
 #' tmp <- demo_station[, !names(demo_station) %in% c('XerMtn', 'PSA6C')]
 #' calcgis(tmp)
 #' 
@@ -69,10 +69,10 @@ calcgis <- function(station){
   if(!'XerMtn' %in% nms){
     
     if(!'PSA6C' %in% nms)
-      stop('Cannot calculate XerMtn if PSA6c is missing', call. = FALSE)
+      stop('Cannot calculate XerMtn if PSA6C is missing', call. = FALSE)
     
     if(any(is.na(station$PSA6C)))
-      stop('Cannot calculate XerMtn if any missing values in PSA6c', call. = FALSE)
+      stop('Cannot calculate XerMtn if any missing values in PSA6C', call. = FALSE)
     
     station <- station %>% 
       mutate(
@@ -90,10 +90,10 @@ calcgis <- function(station){
     if(any(is.na(station$XerMtn))){
       
       if(!'PSA6C' %in% nms)
-        stop('Cannot calculate XerMtn if PSA6c is missing', call. = FALSE)
+        stop('Cannot calculate XerMtn if PSA6C is missing', call. = FALSE)
     
       if(any(is.na(station$PSA6C)))
-        stop('Cannot calculate XerMtn if any missing values in PSA6c', call. = FALSE)
+        stop('Cannot calculate XerMtn if any missing values in PSA6C', call. = FALSE)
       
       station <- station %>% 
         mutate(
@@ -115,6 +115,8 @@ calcgis <- function(station){
                 "AtmCa", "AtmMg", "AtmSO4", "MINP_WS", "MEANP_WS", "SumAve_P",
                 "TMAX_WS", "XWD_WS", "MAXWD_WS", "LST32AVE", "BDH_AVE", "KFCT_AVE",
                 "PRMH_AVE")
+  
+  nms <- names(station)
   
   # message if missing conductivity predictors
   msgmissprd <- setdiff(condvals, nms) %>% 

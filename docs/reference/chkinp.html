@@ -139,7 +139,7 @@ Site data will include only those sites in the taxonomic data.</p>
 <li><p>Sites include both diatom and soft-bodied algae data (warning if not)</p></li>
 <li><p>No missing abundance values for diatoms (for rarification)</p></li>
 <li><p>One of <code>CondQR50</code> or all predictors for the conductivity model in the station data</p></li>
-<li><p>One of <code>XerMtn</code> or PSA6C in the station data</p></li>
+<li><p>One of <code>XerMtn</code> or <code>PSA6C</code> in the station data</p></li>
 <li><p>Additional required columns for the station data: StationCode, CondQR50, SITE_ELEV, TEMP_00_09, KFCT_AVE, AtmCa, PPT_00_09, MAX_ELEV</p></li>
 <li><p>No missing data in additional required columns for stationdata</p></li>
 </ul>
@@ -203,7 +203,7 @@ Site data will include only those sites in the taxonomic data.</p>
 <span class='no'>tmp</span> <span class='kw'>&lt;-</span> <span class='no'>demo_station</span>[-<span class='fl'>1</span>, ]
 <span class='fu'>chkinp</span>(<span class='no'>demo_algae_tax</span>, <span class='no'>tmp</span>)
 
-<span class='co'># missing both of XerMtn and PSA6c in station</span>
+<span class='co'># missing both of XerMtn and PSA6C in station</span>
 <span class='no'>tmp</span> <span class='kw'>&lt;-</span> <span class='no'>demo_station</span>[, !<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>demo_station</span>) <span class='kw'>%in%</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'XerMtn'</span>, <span class='st'>'PSA6C'</span>)]
 <span class='fu'>chkinp</span>(<span class='no'>demo_algae_tax</span>, <span class='no'>tmp</span>)
 

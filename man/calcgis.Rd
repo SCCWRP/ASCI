@@ -36,7 +36,7 @@ calcgis(demo_station)
 tmp <- demo_station[, !names(demo_station) \%in\% 'XerMtn']
 calcgis(tmp)
 
-# error, cannot get XerMtn if PSA6c not found
+# error, cannot get XerMtn if PSA6C not found
 tmp <- demo_station[, !names(demo_station) \%in\% c('XerMtn', 'PSA6C')]
 calcgis(tmp)
 
