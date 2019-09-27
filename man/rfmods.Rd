@@ -11,7 +11,7 @@
   \item{\code{h.OxyRed.DO_30.richness}}{randomForest}
   \item{\code{h.prop.spp.BCG4}}{randomForest}
   \item{\code{h.Salinity.BF.richness}}{randomForest}
-  \item{\code{temp.cond.qrf}}{quantregForest}
+  \item{\code{cond.qrf}}{quantregForest}
 }}
 \usage{
 rfmods

@@ -132,7 +132,7 @@ calcgis <- function(station){
     paste('Missing values in conductivity predictors:', .)
   
   # conductivity model
-  condmod <- rfmods$temp.cond.qrf
+  condmod <- rfmods$cond.qrf
 
   # if CondQR50 not found, calculate from predictors if found
   if(!'CondQR50' %in% nms){
