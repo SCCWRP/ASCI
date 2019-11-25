@@ -206,8 +206,8 @@ chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
   ##
   # find and remove unidentified taxonomy
   chk <- setdiff(taxa$FinalID, STE$FinalID)
-  if(length(chk) > 0){
-    
+  #if(length(chk) > 0){
+  if (TRUE) {  # in the case that length(chk) == 0, txrmv is not getting defined. Thus causing it to break when it references it later on
     # removed FinalID by SampleID
     txrmv <- taxa %>% 
       filter(FinalID %in% chk) %>% 
