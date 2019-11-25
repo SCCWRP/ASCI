@@ -82,7 +82,7 @@
 #' chkinp(demo_algae_tax, tmp)
 #' }
 
-chkinp <- function(taxa, station, getval = FALSE){
+chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
   
   ##
   # check if required columns are present in taxa
@@ -134,7 +134,7 @@ chkinp <- function(taxa, station, getval = FALSE){
     
     msg <- paste(chk, collapse = ', ') %>% 
       paste('Missing abundance data for diatoms', .)
-    stop(msg, call. = FALSE)
+    #stop(msg, call. = FALSE)
     
   }
 
