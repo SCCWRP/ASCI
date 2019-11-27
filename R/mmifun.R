@@ -138,9 +138,9 @@ mmifun <- function(taxa, station){
   # hybrid.win.suf <- c('prop.spp.BCG4_mod', 'Salinity.BF.richness_mod', 
   #                     'prop.spp.IndicatorClass_DOC_high_raw', 'OxyRed.DO_30.richness_mod')
   
-  d.win.suf<-c("prop.spp.BCG12_mod", "prop.spp.OxyReq.DO_100orDO_75_raw", "prop.spp.Salinity.BF_mod", "prop.spp.Trophic.E_mod", "richness")
-  sba.win.suf<-c("cnt.spp.IndicatorClass_DOC_high_raw" , "prop.spp.BCG45_raw", "prop.spp.Green_raw", "richness")
-  hybrid.win.suf<-c("OxyRed.DO_30.richness_mod","prop.spp.BCG4_mod","prop.spp.IndicatorClass_DOC_high_raw", "Salinity.BF.richness_mod", "richness")
+  d.win.suf<-c("prop.spp.BCG12_mod", "prop.spp.OxyReq.DO_100orDO_75_raw", "prop.spp.Salinity.BF_mod", "prop.spp.Trophic.E_mod", "richness", "richness_raw")
+  sba.win.suf<-c("cnt.spp.IndicatorClass_DOC_high_raw" , "prop.spp.BCG45_raw", "prop.spp.Green_raw", "richness", "richness_raw")
+  hybrid.win.suf<-c("OxyRed.DO_30.richness_mod","prop.spp.BCG4_mod","prop.spp.IndicatorClass_DOC_high_raw", "Salinity.BF.richness_mod", "richness", "richness_raw")
 
   
   # Calculated observed and predicted metrics -------------------------------
