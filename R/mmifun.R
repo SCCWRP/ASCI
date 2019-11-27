@@ -157,7 +157,7 @@ mmifun <- function(taxa, station){
       pcnt.attributed.prop.spp.OxyReq.DO_100orDO_75 = prop.spp.OxyReq.DO_100orDO_75/richness,
       pcnt.attributed.prop.spp.Salinity.BF = prop.spp.Salinity.BF/richness,
       pcnt.attributed.prop.spp.Trophic.E = prop.spp.Trophic.E/richness
-    ) %>% 
+    ) # %>% 
    #  select(-c('prop.spp.BCG12','prop.spp.Salinity.BF','prop.spp.Trophic.E_mod')) # mystery line 
   names(d.results) <- paste0(names(d.results), '_raw') 
   d.results <- d.results %>% 
@@ -202,7 +202,7 @@ mmifun <- function(taxa, station){
       pcnt.attributed.cnt.spp.IndicatorClass_DOC_high = cnt.spp.IndicatorClass_DOC_high/richness,
       pcnt.attributed.prop.spp.BCG45 = prop.spp.BCG45/richness,
       pcnt.attributed.prop.spp.Green = prop.spp.Green/richness
-    ) %>% 
+    ) # %>% 
    #  select(-c('foo'))  # mystery line 
   names(sba.results) <- paste0(names(sba.results), '_raw') 
   sba.results <- sba.results %>% 
@@ -232,7 +232,7 @@ mmifun <- function(taxa, station){
       pcnt.attributed.prop.spp.BCG4 = prop.spp.BCG4/richness,
       pcnt.attributed.prop.spp.IndicatorClass_DOC_high = prop.spp.IndicatorClass_DOC_high/richness,
       pcnt.attributed.Salinity.BF.richness = Salinity.BF.richness/richness
-    ) %>% 
+    ) # %>% 
    # select(-c('OxyRed.DO_30.richness', 'prop.spp.BCG4', 'Salinity.BF.richness')) # mystery line 
   names(hybrid.results) <- paste0(names(hybrid.results), '_raw') 
   hybrid.results <- hybrid.results %>% 
