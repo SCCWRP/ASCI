@@ -125,9 +125,9 @@ mmifun <- function(taxa, station){
   #                 'prop.spp.IndicatorClass_DOC_high', 'OxyRed.DO_30.richness', 
   #                 'richness', 'cnt.spp.BCG4', 'cnt.spp.IndicatorClass_DOC_high')
   
-  d.win<-c("prop.spp.BCG12", "prop.spp.OxyReq.DO_100orDO_75", "prop.spp.Salinity.BF", "prop.spp.Trophic.E")
-  sba.win<-c("cnt.spp.IndicatorClass_DOC_high" , "prop.spp.BCG45", "prop.spp.Green")
-  hybrid.win<-c("OxyRed.DO_30.richness","prop.spp.BCG4","prop.spp.IndicatorClass_DOC_high", "Salinity.BF.richness")
+  d.win<-c("prop.spp.BCG12", "prop.spp.OxyReq.DO_100orDO_75", "prop.spp.Salinity.BF", "prop.spp.Trophic.E", "richness")
+  sba.win<-c("cnt.spp.IndicatorClass_DOC_high" , "prop.spp.BCG45", "prop.spp.Green", "richness")
+  hybrid.win<-c("OxyRed.DO_30.richness","prop.spp.BCG4","prop.spp.IndicatorClass_DOC_high", "Salinity.BF.richness", "richness")
   
   
   # names with suffix
