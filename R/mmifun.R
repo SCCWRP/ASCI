@@ -153,7 +153,7 @@ mmifun <- function(taxa, station){
     select(SampleID, d.win) %>%
     filter(SampleID %in% rownames(bugs.d.m)) %>%
     mutate(
-      pcnt.attributed.prop.spp.BCG12 =  0, # prop.spp.BCG12/richness,
+      pcnt.attributed.prop.spp.BCG12 =  prop.spp.BCG12/richness,
       pcnt.attributed.prop.spp.OxyReq.DO_100orDO_75 = 0, # prop.spp.OxyReq.DO_100orDO_75/richness,
       pcnt.attributed.prop.spp.Salinity.BF = 0, # prop.spp.Salinity.BF/richness,
       pcnt.attributed.prop.spp.Trophic.E = 0 # prop.spp.Trophic.E/richness
