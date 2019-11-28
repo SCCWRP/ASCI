@@ -126,9 +126,9 @@ mmifun <- function(taxa, station){
   #                 'prop.spp.IndicatorClass_DOC_high', 'OxyRed.DO_30.richness', 
   #                 'richness', 'cnt.spp.BCG4', 'cnt.spp.IndicatorClass_DOC_high')
   
-  d.win<-c("prop.spp.BCG12", "prop.spp.OxyReq.DO_100orDO_75", "prop.spp.Salinity.BF", "prop.spp.Trophic.E")
-  sba.win<-c("cnt.spp.IndicatorClass_DOC_high" , "prop.spp.BCG45", "prop.spp.Green")
-  hybrid.win<-c("OxyRed.DO_30.richness","prop.spp.BCG4","prop.spp.IndicatorClass_DOC_high", "Salinity.BF.richness")
+  d.win<-c("prop.spp.BCG12", "prop.spp.OxyReq.DO_100orDO_75", "prop.spp.Salinity.BF", "prop.spp.Trophic.E", "richness")
+  sba.win<-c("cnt.spp.IndicatorClass_DOC_high" , "prop.spp.BCG45", "prop.spp.Green", "richness")
+  hybrid.win<-c("OxyRed.DO_30.richness","prop.spp.BCG4","prop.spp.IndicatorClass_DOC_high", "Salinity.BF.richness", "richness")
   
   
   # names with suffix
@@ -162,7 +162,7 @@ mmifun <- function(taxa, station){
   names(d.results) <- paste0(names(d.results), '_raw') 
   d.results <- d.results %>% 
     rename(
-      NumberTaxa = 0 , # richness_raw, 
+      NumberTaxa = richness_raw, 
       SampleID = SampleID_raw
     )
   
@@ -207,7 +207,7 @@ mmifun <- function(taxa, station){
   names(sba.results) <- paste0(names(sba.results), '_raw') 
   sba.results <- sba.results %>% 
     rename(
-      NumberTaxa = 0, #richness_raw, 
+      NumberTaxa = richness_raw, 
       SampleID = SampleID_raw
     ) %>% 
     column_to_rownames('SampleID')
@@ -237,7 +237,7 @@ mmifun <- function(taxa, station){
   names(hybrid.results) <- paste0(names(hybrid.results), '_raw') 
   hybrid.results <- hybrid.results %>% 
     rename(
-      NumberTaxa = 0, #richness_raw, 
+      NumberTaxa = richness_raw, 
       SampleID = SampleID_raw
     )
   
