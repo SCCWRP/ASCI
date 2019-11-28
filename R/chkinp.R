@@ -228,7 +228,7 @@ chkinp <- function(taxa, station, getval = FALSE){
   # return list of taxa and removed FinalID by SampleID
   out <- list(
     taxa = taxa,
-    if(length(txrmv)>0)) {txrmv = txrmv}
+    txrmv = txrmv
   )
   
   return(out)
