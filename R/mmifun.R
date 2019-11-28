@@ -153,9 +153,9 @@ mmifun <- function(taxa, station){
     select(SampleID, d.win) %>%
     filter(SampleID %in% rownames(bugs.d.m)) %>%
     mutate(
-      pcnt.attributed.prop.spp.BCG12 =  0 # prop.spp.BCG12/richness,
-      pcnt.attributed.prop.spp.OxyReq.DO_100orDO_75 = 0 # prop.spp.OxyReq.DO_100orDO_75/richness,
-      pcnt.attributed.prop.spp.Salinity.BF = 0 # prop.spp.Salinity.BF/richness,
+      pcnt.attributed.prop.spp.BCG12 =  0, # prop.spp.BCG12/richness,
+      pcnt.attributed.prop.spp.OxyReq.DO_100orDO_75 = 0, # prop.spp.OxyReq.DO_100orDO_75/richness,
+      pcnt.attributed.prop.spp.Salinity.BF = 0, # prop.spp.Salinity.BF/richness,
       pcnt.attributed.prop.spp.Trophic.E = 0 # prop.spp.Trophic.E/richness
     )  # %>% 
   # select(-c('prop.spp.BCG12','prop.spp.Salinity.BF','prop.spp.Trophic.E_mod')) # mystery line 
@@ -199,8 +199,8 @@ mmifun <- function(taxa, station){
     select(SampleID, sba.win) %>%
     filter(SampleID %in% rownames(bugs.sba.m)) %>% 
     mutate(
-      pcnt.attributed.cnt.spp.IndicatorClass_DOC_high = 0 # cnt.spp.IndicatorClass_DOC_high/richness,
-      pcnt.attributed.prop.spp.BCG45 = 0 # prop.spp.BCG45/richness,
+      pcnt.attributed.cnt.spp.IndicatorClass_DOC_high = 0, # cnt.spp.IndicatorClass_DOC_high/richness,
+      pcnt.attributed.prop.spp.BCG45 = 0, # prop.spp.BCG45/richness,
       pcnt.attributed.prop.spp.Green = 0 # prop.spp.Green/richness
     )  # %>% 
      # select(-c('foo'))  # mystery line 
@@ -228,9 +228,9 @@ mmifun <- function(taxa, station){
     select(SampleID, hybrid.win) %>%
     filter(SampleID %in% rownames(bugs.hybrid.m)) %>% 
     mutate(
-      pcnt.attributed.OxyRed.DO_30.richness = 0 # OxyRed.DO_30.richness/richness,
-      pcnt.attributed.prop.spp.BCG4 = 0 # prop.spp.BCG4/richness,
-      pcnt.attributed.prop.spp.IndicatorClass_DOC_high = 0 # prop.spp.IndicatorClass_DOC_high/richness,
+      pcnt.attributed.OxyRed.DO_30.richness = 0, # OxyRed.DO_30.richness/richness,
+      pcnt.attributed.prop.spp.BCG4 = 0, # prop.spp.BCG4/richness,
+      pcnt.attributed.prop.spp.IndicatorClass_DOC_high = 0, # prop.spp.IndicatorClass_DOC_high/richness,
       pcnt.attributed.Salinity.BF.richness = 0 # Salinity.BF.richness/richness
     ) #  %>% 
     # select(-c('OxyRed.DO_30.richness', 'prop.spp.BCG4', 'Salinity.BF.richness')) # mystery line 
