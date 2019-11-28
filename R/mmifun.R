@@ -145,6 +145,8 @@ mmifun <- function(taxa, station){
   
   # Calculated observed and predicted metrics -------------------------------
   
+  richness=100
+  
   ##
   # diatoms
   
