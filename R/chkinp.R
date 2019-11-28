@@ -234,9 +234,7 @@ chkinp <- function(taxa, station, getval = FALSE){
   
   if (exists("txrmv") ==F) { 
   out <- list(
-    taxa = taxa,
-    #txrmv = txrmv
-    NULL
+    taxa = taxa
   ) 
   
   return(out) } 
