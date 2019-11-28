@@ -173,7 +173,7 @@ mmifun <- function(taxa, station){
       prop.spp.Salinity.BF_pred = predict(rfmods$diatoms.prop.spp.Salinity.BF, newdata = .[, c("XerMtn","KFCT_AVE","CondQR50","LST32AVE","AtmCa","SITE_ELEV")]), 
       prop.spp.Trophic.E_pred = predict(rfmods$diatoms.prop.spp.Trophic.E, newdata = .[, c("SITE_ELEV", "KFCT_AVE")]) 
     ) %>% 
-    select(SampleID, prop.spp.BCG12_pred, Salinity.BF.richness_pred, prop.spp.Trophic.E_pred)
+    select(SampleID, prop.spp.BCG12_pred, prop.spp.Salinity.BF_pred, prop.spp.Trophic.E_pred)
   
   # join with observed, take residuals for raw/pred metrics
   d.results <- d.results %>% 
