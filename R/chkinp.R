@@ -101,7 +101,7 @@ chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
   
   ##
   # add id values after columns are checked
-  taxa <- getids(taxa)  
+  #taxa <- getids(taxa)  
 
   ##
   # check if sites have both diatom and sba data

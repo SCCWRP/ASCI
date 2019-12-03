@@ -30,12 +30,12 @@ getids <- function(datin, concatenate = T){
     datin <- datin %>%
       mutate(
         col = SampleID,
-        Replicate = gsub('.*_([0-9]+)$', '\\1', col),
+        Replicate = gsub('.*|([0-9]+)$', '\\1', col),
         Replicate = as.numeric(Replicate),
-        col = gsub('_[0-9]+$', '', col),
-        SampleDate = gsub('.*_(.*)$', '\\1', col), 
+        col = gsub('|[0-9]+$', '', col),
+        SampleDate = gsub('.*|(.*)$', '\\1', col), 
         StationCode = gsub(paste(SampleDate, collapse = '|'), '', col), 
-        StationCode = gsub('_$', '', StationCode)
+        StationCode = gsub('|$', '', StationCode)
       ) %>% 
       dplyr::select(-col)
         
