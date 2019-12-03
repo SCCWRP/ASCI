@@ -129,8 +129,8 @@ ASCI <- function(taxa, station){
               )
 
   out1 <- out1[, colsel]
-
+  
+  
   return(out1)
   
 }
-
