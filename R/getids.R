@@ -23,7 +23,7 @@ getids <- function(datin, concatenate = T){
   if(!'SampleID' %in% names(datin) & concatenate)
   
     datin <- datin %>% 
-      unite('SampleID', StationCode, SampleDate, Replicate, sep = '_', remove = FALSE)
+      unite('SampleID', StationCode, SampleDate, Replicate, sep = '|', remove = FALSE)
 
   if('SampleID' %in% names(datin) & !concatenate)
 
