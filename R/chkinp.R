@@ -214,9 +214,7 @@ chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
       select(SampleID, FinalID) %>% 
       unique %>% 
       group_by(SampleID) %>% 
-      summarise(
-        UnrecognizedTaxa = paste(FinalID, collapse = ', ')
-      )
+      summarise(UnrecognizedTaxa = paste(FinalID, collapse = ', ') )
     
     # purge unidentified from taxa
     taxa <- taxa %>% 
@@ -226,12 +224,22 @@ chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
   
   ##
   # return list of taxa and removed FinalID by SampleID
+  if (exists("txrmv") ==T) { 
   out <- list(
     taxa = taxa,
     txrmv = txrmv
-  )
+  ) 
   
-  return(out)
+  return(out) } 
+  
+  if (exists("txrmv") ==F) { 
+  out <- list(
+    taxa = taxa
+  ) 
+  
+  return(out) } 
+  
+  
   
 }
 
