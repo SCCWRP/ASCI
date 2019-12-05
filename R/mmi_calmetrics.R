@@ -326,6 +326,7 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     )  %>%
     select(-data) %>%
     unnest(cols = c(mets)) %>%
+    mutate(metest = unlist(metest), cols = NULL) %>% 
     spread(name, metest) %>% 
     data.frame(stringsAsFactors = F)
   

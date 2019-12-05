@@ -85,18 +85,24 @@ mmifun <- function(taxa, station){
   }
   
   # Convert to species abd matrix at Species level  -----------------------------------------------------------
-  bugs.d.m <- as.data.frame(acast(bugs.d, 
-                                  SampleID ~ FinalIDassigned, 
-                                  value.var = "BAResult", 
-                                  fun.aggregate=sum, na.rm = T))
-  bugs.sba.m <- as.data.frame(acast(bugs.sba, 
-                                    SampleID ~ FinalIDassigned, 
-                                    value.var = "Result", 
-                                    fun.aggregate=sum, na.rm = T))
-  bugs.hybrid.m <- as.data.frame(acast(bugs, 
-                                       SampleID ~ FinalIDassigned, 
-                                       value.var = "ComboResult", 
-                                       fun.aggregate=sum, na.rm = T))
+  bugs.d.m <- bugs.d %>% 
+    group_by(SampleID, FinalIDassigned) %>% 
+    summarize(val = sum(as.numeric(BAResult))) %>% 
+    spread(FinalIDassigned, val) %>% 
+    column_to_rownames('SampleID')
+  
+  bugs.sba.m <- bugs.sba %>% 
+    group_by(SampleID, FinalIDassigned) %>% 
+    summarize(val = sum(as.numeric(Result))) %>% 
+    spread(FinalIDassigned, val) %>% 
+    column_to_rownames('SampleID')
+  
+  
+  bugs.hybrid.m <- bugs %>% 
+    group_by(SampleID, FinalIDassigned) %>% 
+    summarize(val = sum(as.numeric(ComboResult))) %>% 
+    spread(FinalIDassigned, val) %>% 
+    column_to_rownames('SampleID')
   
   stations <- taxa %>% 
     select(StationCode, SampleDate, Replicate, SampleID) %>% 

@@ -35,7 +35,7 @@
 #' tmp <- subset(demo_algae_tax, !(StationCode == '801M16916' & SampleTypeCode != 'Integrated'))
 #' ASCI(tmp, demo_station)
 ASCI <- function(taxa, station){
-
+  
   # run all other checks, get output if passed
   dat <- chkinp(taxa, station)
   txrmv <- dat$txrmv
@@ -54,6 +54,7 @@ ASCI <- function(taxa, station){
     map(gather, 'Metric', 'Value', -SampleID) %>% 
     enframe('taxa') %>% 
     unnest(cols = value) %>% 
+    select(-value) %>% 
     mutate_all(~ replace(., is.na(.), NA))
   
   ##
@@ -78,8 +79,8 @@ ASCI <- function(taxa, station){
     group_by(SampleID) %>% 
     summarize(
       SampleType = paste0(unique(SampleTypeCode), collapse = ', '),
-      S_EntityCount = sum(BAResult, na.rm = T),
-      S_Biovolume = sum(Result, na.rm = T)
+      S_EntityCount = sum(as.numeric(BAResult), na.rm = T),
+      S_Biovolume = sum(as.numeric(Result), na.rm = T)
     ) %>% 
     full_join(extra1, by = 'SampleID')
 
@@ -132,8 +133,8 @@ ASCI <- function(taxa, station){
               )
 
   out1 <- out1[, colsel]
-  
-  
+
   return(out1)
   
 }
+
