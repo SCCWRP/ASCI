@@ -13,7 +13,7 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom tidyr unite
 #' 
-#' @seealso \code{\link{chkinp}}
+#' @seealso \code{\link{chkinp}}, \code{\link{calcgis}}
 #' 
 #' @examples
 #' getids(demo_algae_tax)

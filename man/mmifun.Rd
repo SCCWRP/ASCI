@@ -4,10 +4,12 @@
 \alias{mmifun}
 \title{Run the ASCI MMI}
 \usage{
-mmifun(taxain)
+mmifun(taxa, station)
 }
 \arguments{
-\item{taxain}{\code{data.frame} for input taxonomy data}
+\item{taxa}{\code{data.frame} for input taxonomy data}
+
+\item{station}{\code{data.frame} for input station data}
 }
 \value{
 A list with three elements named as \code{d.results.scored}, \code{sba.results.scored}, and \code{hybrid.results.scored}. Each element is a \code{data.frame} with metric scores by site.
@@ -19,6 +21,14 @@ Run the ASCI MMI index for diatoms, soft-bodied algae, and hybrids
 Three index scores are calculated and returned as a named list
 }
 \examples{
-taxain <- getids(demo_algae_tax)
-mmifun(taxain)
+# check input taxonomy data
+dat <- chkinp(demo_algae_tax, demo_station)
+dat <- dat$taxa
+
+# calculate GIS from stations
+station <- calcgis(demo_station)
+
+# calc metrics
+out <- mmifun(dat, station)
+out
 }
