@@ -87,11 +87,19 @@ chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
   # Replace -88's with NA
   taxa <- taxa %>% mutate_all(~na_if(.,-88))
   
-  # BAResult should be an integer
+  # Reassure that all columns are the correct datatype
   taxa <- taxa %>%
     dplyr::mutate(
-      BAResult = as.integer(as.character(BAResult))
-    )
+      StationCode = as.character(StationCode),
+      SampleDate = as.POSIXct(SampleDate),
+      Replicate = as.integer(as.character(Replicate)),
+      SampleTypeCode = as.character(SampleTypeCode),
+      BAResult = as.integer(as.character(BAResult)),
+      Result = as.numeric(as.character(Result)),
+      FinalID = as.character(FinalID),
+      SampleID = paste(StationCode, SampleDate, Replicate, sep = "|")
+    ) %>% 
+    dplyr::select(SampleID, StationCode, SampleDate, Replicate, SampleTypeCode, BAResult, Result, FinalID)
   
   ##
   # check if required columns are present in taxa
