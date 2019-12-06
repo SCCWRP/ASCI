@@ -69,7 +69,7 @@ mmifun <- function(taxa, station){
   bugs.sba <- chkmt(bugs.sba)
   
   # create hybrid, but first see if both exist, if not create dummy data frame
-  if(bugs.d$FinalID[1] == NA | bugs.sba$FinalID[1] == NA) {
+  if(is.na(bugs.d$FinalID[1]) | is.NA(bugs.sba$FinalID[1])) {
     bugs <- bugs[1,]
     bugs[1, ] <- rep(NA)
     bugs <- bugs %>% 
