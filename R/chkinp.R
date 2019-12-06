@@ -85,7 +85,7 @@
 chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
   
   # Replace -88's with NA
-  taxa <- taxa %>% mutate_all(~na_if(.,-88))
+  taxa <- taxa %>% mutate_all(~dplyr::na_if(.,-88))
   
   # Reassure that all columns are the correct datatype
   taxa <- taxa %>%
