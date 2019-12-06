@@ -87,6 +87,12 @@ chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
   # Replace -88's with NA
   taxa <- taxa %>% mutate_all(~na_if(.,-88))
   
+  # BAResult should be an integer
+  taxa <- taxa %>%
+    dplyr::mutate(
+      BAResult = as.integer(as.character(BAResult))
+    )
+  
   ##
   # check if required columns are present in taxa
   taxcols <- c('StationCode', 'SampleDate', 'Replicate',
