@@ -49,7 +49,7 @@ mmifun <- function(taxa, station){
   
   chkmt <- function(df) {
     if(nrow(df) == 0) {
-      df[1,] = rep(-88)
+      df[1,] = rep(NA)
     }
     return(df)
   }
@@ -69,9 +69,9 @@ mmifun <- function(taxa, station){
   bugs.sba <- chkmt(bugs.sba)
   
   # create hybrid, but first see if both exist, if not create dummy data frame
-  if(bugs.d$FinalID[1] == -88 | bugs.sba$FinalID[1] == -88) {
+  if(bugs.d$FinalID[1] == NA | bugs.sba$FinalID[1] == NA) {
     bugs <- bugs[1,]
-    bugs[1, ] <- rep(-88)
+    bugs[1, ] <- rep(NA)
     bugs <- bugs %>% 
       mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T)))
   } else { # otherwise subset both
@@ -316,25 +316,25 @@ mmifun <- function(taxa, station){
     # column_to_rownames() %>% 
     sweep(., MARGIN = 2, FUN = "/",
           STATS = colMeans(d.rf.mean, na.rm = T)) 
-  if(bugs.d[1,1] == -88){
+  if(is.na(bugs.d[1,1])){
     d.scored.scaled <- d.scored.scaled[1,] 
-    d.scored.scaled[1,] <- rep(-88)
+    d.scored.scaled[1,] <- rep(NA)
   }
   
   sba.scored.scaled <- sba.scored %>% 
     sweep(., MARGIN = 2, FUN = "/",
           STATS = colMeans(sba.rf.mean, na.rm = T))
-  if(bugs.sba[1,1] == -88){
+  if(is.na(bugs.sba[1,1])){
     sba.scored.scaled <- sba.scored.scaled[1,]
-    sba.scored.scaled[1,] <- rep(-88)
+    sba.scored.scaled[1,] <- rep(NA)
   }
   
   hybrid.scored.scaled <- hybrid.scored %>% 
     sweep(., MARGIN = 2, FUN="/",
           STATS = colMeans(hybrid.rf.mean, na.rm = T))
-  if(bugs[1,1] == -88){
+  if(is.na(bugs[1,1])){
     hybrid.scored.scaled <- hybrid.scored.scaled[1, ]
-    hybrid.scored.scaled[1, ] <- rep(-88)
+    hybrid.scored.scaled[1, ] <- rep(NA)
   }
   
   # put all results in long format
