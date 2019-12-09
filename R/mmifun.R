@@ -31,7 +31,7 @@
 #' # calc metrics
 #' out <- mmifun(dat, station)
 #' out
-mmifun <- function(taxa, station){
+mmifun <- function(taxa, station, CalcWithMissingAssemblage = T){
   
   options(gsubfn.engine = "R")
   
@@ -69,7 +69,7 @@ mmifun <- function(taxa, station){
   bugs.sba <- chkmt(bugs.sba)
   
   # create hybrid, but first see if both exist, if not create dummy data frame
-  if(is.na(bugs.d$FinalID[1]) | is.na(bugs.sba$FinalID[1])) {
+  if( (is.na(bugs.d$FinalID[1]) | is.na(bugs.sba$FinalID[1])) & CalcWithMissingAssemblage = F ) {
     bugs <- bugs[1,]
     bugs[1, ] <- rep(NA)
     bugs <- bugs %>% 
