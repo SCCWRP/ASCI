@@ -161,7 +161,7 @@ mmifun <- function(taxa, station){
   # select(-c('prop.spp.BCG12','prop.spp.Salinity.BF','prop.spp.Trophic.E_mod')) # mystery line 
   names(d.results) <- paste0(names(d.results), '_raw') 
   d.results <- d.results %>% 
-    rename(
+    dplyr::rename(
       NumberTaxa = richness_raw, 
       SampleID = SampleID_raw
     )
