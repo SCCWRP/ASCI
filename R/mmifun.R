@@ -75,7 +75,11 @@ mmifun <- function(taxa, station, CalcWithMissingAssemblage = T){
     bugs <- bugs %>% 
       mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T)))
   } else { # otherwise subset both
-    smpid <- intersect(bugs.d$SampleID, bugs.sba$SampleID)
+    if (CalcWithMissingAssemblage) {
+      smpid <- bugs$SampleID
+    } else {
+      smpid <- intersect(bugs.d$SampleID, bugs.sba$SampleID)
+    }
     bugs <- bugs %>% 
       filter(SampleID %in% smpid) %>% 
       group_by(SampleID) %>% 
