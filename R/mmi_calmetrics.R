@@ -76,7 +76,8 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
                       index='shannon') #Computing Shannon
   simpson = diversity(taxonomy_pa[ ,-z],
                       index='simpson') #Computing Simpson
-  richness = specnumber(taxonomy_pa[ ,-z]) #Computing Richness
+  #richness = specnumber(taxonomy_pa[ ,-z]) #Computing Richness
+  richness = rowSums(taxonomy_pa %>% select(-SampleID))
   specialty_metrics = data.frame(SampleID = taxonomy_pa[ ,z],
                                  shannon, 
                                  simpson,
