@@ -109,8 +109,10 @@ ASCI <- function(taxa, station){
   
   # unholy column selection
   colsel <- c("SampleID", "StationCode", "SampleDate", "Replicate", "SampleType", 
+              
               "D_ValveCount", "S_EntityCount", "S_Biovolume", "D_NumberTaxa", 
               "S_NumberTaxa", "H_NumberTaxa", "UnrecognizedTaxa", "D_ASCI", "S_ASCI", "H_ASCI", 
+              
               "D_cnt.spp.IndicatorClass_TP_low_raw", "D_cnt.spp.IndicatorClass_TP_low_raw_score", 
               "D_prop.spp.Saprobic.BM_raw", "D_prop.spp.Saprobic.BM_raw_score", 
               "D_prop.spp.SPIspecies4_mod", "D_prop.spp.SPIspecies4_mod_score", 
@@ -126,11 +128,12 @@ ASCI <- function(taxa, station){
               "S_prop.spp.Green_raw_score", "S_cnt.spp.IndicatorClass_DOC_high_raw", 
               "S_cnt.spp.IndicatorClass_DOC_high_raw_score", "S_pcnt.attributed.BCG45", "S_pcnt.attributed.Green", 
               "S_pcnt.attributed.IndicatorClass_DOC_high"
+             # NULL
               )
 
-  out1 <- out1[, colsel]
-
+  #out1 <- out1[, colsel]
+  
+  
   return(out1)
   
 }
-

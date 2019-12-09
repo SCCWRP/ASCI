@@ -82,7 +82,29 @@
 #' chkinp(demo_algae_tax, tmp)
 #' }
 
-chkinp <- function(taxa, station, getval = FALSE){
+chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
+  
+  # Replace -88's with NA
+  taxa <- taxa %>% mutate_all(~dplyr::na_if(.,-88))
+  
+  # Reassure that all columns are the correct datatype
+  taxa <- taxa %>%
+    dplyr::mutate(
+      StationCode = as.character(StationCode),
+      # Nothing in the code necessarily demands that the SampleDate needs to be a Date field (to my knowledge)
+      # For that reason, we will not coerce it to a date, in case they put different date formats or something like that
+      #SampleDate = as.POSIXct(SampleDate),
+      Replicate = as.integer(as.character(Replicate)),
+      SampleTypeCode = as.character(SampleTypeCode),
+      BAResult = as.integer(as.character(BAResult)),
+      Result = as.numeric(as.character(Result)),
+      FinalID = as.character(FinalID),
+      SampleID_original = dplyr::case_when(
+        SampleID %in% names(taxa) ~ SampleID,
+        TRUE ~ paste(StationCode, SampleDate, Replicate, sep = "|")),
+      SampleID = paste(StationCode, SampleDate, Replicate, sep = "|")
+    ) %>% 
+    dplyr::select(SampleID, StationCode, SampleDate, Replicate, SampleTypeCode, BAResult, Result, FinalID)
   
   ##
   # check if required columns are present in taxa
@@ -101,7 +123,7 @@ chkinp <- function(taxa, station, getval = FALSE){
   
   ##
   # add id values after columns are checked
-  taxa <- getids(taxa)  
+  #taxa <- getids(taxa)  
 
   ##
   # check if sites have both diatom and sba data
@@ -134,7 +156,7 @@ chkinp <- function(taxa, station, getval = FALSE){
     
     msg <- paste(chk, collapse = ', ') %>% 
       paste('Missing abundance data for diatoms', .)
-    stop(msg, call. = FALSE)
+    #stop(msg, call. = FALSE)
     
   }
 
@@ -206,17 +228,15 @@ chkinp <- function(taxa, station, getval = FALSE){
   ##
   # find and remove unidentified taxonomy
   chk <- setdiff(taxa$FinalID, STE$FinalID)
-  if(length(chk) > 0){
-    
+  #if(length(chk) > 0){
+  if (TRUE) {  # in the case that length(chk) == 0, txrmv is not getting defined. Thus causing it to break when it references it later on
     # removed FinalID by SampleID
     txrmv <- taxa %>% 
       filter(FinalID %in% chk) %>% 
       select(SampleID, FinalID) %>% 
       unique %>% 
       group_by(SampleID) %>% 
-      summarise(
-        UnrecognizedTaxa = paste(FinalID, collapse = ', ')
-      )
+      summarise(UnrecognizedTaxa = paste(FinalID, collapse = ', ') )
     
     # purge unidentified from taxa
     taxa <- taxa %>% 
@@ -226,12 +246,22 @@ chkinp <- function(taxa, station, getval = FALSE){
   
   ##
   # return list of taxa and removed FinalID by SampleID
+  if (exists("txrmv") ==T) { 
   out <- list(
     taxa = taxa,
     txrmv = txrmv
-  )
+  ) 
   
-  return(out)
+  return(out) } 
+  
+  if (exists("txrmv") ==F) { 
+  out <- list(
+    taxa = taxa
+  ) 
+  
+  return(out) } 
+  
+  
   
 }
 
