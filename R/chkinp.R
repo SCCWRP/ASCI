@@ -91,7 +91,9 @@ chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
   taxa <- taxa %>%
     dplyr::mutate(
       StationCode = as.character(StationCode),
-      SampleDate = as.POSIXct(SampleDate),
+      # Nothing in the code necessarily demands that the SampleDate needs to be a Date field (to my knowledge)
+      # For that reason, we will not coerce it to a date, in case they put different date formats or something like that
+      #SampleDate = as.POSIXct(SampleDate),
       Replicate = as.integer(as.character(Replicate)),
       SampleTypeCode = as.character(SampleTypeCode),
       BAResult = as.integer(as.character(BAResult)),
