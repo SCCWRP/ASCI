@@ -99,6 +99,9 @@ chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
       BAResult = as.integer(as.character(BAResult)),
       Result = as.numeric(as.character(Result)),
       FinalID = as.character(FinalID),
+      SampleID_original = dplyr::case_when(
+        SampleID %in% names(taxa) ~ SampleID,
+        TRUE ~ paste(StationCode, SampleDate, Replicate, sep = "|")),
       SampleID = paste(StationCode, SampleDate, Replicate, sep = "|")
     ) %>% 
     dplyr::select(SampleID, StationCode, SampleDate, Replicate, SampleTypeCode, BAResult, Result, FinalID)
