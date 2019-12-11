@@ -45,12 +45,8 @@ ASCI <- function(taxa, station, CalcWithMissingAssemblage = T){
   station <- calcgis(station)
   
   # mmi
-  if (CalcWithMissingAssemblage) {
-    mmind <- mmifun(dat, station, CalcWithMissingAssemblage = T)
-  } else {
-    mmind <- mmifun(dat, station, CalcWithMissingAssemblage = F)
-  }
-  
+  mmind <- mmifun(dat, station, CalcWithMissingAssemblage = T)
+
   ##
   # main output (scores)
   mmiscr <- mmind %>% 
@@ -113,14 +109,16 @@ ASCI <- function(taxa, station, CalcWithMissingAssemblage = T){
   
   # Tack on a column that warns them if there is only diatom or soft body at a site
   warnings_column <- dat %>%
+    # if Result is 0 it counts as it not being there
+    dplyr::filter(((Result != 0) & is.na(BAResult)) | ((BAResult != 0) & is.na(Result))) %>% 
     dplyr::group_by(SampleID) %>%
     dplyr::mutate(
       dia_or_sba = ifelse(SampleTypeCode == "Integrated", "dia", "sba")
     ) %>% 
     dplyr::summarise(
       Comments = dplyr::case_when(
-        unique(dia_or_sba) == "dia" ~ "Warning - Only Diatom data present",
-        unique(dia_or_sba) == "sba" ~ "Warning - Only Soft Body data present",
+        ("dia" %in% unique(dia_or_sba)) & (!("sba" %in% unique(dia_or_sba))) ~ "Warning - Only Diatom data present",
+        ("sba" %in% unique(dia_or_sba)) & (!("dia" %in% unique(dia_or_sba))) ~ "Warning - Only Soft Body data present",
         TRUE ~ ""
       )
     )
