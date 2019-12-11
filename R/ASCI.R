@@ -112,7 +112,7 @@ ASCI <- function(taxa, station, CalcWithMissingAssemblage = T){
     left_join(txrmv, by = 'SampleID')
   
   # Tack on a column that warns them if there is only diatom or soft body at a site
-  warnings_column <- taxa %>%
+  warnings_column <- dat %>%
     dplyr::group_by(SampleID) %>%
     dplyr::mutate(
       dia_or_sba = ifelse(SampleTypeCode == "Integrated", "dia", "sba")
