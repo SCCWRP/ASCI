@@ -111,6 +111,23 @@ ASCI <- function(taxa, station, CalcWithMissingAssemblage = T){
   out1 <- getids(out1, concatenate = FALSE) %>% 
     left_join(txrmv, by = 'SampleID')
   
+  # Tack on a column that warns them if there is only diatom or soft body at a site
+  warnings_column <- taxa %>%
+    dplyr::group_by(SampleID) %>%
+    dplyr::mutate(
+      dia_or_sba = ifelse(SampleTypeCode == "Integrated", "dia", "sba")
+    ) %>% 
+    dplyr::summarise(
+      Comments = dplyr::case_when(
+        unique(dia_or_sba) == "dia" ~ "Warning - Only Diatom data present",
+        unique(dia_or_sba) == "sba" ~ "Warning - Only Soft Body data present",
+        TRUE ~ ""
+      )
+    )
+
+  out1 <- out1 %>% dplyr::left_join(warnings_column, by = "SampleID")
+    
+  
   # unholy column selection
   colsel <- c("SampleID", "StationCode", "SampleDate", "Replicate", "SampleType", 
               
