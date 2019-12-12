@@ -225,6 +225,12 @@ chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
     
   }
 
+  # Station columns that need to be character:
+  # StationCode, PSA6, PSA6C, County
+  # These seem to be read in as factors sometimes
+  station <- station %>% dplyr::mutate_if(is.factor, as.character)
+  
+  
   ##
   # find and remove unidentified taxonomy
   chk <- setdiff(taxa$FinalID, STE$FinalID)
