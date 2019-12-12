@@ -87,6 +87,22 @@ chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
   # Replace -88's with NA
   taxa <- taxa %>% mutate_all(~dplyr::na_if(.,-88))
   
+  
+  ##
+  # check if required columns are present in taxa
+  taxcols <- c('StationCode', 'SampleDate', 'Replicate',
+               'SampleTypeCode', 'BAResult', 'Result', 'FinalID')
+  chk <- taxcols %in% names(taxa)
+  if(any(!chk)){
+    
+    chk <- taxcols[!chk]
+    if(getval) return(chk)
+    
+    msg <- paste(chk, collapse = ', ') %>% 
+      paste('Required columns not found taxa:', .)
+    stop(msg, call. = FALSE)
+  }
+  
   # Reassure that all columns are the correct datatype
   taxa <- taxa %>%
     dplyr::mutate(
@@ -103,20 +119,7 @@ chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
     ) %>% 
     dplyr::select(SampleID, StationCode, SampleDate, Replicate, SampleTypeCode, BAResult, Result, FinalID)
   
-  ##
-  # check if required columns are present in taxa
-  taxcols <- c('StationCode', 'SampleDate', 'Replicate',
-               'SampleTypeCode', 'BAResult', 'Result', 'FinalID')
-  chk <- taxcols %in% names(taxa)
-  if(any(!chk)){
-    
-    chk <- taxcols[!chk]
-    if(getval) return(chk)
-    
-    msg <- paste(chk, collapse = ', ') %>% 
-      paste('Required columns not found taxa:', .)
-    stop(msg, call. = FALSE)
-  }
+  
   
   ##
   # add id values after columns are checked
