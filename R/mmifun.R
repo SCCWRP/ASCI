@@ -31,7 +31,7 @@
 #' # calc metrics
 #' out <- mmifun(dat, station)
 #' out
-mmifun <- function(taxa, station, CalcWithMissingAssemblage = T){
+mmifun <- function(taxa, station){
   
   options(gsubfn.engine = "R")
   
@@ -67,26 +67,15 @@ mmifun <- function(taxa, station, CalcWithMissingAssemblage = T){
       SampleTypeCode != 'Integrated'
     )
   bugs.sba <- chkmt(bugs.sba)
-  
-  # create hybrid, but first see if both exist, if not create dummy data frame
-  if( (is.na(bugs.d$FinalID[1]) | is.na(bugs.sba$FinalID[1])) & CalcWithMissingAssemblage == F ) {
-    bugs <- bugs[1,]
-    bugs[1, ] <- rep(NA)
-    bugs <- bugs %>% 
-      mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T)))
-  } else { # otherwise subset both
-    if (CalcWithMissingAssemblage) {
-      smpid <- bugs$SampleID
-    } else {
-      smpid <- intersect(bugs.d$SampleID, bugs.sba$SampleID)
-    }
-    bugs <- bugs %>% 
-      filter(SampleID %in% smpid) %>% 
-      group_by(SampleID) %>% 
-      mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T))) %>% 
-      filter(ComboResult != 0) %>% 
-      ungroup()
-  }
+ 
+  # ASCI should always calculate hybrid even if they are missing assemblage 
+  smpid <- bugs$SampleID
+  bugs <- bugs %>% 
+    filter(SampleID %in% smpid) %>% 
+    group_by(SampleID) %>% 
+    mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T))) %>% 
+    filter(ComboResult != 0) %>% 
+    ungroup()
   
   # Convert to species abd matrix at Species level  -----------------------------------------------------------
   bugs.d.m <- as.data.frame(acast(bugs.d, 

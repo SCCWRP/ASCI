@@ -34,7 +34,7 @@
 #' # remove soft-bodied from station sample 801M16916
 #' tmp <- subset(demo_algae_tax, !(StationCode == '801M16916' & SampleTypeCode != 'Integrated'))
 #' ASCI(tmp, demo_station)
-ASCI <- function(taxa, station, CalcWithMissingAssemblage = T){
+ASCI <- function(taxa, station){
 
   # run all other checks, get output if passed
   dat <- chkinp(taxa, station)
@@ -45,7 +45,7 @@ ASCI <- function(taxa, station, CalcWithMissingAssemblage = T){
   station <- calcgis(station)
   
   # mmi
-  mmind <- mmifun(dat, station, CalcWithMissingAssemblage = T)
+  mmind <- mmifun(dat, station)
 
   ##
   # main output (scores)
