@@ -82,7 +82,7 @@
 #' chkinp(demo_algae_tax, tmp)
 #' }
 
-chkinp <- function(taxa, station, getval = FALSE, purge = FALSE){
+chkinp <- function(taxa, station, getval = FALSE){
   
   # Replace -88's with NA
   taxa <- taxa %>% mutate_all(~dplyr::na_if(.,-88))
