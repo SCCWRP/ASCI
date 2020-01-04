@@ -14,16 +14,18 @@ globalVariables(c('STE', 'Class', 'acast', 'mmilkup', 'SampleTypeCode', 'Phylum'
                   'D_ValveCount', 'H_ASCI', 'H_NumberTaxa', 'S_ASCI', 'S_Biovolume', 'S_EntityCount',
                   'S_NumberTaxa', 'SampleType', 'UnrecognizedTaxa', 
                   
-                  #'cnt.spp.BCG4', 'cnt.spp.BCG45', 'cnt.spp.Green', 'cnt.spp.IndicatorClass_TP_low', 'cnt.spp.SPIspecies4', 
-                  #'OxyRed.DO_30.richness', 'Salinity.BF.richness', 'Saprobic.BM.richness', 'cnt.spp.IndicatorClass_DOC_high', 
+                  'cnt.spp.BCG4', 'cnt.spp.BCG45', 'cnt.spp.Green', 'cnt.spp.IndicatorClass_TP_low', 'cnt.spp.SPIspecies4', 
+                  'OxyRed.DO_30.richness', 'Salinity.BF.richness', 'Saprobic.BM.richness', 'cnt.spp.IndicatorClass_DOC_high', 
                   
                   'rfmods', 
                   
-                  #'OxyRed.DO_30.richness_pred', 'OxyRed.DO_30.richness_raw', 'Salinity.BF.richness_pred', 'Salinity.BF.richness_raw',
+                  'OxyRed.DO_30.richness_pred', 'OxyRed.DO_30.richness_raw', 'Salinity.BF.richness_pred', 'Salinity.BF.richness_raw',
                   
                   'SampleID_raw', 'mets', 
                   
-                  #'prop.spp.BCG4_pred', 'prop.spp.BCG4_raw', 'prop.spp.SPI.species4_pred', 'prop.spp.SPIspecies4_raw', 
+                  'prop.spp.BCG4_pred', 'prop.spp.BCG4_raw', 'prop.spp.SPI.species4_pred', 'prop.spp.SPIspecies4_raw',
+                  'prop.spp.BCG12_pred','prop.spp.BCG12_raw','prop.spp.Salinity.BF_pred','prop.spp.Trophic.E_pred',
+                  'prop.spp.Salinity.BF_raw','prop.spp.Trophic.E_raw',
                   
                   
 "prop.spp.BCG12_mod", "prop.spp.OxyReq.DO_100orDO_75_raw", "prop.spp.Salinity.BF_mod", "prop.spp.Trophic.E_mod", 
