@@ -139,11 +139,6 @@ ASCI <- function(taxa, station){
         TRUE ~ ""
       )
     )
-
-  print("dat")
-  print(head(dat))
-  print("warnings_column")
-  print(warnings_column)
   
   beginning_cols <- c('SampleID', 'StationCode','SampleDate','Replicate',
                       'SampleType','D_ValveCount','S_EntityCount','S_Biovolume','D_NumberTaxa',
