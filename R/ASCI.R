@@ -105,7 +105,24 @@ ASCI <- function(taxa, station){
   # get original stationcode, date, and replicate
   # add unrecognized taxa
   out1 <- getids(out1, concatenate = FALSE) %>% 
-    left_join(txrmv, by = 'SampleID')
+    left_join(txrmv, by = 'SampleID') %>%
+    dplyr::select(-c("StationCode","SampleDate","Replicate")) %>%
+    left_join(
+      dat %>% dplyr::select(
+        SampleID,StationCode,SampleDate,Replicate
+      ),
+      by = "SampleID"
+    )
+  # In the above code we also grab stationcode sampledate and replicate from original input data
+  # getids function was sometimes not grabbing them correctly
+  
+  # Besides, as Rafi has suggested in the past, extracting fields by parsing a string may not
+  # be the best way to go. He suggested doing it this way and 
+  # I think it may be a good approach
+    
+  
+  
+  
   
   # Tack on a column that warns them if there is only diatom or soft body at a site
   warnings_column <- dat %>%
@@ -123,15 +140,21 @@ ASCI <- function(taxa, station){
       )
     )
 
-  beginning_cols <- c('SampleID','StationCode','SampleDate','Replicate','SampleType',
-                      'D_ValveCount','S_EntityCount','S_Biovolume','D_NumberTaxa',
+  print("dat")
+  print(head(dat))
+  print("warnings_column")
+  print(warnings_column)
+  
+  beginning_cols <- c('SampleID', 'StationCode','SampleDate','Replicate',
+                      'SampleType','D_ValveCount','S_EntityCount','S_Biovolume','D_NumberTaxa',
                       'S_NumberTaxa','H_NumberTaxa','UnrecognizedTaxa',
                       'D_ASCI','S_ASCI','H_ASCI')
   
+  # Here we tack on that warnings column
   out1 <- out1 %>% dplyr::left_join(warnings_column, by = "SampleID") %>%
     dplyr::select(
-      c(beginning_cols, names(out1)[which(!names(out1) %in% beginning_cols)])
-    )
+      c(beginning_cols, names(out1)[which(!names(out1) %in% beginning_cols)], "Comments")
+    ) 
   
   names(out1) <- gsub("pcnt","pct",names(out1))
   names(out1) <- gsub("prop","prp",names(out1))
