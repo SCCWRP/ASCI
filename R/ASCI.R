@@ -108,7 +108,7 @@ ASCI <- function(taxa, station){
     left_join(txrmv, by = 'SampleID') %>%
     dplyr::select(-c("StationCode","SampleDate","Replicate")) %>%
     left_join(
-      dat %>% dplyr::select(
+      dat %>% dplyr::distinct(
         SampleID,StationCode,SampleDate,Replicate
       ),
       by = "SampleID"
