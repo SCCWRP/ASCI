@@ -179,7 +179,8 @@ mmifun <- function(taxa, station){
     column_to_rownames('SampleID')
   
   # final selection
-  colsel <- names(d.results) %in% d.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(d.results))
+  colsel <- names(d.results) %in% d.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(d.results)) | grepl('pred',
+                                                                                                               names(d.results))
   d.results <- d.results[, colsel] %>% 
     rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
   d.results <- chkmt(d.results)
@@ -206,7 +207,8 @@ mmifun <- function(taxa, station){
     column_to_rownames('SampleID')
   
   # final selection
-  colsel <- names(sba.results) %in% sba.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(sba.results))
+  colsel <- names(sba.results) %in% sba.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(sba.results)) | grepl('pred',
+                                                                                                                      names(sba.results))
   sba.results <- sba.results[, colsel] %>% 
     rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
   sba.results <- chkmt(sba.results)
@@ -214,7 +216,7 @@ mmifun <- function(taxa, station){
   ##
   # hybrid
   
-  #   hybrid.win.suf<-c("OxyRed.DO_30.richness_mod","prop.spp.BCG4_mod","prop.spp.IndicatorClass_DOC_high_raw", "Salinity.BF.richness_mod")
+  # hybrid.win.suf<-c("OxyRed.DO_30.richness_mod","prop.spp.BCG4_mod","prop.spp.IndicatorClass_DOC_high_raw", "Salinity.BF.richness_mod")
   
   # get observed hybrid results and percent attributed
   hybrid.results <- hybrid.metrics %>% 
@@ -251,11 +253,11 @@ mmifun <- function(taxa, station){
       prop.spp.BCG4_mod = prop.spp.BCG4_raw - prop.spp.BCG4_pred, 
       Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness_pred
     ) %>% 
-    column_to_rownames('SampleID') %>% 
-    select_at(vars(-contains('pred')))
+    column_to_rownames('SampleID') # %>% 
+    # select_at(vars(-contains('pred')))
   
   # final selection
-  colsel <- names(hybrid.results) %in% hybrid.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(hybrid.results))
+  colsel <- names(hybrid.results) %in% hybrid.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(hybrid.results)) | grepl('pred', names(hybrid.results))
   hybrid.results <- hybrid.results[, colsel] %>% 
     rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
   hybrid.results <- chkmt(hybrid.results)
@@ -271,7 +273,7 @@ mmifun <- function(taxa, station){
   
   sba.scored <- score_metric(taxa = 'sba', bugs.sba.m, sba.results, omni.ref) %>% 
     select(-rowname) %>% 
-    replace(. > 1, 1) %>% 
+    replace(. > 1, 1) %>%
     replace(. < 0, 0) %>% 
     select(sort(colnames(.)))
   
