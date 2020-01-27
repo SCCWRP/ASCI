@@ -78,7 +78,7 @@ ASCI <- function(taxa, station){
     group_by(SampleID) %>% 
     summarize(
       SampleType = paste0(unique(SampleTypeCode), collapse = ', '),
-      S_EntityCount = sum(BAResult, na.rm = T),
+      S_EntityCount = sum(BAResult[which(SampleTypeCode != 'Integrated')], na.rm = T),
       S_Biovolume = sum(Result, na.rm = T)
     ) %>% 
     full_join(extra1, by = 'SampleID')
@@ -123,36 +123,26 @@ ASCI <- function(taxa, station){
       )
     )
 
-  out1 <- out1 %>% dplyr::left_join(warnings_column, by = "SampleID")
-    
+  beginning_cols <- c('SampleID','StationCode','SampleDate','Replicate','SampleType',
+                      'D_ValveCount','S_EntityCount','S_Biovolume','D_NumberTaxa',
+                      'S_NumberTaxa','H_NumberTaxa','UnrecognizedTaxa',
+                      'D_ASCI','S_ASCI','H_ASCI')
   
-  # unholy column selection
-  colsel <- c("SampleID", "StationCode", "SampleDate", "Replicate", "SampleType", 
-              
-              "D_ValveCount", "S_EntityCount", "S_Biovolume", "D_NumberTaxa", 
-              "S_NumberTaxa", "H_NumberTaxa", "UnrecognizedTaxa", "D_ASCI", "S_ASCI", "H_ASCI", 
-              
-              "D_cnt.spp.IndicatorClass_TP_low_raw", "D_cnt.spp.IndicatorClass_TP_low_raw_score", 
-              "D_prop.spp.Saprobic.BM_raw", "D_prop.spp.Saprobic.BM_raw_score", 
-              "D_prop.spp.SPIspecies4_mod", "D_prop.spp.SPIspecies4_mod_score", 
-              "D_Salinity.BF.richness_mod", "D_Salinity.BF.richness_mod_score", 
-              "D_pcnt.attributed.IndicatorClass_TP_Low", "D_pcnt.attributed.Salinity.BF", 
-              "D_pcnt.attributed.Saprobic.BM", "D_pcnt.attributed.SPIspecies4", 
-              "H_OxyRed.DO_30.richness_mod", "H_OxyRed.DO_30.richness_mod_score", "H_prop.spp.BCG4_mod",
-              "H_prop.spp.BCG4_mod_score",  "H_prop.spp.IndicatorClass_DOC_high_raw","H_prop.spp.IndicatorClass_DOC_high_raw_score", 
-              "H_Salinity.BF.richness_mod", "H_Salinity.BF.richness_mod_score",  
-              "H_pcnt.attributed.OxyRed.DO_30", "H_pcnt.attributed.BCG4", "H_pcnt.attributed.IndicatorClass_DOC_high",
-              "H_pcnt.attributed.Salinity.BF",
-              "S_prop.spp.BCG45_raw", "S_prop.spp.BCG45_raw_score", "S_prop.spp.Green_raw", 
-              "S_prop.spp.Green_raw_score", "S_cnt.spp.IndicatorClass_DOC_high_raw", 
-              "S_cnt.spp.IndicatorClass_DOC_high_raw_score", "S_pcnt.attributed.BCG45", "S_pcnt.attributed.Green", 
-              "S_pcnt.attributed.IndicatorClass_DOC_high"
-             # NULL
-              )
+  out1 <- out1 %>% dplyr::left_join(warnings_column, by = "SampleID") %>%
+    dplyr::select(
+      c(beginning_cols, names(out1)[which(!names(out1) %in% beginning_cols)])
+    )
+  
+  names(out1) <- gsub("pcnt","pct",names(out1))
+  names(out1) <- gsub("prop","prp",names(out1))
+  names(out1) <- gsub("attributed","att",names(out1))
+  names(out1) <- gsub("score","scr",names(out1))
+  names(out1) <- gsub("IndicatorClass","IC",names(out1))
+  names(out1) <- gsub("OxyRed","OxRd",names(out1))
+  names(out1) <- gsub("OxyReq","OxRq",names(out1))
+  names(out1) <- gsub("DO_100orDO_75","DO100_75",names(out1))
+  names(out1) <- gsub("\\.","_",names(out1))
 
-  #out1 <- out1[, colsel]
-  
-  
   return(out1)
   
 }
