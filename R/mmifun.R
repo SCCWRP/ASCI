@@ -18,7 +18,8 @@
 #' @importFrom tidyr gather spread nest unnest separate unite
 #' @import purrr
 #' @import tibble
-#' @importFrom vegan diversity specnumber # susie added 11/27
+#' @importFrom vegan diversity specnumber 
+#'
 #' 
 #' @examples 
 #' # check input taxonomy data
