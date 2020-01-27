@@ -23,7 +23,7 @@ getids <- function(datin, concatenate = T){
   if(!'SampleID' %in% names(datin) & concatenate)
   
     datin <- datin %>% 
-      unite('SampleID', StationCode, SampleDate, Replicate, sep = '|', remove = FALSE)
+      unite('SampleID', StationCode, SampleDate, Replicate, sep = '_', remove = FALSE)
 
   if('SampleID' %in% names(datin) & !concatenate)
 
@@ -34,7 +34,7 @@ getids <- function(datin, concatenate = T){
         Replicate = as.numeric(Replicate),
         col = gsub('|[0-9]+$', '', col),
         SampleDate = gsub('.*|(.*)$', '\\1', col), 
-        StationCode = gsub(paste(SampleDate, collapse = '|'), '', col), 
+        StationCode = gsub(paste(SampleDate, collapse = '_'), '', col), 
         StationCode = gsub('|$', '', StationCode)
       ) %>% 
       dplyr::select(-col)

@@ -115,7 +115,7 @@ chkinp <- function(taxa, station, getval = FALSE){
       BAResult = as.integer(as.character(BAResult)),
       Result = as.numeric(as.character(Result)),
       FinalID = as.character(FinalID),
-      SampleID = paste(StationCode, SampleDate, Replicate, sep = "|")
+      SampleID = paste(StationCode, SampleDate, Replicate, sep = "_")
     ) %>% 
     dplyr::select(SampleID, StationCode, SampleDate, Replicate, SampleTypeCode, BAResult, Result, FinalID)
   
