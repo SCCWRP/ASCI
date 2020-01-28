@@ -31,6 +31,7 @@
 #' @importFrom dplyr arrange filter group_by mutate select summarise
 #' @importFrom magrittr "%>%"
 #' @importFrom tidyr gather
+#' @importFrom stringr str_squish
 #' 
 #' @examples
 #' # all checks passed, data returned with SampleID
@@ -106,15 +107,15 @@ chkinp <- function(taxa, station, getval = FALSE){
   # Reassure that all columns are the correct datatype
   taxa <- taxa %>%
     dplyr::mutate(
-      StationCode = as.character(StationCode),
+      StationCode = str_squish(as.character(StationCode)),
       # Nothing in the code necessarily demands that the SampleDate needs to be a Date field (to my knowledge)
       # For that reason, we will not coerce it to a date, in case they put different date formats or something like that
       #SampleDate = as.POSIXct(SampleDate),
       Replicate = as.integer(as.character(Replicate)),
-      SampleTypeCode = as.character(SampleTypeCode),
+      SampleTypeCode = str_squish(as.character(SampleTypeCode)),
       BAResult = as.integer(as.character(BAResult)),
       Result = as.numeric(as.character(Result)),
-      FinalID = as.character(FinalID),
+      FinalID = str_squish(as.character(FinalID)),
       SampleID = paste(StationCode, SampleDate, Replicate, sep = "_")
     ) %>% 
     dplyr::select(SampleID, StationCode, SampleDate, Replicate, SampleTypeCode, BAResult, Result, FinalID)
