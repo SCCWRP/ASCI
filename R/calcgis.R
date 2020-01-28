@@ -24,6 +24,7 @@
 #' @importFrom dplyr mutate mutate_if
 #' @importFrom magrittr "%>%"
 #' @importFrom stringr str_squish
+#' @importFrom glue glue_collapse
 #' @import quantregForest
 #' 
 #' @examples
@@ -133,6 +134,32 @@ calcgis <- function(station){
     
       if(any(is.na(station$PSA6C)))
         stop('Cannot calculate XerMtn if any missing values in PSA6C', call. = FALSE)
+        
+      if(any(is.na(station$PSA6C)))
+        stop('Cannot calculate XerMtn if any missing values in PSA6C', call. = FALSE)
+        
+      if(!all(station$PSA6C %in% PSA6C_values)){
+        badvals <- setdiff(station$PSA6C,PSA6C_values)
+        stop(paste("unrecognized PSA6C values: ",glue_collapse(badvals, sep = ', ')),
+             call. = FALSE
+        )
+      } else {
+        # Susie's request that we allow the long names
+        # But we need them to be in abbreviated format, so we convert it here.
+        station <- station %>%
+          mutate(
+            PSA6C = case_when(
+              PSA6C == 'North Coast' ~ 'NC',
+              PSA6C == 'Deserts Modoc' ~ 'DM',
+              PSA6C == 'Chaparral' ~ 'CH',
+              PSA6C == 'Central Valley' ~ 'CV',
+              PSA6C == 'South Coast' ~ 'SC',
+              PSA6C == 'Sierra Nevada' ~ 'SN',
+              TRUE ~ PSA6C
+            )
+          )
+      }
+      
       
       station <- station %>% 
         mutate(
