@@ -111,11 +111,8 @@ chkinp <- function(taxa, station, getval = FALSE){
       # Nothing in the code necessarily demands that the SampleDate needs to be a Date field (to my knowledge)
       # For that reason, we will not coerce it to a date, in case they put different date formats or something like that
       #SampleDate = as.POSIXct(SampleDate),
-      Replicate = dplyr::case_when(
-        is.na(Replicate) ~ -88,
-        TRUE ~ as.integer(as.character(Replicate))
-      ),
-      #Replicate = as.integer(as.character(Replicate)),
+      Replicate = as.integer(as.character(Replicate)),
+      Replicate = replace(Replicate, which(is.na(Replicate)), -88),
       SampleTypeCode = str_squish(as.character(SampleTypeCode)),
       BAResult = as.integer(as.character(BAResult)),
       Result = as.numeric(as.character(Result)),
