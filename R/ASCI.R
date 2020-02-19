@@ -104,9 +104,10 @@ ASCI <- function(taxa, station){
   
   # get original stationcode, date, and replicate
   # add unrecognized taxa
-  out1 <- getids(out1, concatenate = FALSE) %>% 
+  #out1 <- getids(out1, concatenate = FALSE) %>% 
+  out1 <- out1 %>%
     left_join(txrmv, by = 'SampleID') %>%
-    dplyr::select(-c("StationCode","SampleDate","Replicate")) %>%
+    #dplyr::select(-c("StationCode","SampleDate","Replicate")) %>%
     left_join(
       dat %>% dplyr::distinct(
         SampleID,StationCode,SampleDate,Replicate
