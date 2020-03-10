@@ -67,10 +67,9 @@ ASCI <- function(taxa, station){
   
   # get diatom valve counts
   extra1 <- dat %>% 
-    filter(SampleTypeCode == 'Integrated') %>% 
     group_by(SampleID) %>%
     summarize(
-      D_ValveCount = sum(BAResult, na.rm = T)
+      D_ValveCount = sum(BAResult[which(SampleTypeCode == 'Integrated')], na.rm = T)
     )
   
   # get sampletype concatenated column, soft-bodied entity and biovolume count
