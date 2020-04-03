@@ -36,6 +36,7 @@
 #' ASCI(tmp, demo_station)
 ASCI <- function(taxa, station){
 
+  # This is comment
   # run all other checks, get output if passed
   dat <- chkinp(taxa, station)
   txrmv <- dat$txrmv
@@ -47,7 +48,7 @@ ASCI <- function(taxa, station){
   # mmi
   mmind <- mmifun(dat, station)
   
-  ##
+  
   # main output (scores)
   mmiscr <- mmind %>% 
     map(~ .x$MMI_scores) %>% 
