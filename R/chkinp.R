@@ -181,8 +181,16 @@ chkinp <- function(taxa, station, getval = FALSE){
                 "AtmCa", "AtmMg", "AtmSO4", "MINP_WS", "MEANP_WS", "SumAve_P", 
                 "TMAX_WS", "XWD_WS", "MAXWD_WS", "LST32AVE", "BDH_AVE", "KFCT_AVE", 
                 "PRMH_AVE")
-  regvals <- c("StationCode", "SITE_ELEV", "TEMP_00_09", "KFCT_AVE", 
-               "AtmCa", "PPT_00_09", "MAX_ELEV")
+  regvals <- c("StationCode", 
+               "AREA_SQKM",
+                "KFCT_AVE",
+                "XerMtn",
+                "PPT_00_09",
+                "CondQR50",
+                "TMAX_WS",
+                "MAX_ELEV",
+                "SITE_ELEV",
+                "AtmCa")
 
   # must have one of or both XerMtn and PSA6C
   chk <- c('XerMtn', 'PSA6C') %in% names(station)
