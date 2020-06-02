@@ -68,7 +68,7 @@ mmifun <- function(taxa, station){
       SampleTypeCode != 'Integrated'
     )
   bugs.sba <- chkmt(bugs.sba)
- 
+  
   # ASCI should always calculate hybrid even if they are missing assemblage 
   smpid <- bugs$SampleID
   bugs <- bugs %>% 
@@ -111,32 +111,46 @@ mmifun <- function(taxa, station){
   # Load winning metrics -----------------------------------------------------------
   
   # metric names for mmi_calcmetrics
-  # d.win <- c('prop.spp.SPIspecies4', 'Salinity.BF.richness', 
-  #            'prop.spp.Saprobic.BM', 'cnt.spp.IndicatorClass_TP_low',
-  #            'richness', 'cnt.spp.SPIspecies4', 'Saprobic.BM.richness')
-  # sba.win <- c('prop.spp.Green', 'cnt.spp.IndicatorClass_DOC_high', 
-  #              'prop.spp.BCG45', 'richness', 'cnt.spp.Green', 'cnt.spp.BCG45')
-  # hybrid.win <- c('prop.spp.BCG4', 'Salinity.BF.richness', 
-  #                 'prop.spp.IndicatorClass_DOC_high', 'OxyRed.DO_30.richness', 
-  #                 'richness', 'cnt.spp.BCG4', 'cnt.spp.IndicatorClass_DOC_high')
   
-  d.win<-c("prop.spp.BCG12", "prop.spp.OxyReq.DO_100orDO_75", "prop.spp.Salinity.BF", "prop.spp.Trophic.E", "richness")
-  sba.win<-c("cnt.spp.IndicatorClass_DOC_high" , "prop.spp.BCG45", "prop.spp.Green", "richness")
-  hybrid.win<-c("OxyRed.DO_30.richness","prop.spp.BCG4","prop.spp.IndicatorClass_DOC_high", "Salinity.BF.richness", "richness")
+  d.win<-c("cnt.spp.most.tol",
+           "EpiRho.richness",
+           "prop.spp.IndicatorClass_TN_low",
+           "prop.spp.Planktonic",
+           "prop.spp.Trophic.E",
+           "Salinity.BF.richness")
+  sba.win<-c("prop.spp.IndicatorClass_DOC_high",
+             "prop.spp.IndicatorClass_NonRef",
+             "prop.spp.IndicatorClass_TP_high",
+             "prop.spp.ZHR")
+  hybrid.win<-c("cnt.spp.IndicatorClass_TP_high",
+                "cnt.spp.most.tol",
+                "EpiRho.richness",
+                "OxyRed.DO_30.richness",
+                "prop.spp.Planktonic",
+                "prop.spp.Trophic.E",
+                "prop.spp.ZHR",
+                "Salinity.BF.richness")
   
+  # names with suffix mod or raw
   
-  # names with suffix
-  # d.win.suf <- c('prop.spp.SPIspecies4_mod', 'Salinity.BF.richness_mod', 
-  #                'prop.spp.Saprobic.BM_raw', 'cnt.spp.IndicatorClass_TP_low_raw')
-  # sba.win.suf <- c('prop.spp.Green_raw', 'cnt.spp.IndicatorClass_DOC_high_raw', 
-  #                  'prop.spp.BCG45_raw')
-  # hybrid.win.suf <- c('prop.spp.BCG4_mod', 'Salinity.BF.richness_mod', 
-  #                     'prop.spp.IndicatorClass_DOC_high_raw', 'OxyRed.DO_30.richness_mod')
-  
-  d.win.suf<-c("prop.spp.BCG12_mod", "prop.spp.OxyReq.DO_100orDO_75_raw", "prop.spp.Salinity.BF_mod", "prop.spp.Trophic.E_mod")
-  sba.win.suf<-c("cnt.spp.IndicatorClass_DOC_high_raw" , "prop.spp.BCG45_raw", "prop.spp.Green_raw")
-  hybrid.win.suf<-c("OxyRed.DO_30.richness_mod","prop.spp.BCG4_mod","prop.spp.IndicatorClass_DOC_high_raw", "Salinity.BF.richness_mod")
-
+  d.win.suf<-c("cnt.spp.most.tol_mod",
+               "EpiRho.richness_mod",
+               "prop.spp.IndicatorClass_TN_low_mod",
+               "prop.spp.Planktonic_mod",
+               "prop.spp.Trophic.E_mod",
+               "Salinity.BF.richness_mod")
+  sba.win.suf<-c("prop.spp.IndicatorClass_DOC_high_raw",
+                 "prop.spp.IndicatorClass_NonRef_raw",
+                 "prop.spp.IndicatorClass_TP_high_raw",
+                 "prop.spp.ZHR_raw")
+  hybrid.win.suf<-c("cnt.spp.IndicatorClass_TP_high_mod",
+                    "cnt.spp.most.tol_mod",
+                    "EpiRho.richness_mod",
+                    "OxyRed.DO_30.richness_mod",
+                    "prop.spp.Planktonic_mod",
+                    "prop.spp.Trophic.E_mod",
+                    "prop.spp.ZHR_raw",
+                    "Salinity.BF.richness_mod")
   
   # Calculated observed and predicted metrics -------------------------------
   ##
@@ -147,12 +161,15 @@ mmifun <- function(taxa, station){
     select(SampleID, d.win) %>%
     filter(SampleID %in% rownames(bugs.d.m)) %>%
     mutate(
-      pcnt.attributed.prop.spp.BCG12 =  prop.spp.BCG12/richness,
-      pcnt.attributed.prop.spp.OxyReq.DO_100orDO_75 = prop.spp.OxyReq.DO_100orDO_75/richness,
-      pcnt.attributed.prop.spp.Salinity.BF = prop.spp.Salinity.BF/richness,
-      pcnt.attributed.prop.spp.Trophic.E = prop.spp.Trophic.E/richness
+      pcnt.attributed.cnt.spp.most.tol =  cnt.spp.most.tol/richness,
+      pcnt.attributed.EpiRho.richness =  EpiRho.richness/richness,
+      pcnt.attributed.prop.spp.IndicatorClass_TN_low =  prop.spp.IndicatorClass_TN_low/richness,
+      pcnt.attributed.prop.spp.Planktonic =  prop.spp.Planktonic/richness,
+      pcnt.attributed.prop.spp.Trophic.E =  prop.spp.Trophic.E/richness,
+      pcnt.attributed.Salinity.BF.richness =  Salinity.BF.richness/richness
+      
     )  # %>% 
-  # select(-c('prop.spp.BCG12','prop.spp.Salinity.BF','prop.spp.Trophic.E_mod')) # mystery line 
+  
   names(d.results) <- paste0(names(d.results), '_raw') 
   d.results <- d.results %>% 
     dplyr::rename(
@@ -163,25 +180,33 @@ mmifun <- function(taxa, station){
   # predicted diatom metrics
   d.predmet <- stationid %>% 
     mutate(
-      prop.spp.BCG12_pred = predict(rfmods$diatoms.prop.spp.BCG12, newdata = .[, c("CondQR50","MAX_ELEV")]), 
-      prop.spp.Salinity.BF_pred = predict(rfmods$diatoms.prop.spp.Salinity.BF, newdata = .[, c("XerMtn","KFCT_AVE","CondQR50","LST32AVE","AtmCa","SITE_ELEV")]), 
-      prop.spp.Trophic.E_pred = predict(rfmods$diatoms.prop.spp.Trophic.E, newdata = .[, c("SITE_ELEV", "KFCT_AVE")]) 
+      cnt.spp.most.tol_pred = predict(rfmods$diatoms.cnt.spp.most.tol, newdata = .[,c("XerMtn","PPT_00_09")]),
+      EpiRho.richness_pred = predict(rfmods$diatoms.EpiRho.richness, newdata = .[,c("AREA_SQKM","TMAX_WS")]),
+      prop.spp.IndicatorClass_TN_low_pred = predict(rfmods$diatoms.prop.spp.IndicatorClass_TN_low,newdata = .[,c("CondQR50","MAX_ELEV")]),
+      prop.spp.Planktonic_pred = predict(rfmods$diatoms.prop.spp.Planktonic,newdata = .[,c("CondQR50","SITE_ELEV")]),
+      prop.spp.Trophic.E_pred = predict(rfmods$diatoms.prop.spp.Trophic.E,newdata = .[,c("KFCT_AVE","CondQR50")]),
+      Salinity.BF.richness_pred = predict(rfmods$diatoms.Salinity.BF.richness,newdata = .[,c("XerMtn","KFCT_AVE","CondQR50")])
     ) %>% 
-    select(SampleID, prop.spp.BCG12_pred, prop.spp.Salinity.BF_pred, prop.spp.Trophic.E_pred)
+    select(SampleID, 
+           cnt.spp.most.tol, EpiRho.richness, prop.spp.IndicatorClass_TN_low, 
+           prop.spp.Planktonic, prop.spp.Trophic.E, Salinity.BF.richness)
   
   # join with observed, take residuals for raw/pred metrics
   d.results <- d.results %>% 
     left_join(d.predmet, by = 'SampleID') %>%
     mutate(
-      prop.spp.BCG12_mod = prop.spp.BCG12_raw - prop.spp.BCG12_pred, 
-      prop.spp.Salinity.BF_mod = prop.spp.Salinity.BF_raw - prop.spp.Salinity.BF_pred, 
-      prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E_pred
+      cnt.spp.most.tol_mod = cnt.spp.most.tol_raw - cnt.spp.most.tol_pred,
+      EpiRho.richness_mod = EpiRho.richness_raw - EpiRho.richness_pred,
+      prop.spp.IndicatorClass_TN_low_mod = prop.spp.IndicatorClass_TN_low_raw - prop.spp.IndicatorClass_TN_low_pred,
+      prop.spp.Planktonic_mod = prop.spp.Planktonic_raw - prop.spp.Planktonic_pred,
+      prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E_pred,
+      Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness_pred
     ) %>% 
     column_to_rownames('SampleID')
   
   # final selection
   colsel <- names(d.results) %in% d.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(d.results)) | grepl('pred',
-                                                                                                               names(d.results))
+                                                                                                                names(d.results))
   d.results <- d.results[, colsel] %>% 
     rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
   d.results <- chkmt(d.results)
@@ -194,12 +219,13 @@ mmifun <- function(taxa, station){
     select(SampleID, sba.win) %>%
     filter(SampleID %in% rownames(bugs.sba.m)) %>% 
     mutate(
-      pcnt.attributed.cnt.spp.IndicatorClass_DOC_high = cnt.spp.IndicatorClass_DOC_high/richness,
-      pcnt.attributed.prop.spp.BCG45 = prop.spp.BCG45/richness,
-      pcnt.attributed.prop.spp.Green = prop.spp.Green/richness
-    )  # %>% 
-     # select(-c('foo'))  # mystery line 
-  names(sba.results) <- paste0(names(sba.results), '_raw') 
+      pcnt.attributed.prop.spp.IndicatorClass_DOC_high = prop.spp.IndicatorClass_DOC_high/richness,
+      pcnt.attributed.prop.spp.IndicatorClass_NonRef = prop.spp.IndicatorClass_NonRef/richness,
+      pcnt.attributed.prop.spp.IndicatorClass_TP_high = prop.spp.IndicatorClass_TP_high/richness, 
+      pcnt.attributed.prop.spp.ZHR_raw = prop.spp.ZHR_raw/richness
+    )   %>% 
+    # select(-c('foo'))  # mystery line 
+    names(sba.results) <- paste0(names(sba.results), '_raw') 
   sba.results <- sba.results %>% 
     rename(
       NumberTaxa = richness_raw, 
@@ -217,19 +243,31 @@ mmifun <- function(taxa, station){
   ##
   # hybrid
   
-  # hybrid.win.suf<-c("OxyRed.DO_30.richness_mod","prop.spp.BCG4_mod","prop.spp.IndicatorClass_DOC_high_raw", "Salinity.BF.richness_mod")
+  hybrid.win.suf<-c("cnt.spp.IndicatorClass_TP_high_mod",
+                    "cnt.spp.most.tol_mod",
+                    "EpiRho.richness_mod",
+                    "OxyRed.DO_30.richness_mod",
+                    "prop.spp.Planktonic_mod",
+                    "prop.spp.Trophic.E_mod",
+                    "prop.spp.ZHR_raw",
+                    "Salinity.BF.richness_mod")
   
   # get observed hybrid results and percent attributed
   hybrid.results <- hybrid.metrics %>% 
     select(SampleID, hybrid.win) %>%
     filter(SampleID %in% rownames(bugs.hybrid.m)) %>% 
     mutate(
+      pcnt.attributed.cnt.spp.IndicatorClass_TP_high = cnt.spp.IndicatorClass_TP_high/richness,
+      pcnt.attributed.cnt.spp.most.tol = cnt.spp.most.tol/richness,
+      pcnt.attributed.EpiRho.richness = EpiRho.richness/richness,
       pcnt.attributed.OxyRed.DO_30.richness = OxyRed.DO_30.richness/richness,
-      pcnt.attributed.prop.spp.BCG4 = prop.spp.BCG4/richness,
-      pcnt.attributed.prop.spp.IndicatorClass_DOC_high = prop.spp.IndicatorClass_DOC_high/richness,
+      pcnt.attributed.prop.spp.Planktonic = prop.spp.Planktonic/richness,
+      pcnt.attributed.prop.spp.Trophic.E = prop.spp.Trophic.E/richness,
+      pcnt.attributed.prop.spp.ZHR_raw = prop.spp.ZHR_raw/richness,
       pcnt.attributed.Salinity.BF.richness = Salinity.BF.richness/richness
+      
     ) #  %>% 
-    # select(-c('OxyRed.DO_30.richness', 'prop.spp.BCG4', 'Salinity.BF.richness')) # mystery line 
+  # select(-c('OxyRed.DO_30.richness', 'prop.spp.BCG4', 'Salinity.BF.richness')) # mystery line 
   names(hybrid.results) <- paste0(names(hybrid.results), '_raw') 
   hybrid.results <- hybrid.results %>% 
     rename(
@@ -240,22 +278,33 @@ mmifun <- function(taxa, station){
   # predicted hybrid metrics
   hybrid.predmet <- stationid %>% 
     mutate(
-      OxyRed.DO_30.richness_pred = predict(rfmods$hybrid.OxyRed.DO_30.richness, newdata = .[, c("AtmCa","PPT_00_09")]), 
-      prop.spp.BCG4_pred = predict(rfmods$hybrid.prop.spp.BCG4, newdata = .[, c("MAX_ELEV","CondQR50")]), 
+      cnt.spp.IndicatorClass_TP_high_pred = predict(rfmods$hybrid.cnt.spp.IndicatorClass_TP_high, newdata = .[, c("PPT_00_09", "KFCT_AVE")]), 
+      cnt.spp.most.tol_pred = predict(rfmods$hybrid.cnt.spp.most.tol, newdata = .[, c("CondQR50", "XerMtn")]), 
+      EpiRho.richness_pred = predict(rfmods$hybrid.EpiRho.richness, newdata = .[, c("AREA_SQKM", "TMAX_WS")]), 
+      OxyRed.DO_30.richness_pred = predict(rfmods$hybrid.OxyRed.DO_30.richness, newdata = .[, c("AtmCa", "PPT_00_09")]), 
+      prop.spp.Planktonic_pred = predict(rfmods$hybrid.prop.spp.Planktonic, newdata = .[, c("CondQR50", "SITE_ELEV")]), 
+      prop.spp.Trophic.E_pred = predict(rfmods$hybrid.prop.spp.Trophic.E, newdata = .[, c("CondQR50", "KFCT_AVE")]), 
       Salinity.BF.richness_pred = predict(rfmods$hybrid.Salinity.BF.richness, newdata = .[, c("XerMtn", "KFCT_AVE")]) 
+      
     ) %>% 
-    select(SampleID, OxyRed.DO_30.richness_pred, prop.spp.BCG4_pred, Salinity.BF.richness_pred)
+    select(SampleID, cnt.spp.IndicatorClass_TP_high_pred,cnt.spp.most.tol_pred,EpiRho.richness_pred, 
+           OxyRed.DO_30.richness_pred,prop.spp.Planktonic_pred,prop.spp.Trophic.E_pred,Salinity.BF.richness_pred )
   
   # join with observed, take residuals for raw/pred metrics
   hybrid.results <- hybrid.results %>% 
     left_join(hybrid.predmet, by = 'SampleID') %>%
     mutate(
+      cnt.spp.IndicatorClass_TP_high_mod = cnt.spp.IndicatorClass_TP_high_raw - cnt.spp.IndicatorClass_TP_high_pred, 
+      cnt.spp.most.tol_mod = cnt.spp.most.tol_raw - cnt.spp.most.tol_pred, 
+      EpiRho.richness_mod = EpiRho.richness_raw - EpiRho.richness_pred, 
       OxyRed.DO_30.richness_mod = OxyRed.DO_30.richness_raw - OxyRed.DO_30.richness_pred, 
-      prop.spp.BCG4_mod = prop.spp.BCG4_raw - prop.spp.BCG4_pred, 
+      prop.spp.Planktonic_mod = prop.spp.Planktonic_raw - prop.spp.Planktonic_pred, 
+      prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E_pred, 
       Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness_pred
+      
     ) %>% 
     column_to_rownames('SampleID') # %>% 
-    # select_at(vars(-contains('pred')))
+  # select_at(vars(-contains('pred')))
   
   # final selection
   colsel <- names(hybrid.results) %in% hybrid.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(hybrid.results)) | grepl('pred', names(hybrid.results))
