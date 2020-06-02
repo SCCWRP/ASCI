@@ -161,12 +161,12 @@ mmifun <- function(taxa, station){
     select(SampleID, d.win) %>%
     filter(SampleID %in% rownames(bugs.d.m)) %>%
     mutate(
-      pcnt.attributed.cnt.spp.most.tol =  cnt.spp.most.tol/richness,
-      pcnt.attributed.EpiRho.richness =  EpiRho.richness/richness,
-      pcnt.attributed.prop.spp.IndicatorClass_TN_low =  prop.spp.IndicatorClass_TN_low/richness,
-      pcnt.attributed.prop.spp.Planktonic =  prop.spp.Planktonic/richness,
-      pcnt.attributed.prop.spp.Trophic.E =  prop.spp.Trophic.E/richness,
-      pcnt.attributed.Salinity.BF.richness =  Salinity.BF.richness/richness
+      pcnt.attributed.cnt.spp.most.tol =  cnt.spp.most.tol/100,
+      pcnt.attributed.EpiRho.richness =  EpiRho.richness/100,
+      pcnt.attributed.prop.spp.IndicatorClass_TN_low =  prop.spp.IndicatorClass_TN_low/100,
+      pcnt.attributed.prop.spp.Planktonic =  prop.spp.Planktonic/100,
+      pcnt.attributed.prop.spp.Trophic.E =  prop.spp.Trophic.E/100,
+      pcnt.attributed.Salinity.BF.richness =  Salinity.BF.richness/100
       
     )  # %>% 
   
@@ -219,10 +219,10 @@ mmifun <- function(taxa, station){
     select(SampleID, sba.win) %>%
     filter(SampleID %in% rownames(bugs.sba.m)) %>% 
     mutate(
-      pcnt.attributed.prop.spp.IndicatorClass_DOC_high = prop.spp.IndicatorClass_DOC_high/richness,
-      pcnt.attributed.prop.spp.IndicatorClass_NonRef = prop.spp.IndicatorClass_NonRef/richness,
-      pcnt.attributed.prop.spp.IndicatorClass_TP_high = prop.spp.IndicatorClass_TP_high/richness, 
-      pcnt.attributed.prop.spp.ZHR_raw = prop.spp.ZHR_raw/richness
+      pcnt.attributed.prop.spp.IndicatorClass_DOC_high = prop.spp.IndicatorClass_DOC_high/100,
+      pcnt.attributed.prop.spp.IndicatorClass_NonRef = prop.spp.IndicatorClass_NonRef/100,
+      pcnt.attributed.prop.spp.IndicatorClass_TP_high = prop.spp.IndicatorClass_TP_high/100, 
+      pcnt.attributed.prop.spp.ZHR_raw = prop.spp.ZHR_raw/100
     )   %>% 
     # select(-c('foo'))  # mystery line 
     names(sba.results) <- paste0(names(sba.results), '_raw') 
@@ -257,14 +257,14 @@ mmifun <- function(taxa, station){
     select(SampleID, hybrid.win) %>%
     filter(SampleID %in% rownames(bugs.hybrid.m)) %>% 
     mutate(
-      pcnt.attributed.cnt.spp.IndicatorClass_TP_high = cnt.spp.IndicatorClass_TP_high/richness,
-      pcnt.attributed.cnt.spp.most.tol = cnt.spp.most.tol/richness,
-      pcnt.attributed.EpiRho.richness = EpiRho.richness/richness,
-      pcnt.attributed.OxyRed.DO_30.richness = OxyRed.DO_30.richness/richness,
-      pcnt.attributed.prop.spp.Planktonic = prop.spp.Planktonic/richness,
-      pcnt.attributed.prop.spp.Trophic.E = prop.spp.Trophic.E/richness,
-      pcnt.attributed.prop.spp.ZHR_raw = prop.spp.ZHR_raw/richness,
-      pcnt.attributed.Salinity.BF.richness = Salinity.BF.richness/richness
+      pcnt.attributed.cnt.spp.IndicatorClass_TP_high = cnt.spp.IndicatorClass_TP_high/100,
+      pcnt.attributed.cnt.spp.most.tol = cnt.spp.most.tol/100,
+      pcnt.attributed.EpiRho.richness = EpiRho.richness/100,
+      pcnt.attributed.OxyRed.DO_30.richness = OxyRed.DO_30.richness/100,
+      pcnt.attributed.prop.spp.Planktonic = prop.spp.Planktonic/100,
+      pcnt.attributed.prop.spp.Trophic.E = prop.spp.Trophic.E/100,
+      pcnt.attributed.prop.spp.ZHR_raw = prop.spp.ZHR_raw/100,
+      pcnt.attributed.Salinity.BF.richness = Salinity.BF.richness/100
       
     ) #  %>% 
   # select(-c('OxyRed.DO_30.richness', 'prop.spp.BCG4', 'Salinity.BF.richness')) # mystery line 
