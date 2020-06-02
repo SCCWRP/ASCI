@@ -173,7 +173,8 @@ mmifun <- function(taxa, station){
   names(d.results) <- paste0(names(d.results), '_raw') 
   d.results <- d.results %>% 
     dplyr::rename(
-      NumberTaxa = richness, 
+      #NumberTaxa = richness_raw,
+      NumberTaxa = 10,
       SampleID = SampleID_raw
     )
   
@@ -228,7 +229,8 @@ mmifun <- function(taxa, station){
     names(sba.results) <- paste0(names(sba.results), '_raw') 
   sba.results <- sba.results %>% 
     rename(
-      NumberTaxa = richness, 
+      #NumberTaxa = richness_raw, 
+      NumberTaxa = 10,
       SampleID = SampleID_raw
     ) %>% 
     column_to_rownames('SampleID')
@@ -271,7 +273,8 @@ mmifun <- function(taxa, station){
   names(hybrid.results) <- paste0(names(hybrid.results), '_raw') 
   hybrid.results <- hybrid.results %>% 
     rename(
-      NumberTaxa = richness, 
+      #NumberTaxa = richness_raw,
+      NumberTaxa = 10,
       SampleID = SampleID_raw
     )
   
