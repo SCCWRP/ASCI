@@ -161,11 +161,11 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     cnt.spp.Planktonic="sum(na.omit(Habitat=='P'))", 
     cnt.spp.least.tol="sum(na.omit(designation=='Reference'))", #cnt of species that are least tolerant
     cnt.spp.most.tol="sum(na.omit(designation=='Stressed'))", #cnt of species that are most tolerant
-    cnt.spp.BCG1="sum(na.omit(BCG=='1'))", #count of BCG 1 - species
-    cnt.spp.BCG2="sum(na.omit(BCG=='2'))", #count of BCG 2 - species
-    cnt.spp.BCG3="sum(na.omit(BCG=='3'))", #count of BCG 3 - species
-    cnt.spp.BCG4="sum(na.omit(BCG=='4'))", #count of BCG 4 - species
-    cnt.spp.BCG5="sum(na.omit(BCG=='5'))", #count of BCG 5 - species
+    #cnt.spp.BCG1="sum(na.omit(BCG=='1'))", #count of BCG 1 - species
+    #cnt.spp.BCG2="sum(na.omit(BCG=='2'))", #count of BCG 2 - species
+    #cnt.spp.BCG3="sum(na.omit(BCG=='3'))", #count of BCG 3 - species
+    #cnt.spp.BCG4="sum(na.omit(BCG=='4'))", #count of BCG 4 - species
+    #cnt.spp.BCG5="sum(na.omit(BCG=='5'))", #count of BCG 5 - species
     #cnt.spp.BCG6="sum(na.omit(BCG=='6'))", #count of BCG 6 - species
     #cnt.spp.BCG12="sum(na.omit(BCG %in% c('1', '2')))", 
     #cnt.spp.BCG45="sum(na.omit(BCG %in% c('4', '5')))", 
@@ -234,14 +234,14 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     prop.spp.least.tol="sum(na.omit(designation=='Reference'))/length(na.omit(designation))", #proportion of species that are least tolerant
     prop.spp.most.tol="sum(na.omit(designation=='Stressed'))/length(na.omit(designation))", #proportion of species that are most tolerant
     
-    prop.spp.BCG1="sum(na.omit(BCG=='1'))/length(na.omit(BCG))", #proportion of BCG 1 - species
-    prop.spp.BCG2="sum(na.omit(BCG=='2'))/length(na.omit(BCG))", #proportion of BCG 2 - species
-    prop.spp.BCG3="sum(na.omit(BCG=='3'))/length(na.omit(BCG))", #proportion of BCG 3 - species
-    prop.spp.BCG4="sum(na.omit(BCG=='4'))/length(na.omit(BCG))", #proportion of BCG 4 - species
-    prop.spp.BCG5="sum(na.omit(BCG=='5'))/length(na.omit(BCG))", #proportion of BCG 5 - species
-    prop.spp.BCG6="sum(na.omit(BCG=='6'))/length(na.omit(BCG))", #proportion of BCG 6 - species
-    prop.spp.BCG12="sum(na.omit(BCG %in% c('1', '2')))/length(na.omit(BCG))", 
-    prop.spp.BCG45="sum(na.omit(BCG %in% c('4', '5')))/length(na.omit(BCG))", 
+    #prop.spp.BCG1="sum(na.omit(BCG=='1'))/length(na.omit(BCG))", #proportion of BCG 1 - species
+    #prop.spp.BCG2="sum(na.omit(BCG=='2'))/length(na.omit(BCG))", #proportion of BCG 2 - species
+    #prop.spp.BCG3="sum(na.omit(BCG=='3'))/length(na.omit(BCG))", #proportion of BCG 3 - species
+    #prop.spp.BCG4="sum(na.omit(BCG=='4'))/length(na.omit(BCG))", #proportion of BCG 4 - species
+    #prop.spp.BCG5="sum(na.omit(BCG=='5'))/length(na.omit(BCG))", #proportion of BCG 5 - species
+    #prop.spp.BCG6="sum(na.omit(BCG=='6'))/length(na.omit(BCG))", #proportion of BCG 6 - species
+    #prop.spp.BCG12="sum(na.omit(BCG %in% c('1', '2')))/length(na.omit(BCG))", 
+    #prop.spp.BCG45="sum(na.omit(BCG %in% c('4', '5')))/length(na.omit(BCG))", 
     
     prop.spp.IndicatorClass_TP_high="sum(na.omit(IndicatorClass_TP=='high'))/length(na.omit(IndicatorClass_TP))", 
     prop.spp.IndicatorClass_TP_low="sum(na.omit(IndicatorClass_TP=='low'))/length(na.omit(IndicatorClass_TP))", 
