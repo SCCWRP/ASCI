@@ -167,8 +167,8 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     cnt.spp.BCG4="sum(na.omit(BCG=='4'))", #count of BCG 4 - species
     cnt.spp.BCG5="sum(na.omit(BCG=='5'))", #count of BCG 5 - species
     cnt.spp.BCG6="sum(na.omit(BCG=='6'))", #count of BCG 6 - species
-    cnt.spp.BCG12="sum(na.omit(BCG %in% c('1', "2")))", 
-    cnt.spp.BCG45="sum(na.omit(BCG %in% c('4', "5")))", 
+    cnt.spp.BCG12="sum(na.omit(BCG %in% c('1', '2')))", 
+    cnt.spp.BCG45="sum(na.omit(BCG %in% c('4', '5')))", 
     
     # proportion -----------------------------------
     prop.spp.OrgN.NAHON="sum(na.omit(NitrogenUptakeMetabolism=='NAHON'))/length(na.omit(NitrogenUptakeMetabolism))", #proportion of NAHON - species
