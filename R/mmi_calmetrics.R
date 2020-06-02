@@ -240,8 +240,8 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     prop.spp.BCG4="sum(na.omit(BCG=='4'))/length(na.omit(BCG))", #proportion of BCG 4 - species
     prop.spp.BCG5="sum(na.omit(BCG=='5'))/length(na.omit(BCG))", #proportion of BCG 5 - species
     prop.spp.BCG6="sum(na.omit(BCG=='6'))/length(na.omit(BCG))", #proportion of BCG 6 - species
-    prop.spp.BCG12="sum(na.omit(BCG %in% c('1', "2")))/length(na.omit(BCG))", 
-    prop.spp.BCG45="sum(na.omit(BCG %in% c('4', "5")))/length(na.omit(BCG))", 
+    prop.spp.BCG12="sum(na.omit(BCG %in% c('1', '2')))/length(na.omit(BCG))", 
+    prop.spp.BCG45="sum(na.omit(BCG %in% c('4', '5')))/length(na.omit(BCG))", 
     
     prop.spp.IndicatorClass_TP_high="sum(na.omit(IndicatorClass_TP=='high'))/length(na.omit(IndicatorClass_TP))", 
     prop.spp.IndicatorClass_TP_low="sum(na.omit(IndicatorClass_TP=='low'))/length(na.omit(IndicatorClass_TP))", 
