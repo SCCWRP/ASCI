@@ -186,7 +186,7 @@ chkinp <- function(taxa, station, getval = FALSE){
                 "KFCT_AVE",
                 "XerMtn",
                 "PPT_00_09",
-                "CondQR50",
+                #"CondQR50",
                 "TMAX_WS",
                 "MAX_ELEV",
                 "SITE_ELEV",
