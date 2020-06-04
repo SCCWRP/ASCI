@@ -184,7 +184,7 @@ chkinp <- function(taxa, station, getval = FALSE){
   regvals <- c("StationCode", 
                "AREA_SQKM",
                 "KFCT_AVE",
-                "XerMtn",
+                #"XerMtn",
                 "PPT_00_09",
                 #"CondQR50",
                 "TMAX_WS",
