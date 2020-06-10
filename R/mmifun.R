@@ -189,8 +189,8 @@ mmifun <- function(taxa, station){
       Salinity.BF.richness_pred = predict(rfmods$diatoms.Salinity.BF.richness,newdata = .[,c("XerMtn","KFCT_AVE","CondQR50")])
     ) %>% 
     select(SampleID, 
-           cnt.spp.most.tol, EpiRho.richness, prop.spp.IndicatorClass_TN_low, 
-           prop.spp.Planktonic, prop.spp.Trophic.E, Salinity.BF.richness)
+           cnt.spp.most.tol_pred, EpiRho.richness_pred, prop.spp.IndicatorClass_TN_low_pred, 
+           prop.spp.Planktonic_pred, prop.spp.Trophic.E_pred, Salinity.BF.richness_pred)
   
   # join with observed, take residuals for raw/pred metrics
   d.results <- d.results %>% 
@@ -224,7 +224,7 @@ mmifun <- function(taxa, station){
       pcnt.attributed.prop.spp.IndicatorClass_NonRef = prop.spp.IndicatorClass_NonRef/100,
       pcnt.attributed.prop.spp.IndicatorClass_TP_high = prop.spp.IndicatorClass_TP_high/100, 
       pcnt.attributed.prop.spp.ZHR_raw = prop.spp.ZHR_raw/100
-    )   %>% 
+    )  # %>% 
     # select(-c('foo'))  # mystery line 
     names(sba.results) <- paste0(names(sba.results), '_raw') 
   sba.results <- sba.results %>% 
