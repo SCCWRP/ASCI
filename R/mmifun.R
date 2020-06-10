@@ -216,6 +216,8 @@ mmifun <- function(taxa, station){
   # sba, no predicted metrics
   
   # get observed soft-bodied metrics and percent attributed  
+  print("# get observed soft-bodied metrics and percent attributed")
+  #view(sba.metrics)
   sba.results <- sba.metrics %>% 
     select(SampleID, sba.win) %>%
     filter(SampleID %in% rownames(bugs.sba.m)) %>% 
@@ -223,25 +225,30 @@ mmifun <- function(taxa, station){
       pcnt.attributed.prop.spp.IndicatorClass_DOC_high = prop.spp.IndicatorClass_DOC_high/100,
       pcnt.attributed.prop.spp.IndicatorClass_NonRef = prop.spp.IndicatorClass_NonRef/100,
       pcnt.attributed.prop.spp.IndicatorClass_TP_high = prop.spp.IndicatorClass_TP_high/100, 
-      pcnt.attributed.prop.spp.ZHR_raw = prop.spp.ZHR_raw/100
+      pcnt.attributed.prop.spp.ZHR_raw = prop.spp.ZHR/100 # prop.spp.ZHR_raw wasn't a column
     )  # %>% 
     # select(-c('foo'))  # mystery line 
+
     names(sba.results) <- paste0(names(sba.results), '_raw') 
+
+    view(sba.results)
   sba.results <- sba.results %>% 
     rename(
       #NumberTaxa = richness_raw, 
-      NumberTaxa = 10,
+      #NumberTaxa = 10, # not sure why this line was here, it didn't like it
+      # Thought we were taking the 10th column and renaming it to NumberTaxa
       SampleID = SampleID_raw
     ) %>% 
     column_to_rownames('SampleID')
-  
+
   # final selection
   colsel <- names(sba.results) %in% sba.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(sba.results)) | grepl('pred',
                                                                                                                       names(sba.results))
+
   sba.results <- sba.results[, colsel] %>% 
     rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
   sba.results <- chkmt(sba.results)
-  
+
   ##
   # hybrid
   
@@ -265,7 +272,7 @@ mmifun <- function(taxa, station){
       pcnt.attributed.OxyRed.DO_30.richness = OxyRed.DO_30.richness/100,
       pcnt.attributed.prop.spp.Planktonic = prop.spp.Planktonic/100,
       pcnt.attributed.prop.spp.Trophic.E = prop.spp.Trophic.E/100,
-      pcnt.attributed.prop.spp.ZHR_raw = prop.spp.ZHR_raw/100,
+      pcnt.attributed.prop.spp.ZHR_raw = prop.spp.ZHR/100, # prop.spp.ZHR_raw wasn't a column
       pcnt.attributed.Salinity.BF.richness = Salinity.BF.richness/100
       
     ) #  %>% 
@@ -274,13 +281,18 @@ mmifun <- function(taxa, station){
   hybrid.results <- hybrid.results %>% 
     rename(
       #NumberTaxa = richness_raw,
-      NumberTaxa = 10,
+      #NumberTaxa = 10,# not sure why this line was here, it didn't like it
+      # Thought we were taking the 10th column and renaming it to NumberTaxa
       SampleID = SampleID_raw
     )
   
   # predicted hybrid metrics
+  print(rfmods)
+  print(rfmods$hybrid.cnt.spp.IndicatorClass_TP_high)
   hybrid.predmet <- stationid %>% 
     mutate(
+      # hybrid.cnt.spp.IndicatorClass_TP_high is supposed to be a randomForest model object thing
+      # However, right now it is saying that it is NULL........
       cnt.spp.IndicatorClass_TP_high_pred = predict(rfmods$hybrid.cnt.spp.IndicatorClass_TP_high, newdata = .[, c("PPT_00_09", "KFCT_AVE")]), 
       cnt.spp.most.tol_pred = predict(rfmods$hybrid.cnt.spp.most.tol, newdata = .[, c("CondQR50", "XerMtn")]), 
       EpiRho.richness_pred = predict(rfmods$hybrid.EpiRho.richness, newdata = .[, c("AREA_SQKM", "TMAX_WS")]), 
