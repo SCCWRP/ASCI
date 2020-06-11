@@ -308,7 +308,7 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
   out <- metrics %>% 
     # mutate_at('SampleID', as.character) %>% 
     left_join(specialty_metrics, by = 'SampleID')
-  
+
   return(out)
 }
 

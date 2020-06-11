@@ -117,11 +117,17 @@ mmifun <- function(taxa, station){
            "prop.spp.IndicatorClass_TN_low",
            "prop.spp.Planktonic",
            "prop.spp.Trophic.E",
-           "Salinity.BF.richness")
+           "Salinity.BF.richness",
+           "shannon",
+           "simpson",
+           "richness")
   sba.win<-c("prop.spp.IndicatorClass_DOC_high",
              "prop.spp.IndicatorClass_NonRef",
              "prop.spp.IndicatorClass_TP_high",
-             "prop.spp.ZHR")
+             "prop.spp.ZHR",
+             "shannon",
+             "simpson",
+             "richness")
   hybrid.win<-c("cnt.spp.IndicatorClass_TP_high",
                 "cnt.spp.most.tol",
                 "EpiRho.richness",
@@ -129,7 +135,10 @@ mmifun <- function(taxa, station){
                 "prop.spp.Planktonic",
                 "prop.spp.Trophic.E",
                 "prop.spp.ZHR",
-                "Salinity.BF.richness")
+                "Salinity.BF.richness",
+                "shannon",
+                "simpson",
+                "richness")
   
   # names with suffix mod or raw
   
@@ -171,10 +180,10 @@ mmifun <- function(taxa, station){
     )  # %>% 
   
   names(d.results) <- paste0(names(d.results), '_raw') 
+
   d.results <- d.results %>% 
     dplyr::rename(
-      #NumberTaxa = richness_raw,
-      NumberTaxa = 10,
+      NumberTaxa = richness_raw,
       SampleID = SampleID_raw
     )
   
@@ -211,13 +220,12 @@ mmifun <- function(taxa, station){
   d.results <- d.results[, colsel] %>% 
     rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
   d.results <- chkmt(d.results)
-  
+
   ##
   # sba, no predicted metrics
   
   # get observed soft-bodied metrics and percent attributed  
-  print("# get observed soft-bodied metrics and percent attributed")
-  #view(sba.metrics)
+
   sba.results <- sba.metrics %>% 
     select(SampleID, sba.win) %>%
     filter(SampleID %in% rownames(bugs.sba.m)) %>% 
@@ -231,12 +239,11 @@ mmifun <- function(taxa, station){
 
     names(sba.results) <- paste0(names(sba.results), '_raw') 
 
-    view(sba.results)
+
   sba.results <- sba.results %>% 
     rename(
-      #NumberTaxa = richness_raw, 
-      #NumberTaxa = 10, # not sure why this line was here, it didn't like it
-      # Thought we were taking the 10th column and renaming it to NumberTaxa
+      NumberTaxa = richness_raw, 
+      #NumberTaxa = 10, 
       SampleID = SampleID_raw
     ) %>% 
     column_to_rownames('SampleID')
@@ -280,15 +287,13 @@ mmifun <- function(taxa, station){
   names(hybrid.results) <- paste0(names(hybrid.results), '_raw') 
   hybrid.results <- hybrid.results %>% 
     rename(
-      #NumberTaxa = richness_raw,
-      #NumberTaxa = 10,# not sure why this line was here, it didn't like it
-      # Thought we were taking the 10th column and renaming it to NumberTaxa
+      NumberTaxa = richness_raw,
+      #NumberTaxa = 10,
       SampleID = SampleID_raw
     )
   
   # predicted hybrid metrics
-  print(rfmods)
-  print(rfmods$hybrid.cnt.spp.IndicatorClass_TP_high)
+  
   hybrid.predmet <- stationid %>% 
     mutate(
       # hybrid.cnt.spp.IndicatorClass_TP_high is supposed to be a randomForest model object thing
