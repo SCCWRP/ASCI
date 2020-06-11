@@ -1,0 +1,19 @@
+﻿Assemblage,Metrics,Metrics1,Metrics2,PredVars,RefCalMean,Pred,rfmods,StressResponse
+diatoms,cnt.spp.most.tol,diatoms.cnt.spp.most.tol,"""cnt.spp.most.tol"",","c(""XerMtn"",""PPT_00_09"")",0.752705813,pred,\item{\code{diatoms.cnt.spp.most.tol}}{randomForest},inc
+diatoms,EpiRho.richness,diatoms.EpiRho.richness,"""EpiRho.richness"",","c(""AREA_SQKM"",""TMAX_WS"")",0.752705813,pred,\item{\code{diatoms.EpiRho.richness}}{randomForest},dec
+diatoms,prop.spp.IndicatorClass_TN_low,diatoms.prop.spp.IndicatorClass_TN_low,"""prop.spp.IndicatorClass_TN_low"",","c(""CondQR50"",""MAX_ELEV"")",0.752705813,pred,\item{\code{diatoms.prop.spp.IndicatorClass_TN_low}}{randomForest},dec
+diatoms,prop.spp.Planktonic,diatoms.prop.spp.Planktonic,"""prop.spp.Planktonic"",","c(""CondQR50"",""SITE_ELEV"")",0.752705813,pred,\item{\code{diatoms.prop.spp.Planktonic}}{randomForest},inc
+diatoms,prop.spp.Trophic.E,diatoms.prop.spp.Trophic.E,"""prop.spp.Trophic.E"",","c(""KFCT_AVE"",""CondQR50"")",0.752705813,pred,\item{\code{diatoms.prop.spp.Trophic.E}}{randomForest},inc
+diatoms,Salinity.BF.richness,diatoms.Salinity.BF.richness,"""Salinity.BF.richness"",","c(""XerMtn"",""KFCT_AVE"",""CondQR50"")",0.752705813,pred,\item{\code{diatoms.Salinity.BF.richness}}{randomForest},inc
+hybrid,cnt.spp.IndicatorClass_TP_high,hybrid.cnt.spp.IndicatorClass_TP_high,"""cnt.spp.IndicatorClass_TP_high"",","c(""PPT_00_09"", ""KFCT_AVE"")",0.73063118,pred,\item{\code{hybrid.cnt.spp.IndicatorClass_TP_high}}{randomForest},inc
+hybrid,cnt.spp.most.tol,hybrid.cnt.spp.most.tol,"""cnt.spp.most.tol"",","c(""CondQR50"", ""XerMtn"")",0.73063118,pred,\item{\code{hybrid.cnt.spp.most.tol}}{randomForest},inc
+hybrid,EpiRho.richness,hybrid.EpiRho.richness,"""EpiRho.richness"",","c(""AREA_SQKM"", ""TMAX_WS"")",0.73063118,pred,\item{\code{hybrid.EpiRho.richness}}{randomForest},dec
+hybrid,OxyRed.DO_30.richness,hybrid.OxyRed.DO_30.richness,"""OxyRed.DO_30.richness"",","c(""AtmCa"", ""PPT_00_09"")",0.73063118,pred,\item{\code{hybrid.OxyRed.DO_30.richness}}{randomForest},inc
+hybrid,prop.spp.Planktonic,hybrid.prop.spp.Planktonic,"""prop.spp.Planktonic"",","c(""CondQR50"", ""SITE_ELEV"")",0.73063118,pred,\item{\code{hybrid.prop.spp.Planktonic}}{randomForest},inc
+hybrid,prop.spp.Trophic.E,hybrid.prop.spp.Trophic.E,"""prop.spp.Trophic.E"",","c(""CondQR50"", ""KFCT_AVE"")",0.73063118,pred,\item{\code{hybrid.prop.spp.Trophic.E}}{randomForest},inc
+hybrid,prop.spp.ZHR_raw,hybrid.prop.spp.ZHR_raw,"""prop.spp.ZHR_raw"",",,0.73063118,raw,,dec
+hybrid,Salinity.BF.richness,hybrid.Salinity.BF.richness,"""Salinity.BF.richness"",","c(""XerMtn"", ""KFCT_AVE"")",0.73063118,pred,\item{\code{hybrid.Salinity.BF.richness}}{randomForest},inc
+sba,prop.spp.IndicatorClass_DOC_high_raw,sba.prop.spp.IndicatorClass_DOC_high_raw,"""prop.spp.IndicatorClass_DOC_high_raw"",",,0.70994176,raw,\item{\code{sba.prop.spp.IndicatorClass_DOC_high_raw}}{randomForest},inc
+sba,prop.spp.IndicatorClass_NonRef_raw,sba.prop.spp.IndicatorClass_NonRef_raw,"""prop.spp.IndicatorClass_NonRef_raw"",",,0.70994176,raw,,inc
+sba,prop.spp.IndicatorClass_TP_high_raw,sba.prop.spp.IndicatorClass_TP_high_raw,"""prop.spp.IndicatorClass_TP_high_raw"",",,0.70994176,raw,,inc
+sba,prop.spp.ZHR_raw,sba.prop.spp.ZHR_raw,"""prop.spp.ZHR_raw"",",,0.70994176,raw,,dec
