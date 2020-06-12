@@ -180,7 +180,7 @@ mmifun <- function(taxa, station){
     )  # %>% 
   
   names(d.results) <- paste0(names(d.results), '_raw') 
-
+  
   d.results <- d.results %>% 
     dplyr::rename(
       NumberTaxa = richness_raw,
@@ -220,12 +220,12 @@ mmifun <- function(taxa, station){
   d.results <- d.results[, colsel] %>% 
     rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
   d.results <- chkmt(d.results)
-
+  
   ##
   # sba, no predicted metrics
   
   # get observed soft-bodied metrics and percent attributed  
-
+  
   sba.results <- sba.metrics %>% 
     select(SampleID, sba.win) %>%
     filter(SampleID %in% rownames(bugs.sba.m)) %>% 
@@ -235,11 +235,11 @@ mmifun <- function(taxa, station){
       pcnt.attributed.prop.spp.IndicatorClass_TP_high = prop.spp.IndicatorClass_TP_high/100, 
       pcnt.attributed.prop.spp.ZHR_raw = prop.spp.ZHR/100 # prop.spp.ZHR_raw wasn't a column
     )  # %>% 
-    # select(-c('foo'))  # mystery line 
-
-    names(sba.results) <- paste0(names(sba.results), '_raw') 
-
-
+  # select(-c('foo'))  # mystery line 
+  
+  names(sba.results) <- paste0(names(sba.results), '_raw') 
+  
+  
   sba.results <- sba.results %>% 
     rename(
       NumberTaxa = richness_raw, 
@@ -247,15 +247,15 @@ mmifun <- function(taxa, station){
       SampleID = SampleID_raw
     ) %>% 
     column_to_rownames('SampleID')
-
+  
   # final selection
   colsel <- names(sba.results) %in% sba.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(sba.results)) | grepl('pred',
                                                                                                                       names(sba.results))
-
+  
   sba.results <- sba.results[, colsel] %>% 
     rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
   sba.results <- chkmt(sba.results)
-
+  
   ##
   # hybrid
   
@@ -353,54 +353,71 @@ mmifun <- function(taxa, station){
     replace(. < 0, 0) %>% 
     select(sort(colnames(.)))
   
-  d.rf.mean <- omni.ref %>%
-    filter(Assemblage == 'diatoms',
-           Metric %in% colnames(d.scored)) %>% 
-    arrange(Metric) %>% 
-    column_to_rownames('Metric') %>% 
-    select(RefCalMean) %>% 
-    t()
+  # d.rf.mean <- omni.ref %>%
+  #   filter(Assemblage == 'diatoms',
+  #          Metric %in% colnames(d.scored)) %>% 
+  #   arrange(Metric) %>% 
+  #   column_to_rownames('Metric') %>% 
+  #   select(RefCalMean) %>% 
+  #   t()
+  # 
+  # sba.rf.mean <- omni.ref %>%
+  #   filter(Assemblage == 'sba',
+  #          Metric %in% colnames(sba.scored)) %>% 
+  #   arrange(Metric) %>% 
+  #   column_to_rownames('Metric') %>% 
+  #   select(RefCalMean) %>% 
+  #   t()
+  # 
+  # hybrid.rf.mean <- omni.ref %>%
+  #   filter(Assemblage == 'hybrid',
+  #          Metric %in% colnames(hybrid.scored)) %>% 
+  #   arrange(Metric) %>% 
+  #   column_to_rownames('Metric') %>% 
+  #   select(RefCalMean) %>% 
+  #   t()
+  # 
   
-  sba.rf.mean <- omni.ref %>%
-    filter(Assemblage == 'sba',
-           Metric %in% colnames(sba.scored)) %>% 
-    arrange(Metric) %>% 
-    column_to_rownames('Metric') %>% 
-    select(RefCalMean) %>% 
-    t()
+  d.rf.mean <- 0.752705813
+  sba.rf.mean <- 0.70994176
+  hybrid.rf.mean <- 0.73063118
   
-  hybrid.rf.mean <- omni.ref %>%
-    filter(Assemblage == 'hybrid',
-           Metric %in% colnames(hybrid.scored)) %>% 
-    arrange(Metric) %>% 
-    column_to_rownames('Metric') %>% 
-    select(RefCalMean) %>% 
-    t()
+  # d.scored.scaled <- d.scored %>% 
+  #   # column_to_rownames() %>% 
+  #   sweep(., MARGIN = 2, FUN = "/",
+  #         STATS = colMeans(d.rf.mean, na.rm = T)) 
+  # if(is.na(bugs.d[1,1])){
+  #   d.scored.scaled <- d.scored.scaled[1,] 
+  #   d.scored.scaled[1,] <- rep(NA)
+  # }
+  # 
+  # sba.scored.scaled <- sba.scored %>% 
+  #   sweep(., MARGIN = 2, FUN = "/",
+  #         STATS = colMeans(sba.rf.mean, na.rm = T))
+  # if(is.na(bugs.sba[1,1])){
+  #   sba.scored.scaled <- sba.scored.scaled[1,]
+  #   sba.scored.scaled[1,] <- rep(NA)
+  # }
+  # 
+  # hybrid.scored.scaled <- hybrid.scored %>% 
+  #   sweep(., MARGIN = 2, FUN="/",
+  #         STATS = colMeans(hybrid.rf.mean, na.rm = T))
+  # if(is.na(bugs[1,1])){
+  #   hybrid.scored.scaled <- hybrid.scored.scaled[1, ]
+  #   hybrid.scored.scaled[1, ] <- rep(NA)
+  # }
   
-  d.scored.scaled <- d.scored %>% 
-    # column_to_rownames() %>% 
-    sweep(., MARGIN = 2, FUN = "/",
-          STATS = colMeans(d.rf.mean, na.rm = T)) 
-  if(is.na(bugs.d[1,1])){
-    d.scored.scaled <- d.scored.scaled[1,] 
-    d.scored.scaled[1,] <- rep(NA)
-  }
+  d.scored$MMI <- rowMeans(d.scored, na.rm = T)
+  sba.scored$MMI <- rowMeans(sba.scored, na.rm = T)
+  hybrid.scored$MMI <- rowMeans(hybrid.scored, na.rm = T) 
+    
+  d.scored$MMI <- d.scored$MMI / d.rf.mean
+  sba.scored$MMI <- sba.scored$MMI / sba.rf.mean
+  hybrid.scored$MMI <- hybrid.scored$MMI / hybrid.rf.mean
   
-  sba.scored.scaled <- sba.scored %>% 
-    sweep(., MARGIN = 2, FUN = "/",
-          STATS = colMeans(sba.rf.mean, na.rm = T))
-  if(is.na(bugs.sba[1,1])){
-    sba.scored.scaled <- sba.scored.scaled[1,]
-    sba.scored.scaled[1,] <- rep(NA)
-  }
-  
-  hybrid.scored.scaled <- hybrid.scored %>% 
-    sweep(., MARGIN = 2, FUN="/",
-          STATS = colMeans(hybrid.rf.mean, na.rm = T))
-  if(is.na(bugs[1,1])){
-    hybrid.scored.scaled <- hybrid.scored.scaled[1, ]
-    hybrid.scored.scaled[1, ] <- rep(NA)
-  }
+  d.scored.scaled<-d.scored
+  sba.scored.scaled<-sba.scored
+  hybrid.scored.scaled<-hybrid.scored
   
   # put all results in long format
   out <- list(
