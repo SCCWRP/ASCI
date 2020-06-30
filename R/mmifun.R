@@ -332,7 +332,7 @@ mmifun <- function(taxa, station){
     rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
   hybrid.results <- chkmt(hybrid.results)
   
-  # Score metrics -----------------------------------------------------------
+  # Score metrics [make from 0 to 1] -----------------------------------------------------------
   
   omni.ref <- mmilkup$omni.ref
   d.scored <- score_metric(taxa = 'diatoms', bugs.d.m, d.results, omni.ref) %>% 
@@ -353,19 +353,21 @@ mmifun <- function(taxa, station){
     replace(. < 0, 0) %>% 
     select(sort(colnames(.)))
   
+  # Find average. Scale index by dividing by refcalmean ----------------------------------
 
-  
-  d.rf.mean <- 0.752705813
-  sba.rf.mean <- 0.70994176
-  hybrid.rf.mean <- 0.73063118
-  
+  # average 
   d.scored$MMI <- rowMeans(d.scored, na.rm = T)
   sba.scored$MMI <- rowMeans(sba.scored, na.rm = T)
   hybrid.scored$MMI <- rowMeans(hybrid.scored, na.rm = T) 
-    
-  d.scored$MMI <- d.scored$MMI / d.rf.mean
-  sba.scored$MMI <- sba.scored$MMI / sba.rf.mean
-  hybrid.scored$MMI <- hybrid.scored$MMI / hybrid.rf.mean
+  
+  # refcalmeans
+  d.rf.mean <- 0.752705813
+  sba.rf.mean <- 0.70994176
+  hybrid.rf.mean <- 0.73063118
+
+  d.scored$D_MMI <- d.scored$MMI / d.rf.mean
+  sba.scored$S_MMI <- sba.scored$MMI / sba.rf.mean
+  hybrid.scored$H_MMI <- hybrid.scored$MMI / hybrid.rf.mean
   
   d.scored.scaled<-d.scored
   sba.scored.scaled<-sba.scored
@@ -374,10 +376,12 @@ mmifun <- function(taxa, station){
   # put all results in long format
   out <- list(
     diatoms_obs = d.results, 
+    diatoms_pred = d.predmet,
     diatoms_scr = d.scored.scaled,
     sba_obs = sba.results,
     sba_scr = sba.scored.scaled,
     hybrid_obs = hybrid.results, 
+    hybrid_pred = hybrid.predmet,
     hybrid_scr = hybrid.scored.scaled
   ) %>% 
     enframe %>% 
@@ -389,15 +393,15 @@ mmifun <- function(taxa, station){
     separate(name, c('taxa', 'results'), sep = '_') 
   
   # get mmi total score
-  mmiout <- out %>% 
-    filter(results %in% 'scr') %>% 
-    group_by(taxa, SampleID) %>% 
-    summarise(
-      ASCI = mean(val)
-    ) %>% 
-    ungroup %>% 
-    split(.$taxa) %>% 
-    map(select, -taxa)
+ # mmiout <- out %>% 
+#    filter(results %in% 'scr') %>% 
+#    group_by(taxa, SampleID) %>% 
+#    summarise(
+#      ASCI = mean(val)
+#    ) %>% 
+#    ungroup %>% 
+#    split(.$taxa) %>% 
+#    map(select, -taxa)
   
   # make out a list
   out <- out %>% 
@@ -411,11 +415,19 @@ mmifun <- function(taxa, station){
     map(spread, met, val)
   
   # list of lists for input to ASCI
+ # out <- list(
+#    diatoms = list(mmiout$diatoms, out$diatoms),
+#    sba = list(mmiout$sba, out$sba),
+#    hybrid = list(mmiout$hybrid, out$hybrid)
+#  )
+  
   out <- list(
-    diatoms = list(mmiout$diatoms, out$diatoms),
-    sba = list(mmiout$sba, out$sba),
-    hybrid = list(mmiout$hybrid, out$hybrid)
+    diatoms = list(out$diatoms),
+    sba = list(out$sba),
+    hybrid = list(out$hybrid)
   )
+  
+  
   
   # assign names to list elements
   out <- out %>% 
