@@ -353,59 +353,11 @@ mmifun <- function(taxa, station){
     replace(. < 0, 0) %>% 
     select(sort(colnames(.)))
   
-  # d.rf.mean <- omni.ref %>%
-  #   filter(Assemblage == 'diatoms',
-  #          Metric %in% colnames(d.scored)) %>% 
-  #   arrange(Metric) %>% 
-  #   column_to_rownames('Metric') %>% 
-  #   select(RefCalMean) %>% 
-  #   t()
-  # 
-  # sba.rf.mean <- omni.ref %>%
-  #   filter(Assemblage == 'sba',
-  #          Metric %in% colnames(sba.scored)) %>% 
-  #   arrange(Metric) %>% 
-  #   column_to_rownames('Metric') %>% 
-  #   select(RefCalMean) %>% 
-  #   t()
-  # 
-  # hybrid.rf.mean <- omni.ref %>%
-  #   filter(Assemblage == 'hybrid',
-  #          Metric %in% colnames(hybrid.scored)) %>% 
-  #   arrange(Metric) %>% 
-  #   column_to_rownames('Metric') %>% 
-  #   select(RefCalMean) %>% 
-  #   t()
-  # 
+
   
   d.rf.mean <- 0.752705813
   sba.rf.mean <- 0.70994176
   hybrid.rf.mean <- 0.73063118
-  
-  # d.scored.scaled <- d.scored %>% 
-  #   # column_to_rownames() %>% 
-  #   sweep(., MARGIN = 2, FUN = "/",
-  #         STATS = colMeans(d.rf.mean, na.rm = T)) 
-  # if(is.na(bugs.d[1,1])){
-  #   d.scored.scaled <- d.scored.scaled[1,] 
-  #   d.scored.scaled[1,] <- rep(NA)
-  # }
-  # 
-  # sba.scored.scaled <- sba.scored %>% 
-  #   sweep(., MARGIN = 2, FUN = "/",
-  #         STATS = colMeans(sba.rf.mean, na.rm = T))
-  # if(is.na(bugs.sba[1,1])){
-  #   sba.scored.scaled <- sba.scored.scaled[1,]
-  #   sba.scored.scaled[1,] <- rep(NA)
-  # }
-  # 
-  # hybrid.scored.scaled <- hybrid.scored %>% 
-  #   sweep(., MARGIN = 2, FUN="/",
-  #         STATS = colMeans(hybrid.rf.mean, na.rm = T))
-  # if(is.na(bugs[1,1])){
-  #   hybrid.scored.scaled <- hybrid.scored.scaled[1, ]
-  #   hybrid.scored.scaled[1, ] <- rep(NA)
-  # }
   
   d.scored$MMI <- rowMeans(d.scored, na.rm = T)
   sba.scored$MMI <- rowMeans(sba.scored, na.rm = T)
