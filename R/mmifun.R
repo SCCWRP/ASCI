@@ -97,9 +97,23 @@ mmifun <- function(taxa, station){
     unique()
   
   # calculate metrics
-  d.metrics <- mmi_calcmetrics('diatoms', bugs.d.m, stations)
-  sba.metrics <- mmi_calcmetrics('sba', bugs.sba.m, stations)
-  hybrid.metrics <- mmi_calcmetrics('hybrid', bugs.hybrid.m, stations)
+  d.mmi <- mmi_calcmetrics('diatoms', bugs.d.m, stations)
+  sba.mmi <- mmi_calcmetrics('sba', bugs.sba.m, stations)
+  hybrid.mmi <- mmi_calcmetrics('hybrid', bugs.hybrid.m, stations)
+  
+  # recent change to allow access to the stations combined variable that gets generated in the mmi_calmetrics function
+  # it returns a list now
+  # 7/1/2020
+  d.metrics <- d.mmi$metrics
+  d.stations_combined <- d.mmi$stations_combined
+  
+  sba.metrics <- sba.mmi$metrics
+  sba.stations_combined <- sba.mmi$stations_combined
+  
+  hybrid.metrics <- hybrid.mmi$metrics
+  hybrid.stations_combined <- hybrid.mmi$stations_combined
+  
+  
   
   # Setup GIS predictors by station id --------------------------------------
   
