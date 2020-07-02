@@ -56,6 +56,7 @@ ASCI <- function(taxa, station){
     unnest(cols = value) %>% 
     mutate_all(~ replace(., is.na(.), NA))
   
+  
   ##
   # supplementary info
   Supp1_mmi <- mmind %>% 

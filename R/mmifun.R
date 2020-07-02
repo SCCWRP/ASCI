@@ -413,15 +413,15 @@ mmifun <- function(taxa, station){
     separate(name, c('taxa', 'results'), sep = '_') 
   
   # get mmi total score
- # mmiout <- out %>% 
-#    filter(results %in% 'scr') %>% 
-#    group_by(taxa, SampleID) %>% 
-#    summarise(
-#      ASCI = mean(val)
-#    ) %>% 
-#    ungroup %>% 
-#    split(.$taxa) %>% 
-#    map(select, -taxa)
+  mmiout <- out %>% 
+    filter(results %in% 'scr') %>% 
+    group_by(taxa, SampleID) %>% 
+    summarise(
+      ASCI = mean(val)
+    ) %>% 
+    ungroup %>% 
+    split(.$taxa) %>% 
+    map(select, -taxa)
   
   # make out a list
   out <- out %>% 
@@ -435,18 +435,18 @@ mmifun <- function(taxa, station){
     map(spread, met, val)
   
   # list of lists for input to ASCI
- # out <- list(
-#    diatoms = list(mmiout$diatoms, out$diatoms),
-#    sba = list(mmiout$sba, out$sba),
-#    hybrid = list(mmiout$hybrid, out$hybrid)
-#  )
-  
   out <- list(
-    diatoms = list(out$diatoms),
-    sba = list(out$sba),
-    hybrid = list(out$hybrid)
+    diatoms = list(mmiout$diatoms, out$diatoms),
+    sba = list(mmiout$sba, out$sba),
+    hybrid = list(mmiout$hybrid, out$hybrid)
   )
   
+  
+  # out <- list(
+  #   diatoms = list(out$diatoms),
+  #   sba = list(out$sba),
+  #   hybrid = list(out$hybrid)
+  # )
   
   
   # assign names to list elements
