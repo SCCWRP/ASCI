@@ -199,7 +199,7 @@ mmifun <- function(taxa, station){
     ) %>% 
     select(SampleID, 
            cnt.spp.most.tol_pred, EpiRho.richness_pred, prop.spp.IndicatorClass_TN_low_pred, 
-           prop.spp.Planktonic_pred, prop.spp.Trophic.E_pred, Salinity.BF.richness_pred)
+           prop.spp.Planktonic_pred, prop.spp.Trophic.E_pred, Salinity.BF.richness_pred) 
   
   # join with observed, take residuals for raw/pred metrics
   d.results <- d.results %>% 
@@ -373,6 +373,12 @@ mmifun <- function(taxa, station){
   sba.scored.scaled<-sba.scored
   hybrid.scored.scaled<-hybrid.scored
   
+  # These were problematic
+  # d.predmet and hybrid.predmet
+  # They needed to have SampleID to be the rownames
+  d.predmet <- d.predmet %>% column_to_rownames("SampleID")
+  hybrid.predmet <- hybrid.predmet %>% column_to_rownames("SampleID")
+
   # put all results in long format
   out <- list(
     diatoms_obs = d.results, 
