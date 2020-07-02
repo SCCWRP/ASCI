@@ -379,9 +379,9 @@ mmifun <- function(taxa, station){
   sba.rf.mean <- 0.70994176
   hybrid.rf.mean <- 0.73063118
 
-  d.scored$D_MMI <- d.scored$MMI / d.rf.mean
-  sba.scored$S_MMI <- sba.scored$MMI / sba.rf.mean
-  hybrid.scored$H_MMI <- hybrid.scored$MMI / hybrid.rf.mean
+  d.scored$ASCI <- d.scored$MMI / d.rf.mean
+  sba.scored$ASCI <- sba.scored$MMI / sba.rf.mean
+  hybrid.scored$ASCI <- hybrid.scored$MMI / hybrid.rf.mean
   
   d.scored.scaled<-d.scored
   sba.scored.scaled<-sba.scored
@@ -413,15 +413,30 @@ mmifun <- function(taxa, station){
     separate(name, c('taxa', 'results'), sep = '_') 
   
   # get mmi total score
-  mmiout <- out %>% 
-    filter(results %in% 'scr') %>% 
-    group_by(taxa, SampleID) %>% 
-    summarise(
-      ASCI = mean(val)
-    ) %>% 
-    ungroup %>% 
-    split(.$taxa) %>% 
-    map(select, -taxa)
+  # new way of calculating asci, replaced by lines 382-384
+  # mmiout <- out %>% 
+  #   filter(results %in% 'scr') %>% 
+  #   group_by(taxa, SampleID) %>% 
+  #   summarise(
+  #     ASCI = mean(val)
+  #   ) %>% 
+  #   ungroup %>% 
+  #   split(.$taxa) %>% 
+  #   map(select, -taxa)
+  
+  mmiout <- list(
+    diatoms = d.scored.scaled %>% 
+      rownames_to_column('SampleID') %>% 
+      select(SampleID, ASCI),
+    
+    hybrid = hybrid.scored.scaled %>% 
+      rownames_to_column('SampleID') %>% 
+      select(SampleID, ASCI),
+    
+    sba = sba.scored.scaled %>% 
+      rownames_to_column('SampleID') %>% 
+      select(SampleID, ASCI)
+  )
   
   # make out a list
   out <- out %>% 
