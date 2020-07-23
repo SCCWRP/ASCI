@@ -204,27 +204,27 @@ mmifun <- function(taxa, station){
   # predicted diatom metrics
   d.predmet <- stationid %>% 
     mutate(
-      cnt.spp.most.tol_pred = predict(rfmods$diatoms.cnt.spp.most.tol, newdata = .[,c("XerMtn","PPT_00_09")]),
-      EpiRho.richness_pred = predict(rfmods$diatoms.EpiRho.richness, newdata = .[,c("AREA_SQKM","TMAX_WS")]),
-      prop.spp.IndicatorClass_TN_low_pred = predict(rfmods$diatoms.prop.spp.IndicatorClass_TN_low,newdata = .[,c("CondQR50","MAX_ELEV")]),
-      prop.spp.Planktonic_pred = predict(rfmods$diatoms.prop.spp.Planktonic,newdata = .[,c("CondQR50","SITE_ELEV")]),
-      prop.spp.Trophic.E_pred = predict(rfmods$diatoms.prop.spp.Trophic.E,newdata = .[,c("KFCT_AVE","CondQR50")]),
-      Salinity.BF.richness_pred = predict(rfmods$diatoms.Salinity.BF.richness,newdata = .[,c("XerMtn","KFCT_AVE","CondQR50")])
+      cnt.spp.most.tol = predict(rfmods$diatoms.cnt.spp.most.tol, newdata = .[,c("XerMtn","PPT_00_09")]),
+      EpiRho.richness = predict(rfmods$diatoms.EpiRho.richness, newdata = .[,c("AREA_SQKM","TMAX_WS")]),
+      prop.spp.IndicatorClass_TN_low = predict(rfmods$diatoms.prop.spp.IndicatorClass_TN_low,newdata = .[,c("CondQR50","MAX_ELEV")]),
+      prop.spp.Planktonic = predict(rfmods$diatoms.prop.spp.Planktonic,newdata = .[,c("CondQR50","SITE_ELEV")]),
+      prop.spp.Trophic.E = predict(rfmods$diatoms.prop.spp.Trophic.E,newdata = .[,c("KFCT_AVE","CondQR50")]),
+      Salinity.BF.richness = predict(rfmods$diatoms.Salinity.BF.richness,newdata = .[,c("XerMtn","KFCT_AVE","CondQR50")])
     ) %>% 
     select(SampleID, 
-           cnt.spp.most.tol_pred, EpiRho.richness_pred, prop.spp.IndicatorClass_TN_low_pred, 
-           prop.spp.Planktonic_pred, prop.spp.Trophic.E_pred, Salinity.BF.richness_pred) 
+           cnt.spp.most.tol, EpiRho.richness, prop.spp.IndicatorClass_TN_low, 
+           prop.spp.Planktonic, prop.spp.Trophic.E, Salinity.BF.richness) 
   
   # join with observed, take residuals for raw/pred metrics
   d.results <- d.results %>% 
     left_join(d.predmet, by = 'SampleID') %>%
     mutate(
-      cnt.spp.most.tol_mod = cnt.spp.most.tol_raw - cnt.spp.most.tol_pred,
-      EpiRho.richness_mod = EpiRho.richness_raw - EpiRho.richness_pred,
-      prop.spp.IndicatorClass_TN_low_mod = prop.spp.IndicatorClass_TN_low_raw - prop.spp.IndicatorClass_TN_low_pred,
-      prop.spp.Planktonic_mod = prop.spp.Planktonic_raw - prop.spp.Planktonic_pred,
-      prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E_pred,
-      Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness_pred
+      cnt.spp.most.tol_mod = cnt.spp.most.tol_raw - cnt.spp.most.tol,
+      EpiRho.richness_mod = EpiRho.richness_raw - EpiRho.richness,
+      prop.spp.IndicatorClass_TN_low_mod = prop.spp.IndicatorClass_TN_low_raw - prop.spp.IndicatorClass_TN_low,
+      prop.spp.Planktonic_mod = prop.spp.Planktonic_raw - prop.spp.Planktonic,
+      prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E,
+      Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness
     ) %>% 
     column_to_rownames('SampleID')
   
@@ -312,29 +312,29 @@ mmifun <- function(taxa, station){
     mutate(
       # hybrid.cnt.spp.IndicatorClass_TP_high is supposed to be a randomForest model object thing
       # However, right now it is saying that it is NULL........
-      cnt.spp.IndicatorClass_TP_high_pred = predict(rfmods$hybrid.cnt.spp.IndicatorClass_TP_high, newdata = .[, c("PPT_00_09", "KFCT_AVE")]), 
-      cnt.spp.most.tol_pred = predict(rfmods$hybrid.cnt.spp.most.tol, newdata = .[, c("CondQR50", "XerMtn")]), 
-      EpiRho.richness_pred = predict(rfmods$hybrid.EpiRho.richness, newdata = .[, c("AREA_SQKM", "TMAX_WS")]), 
-      OxyRed.DO_30.richness_pred = predict(rfmods$hybrid.OxyRed.DO_30.richness, newdata = .[, c("AtmCa", "PPT_00_09")]), 
-      prop.spp.Planktonic_pred = predict(rfmods$hybrid.prop.spp.Planktonic, newdata = .[, c("CondQR50", "SITE_ELEV")]), 
-      prop.spp.Trophic.E_pred = predict(rfmods$hybrid.prop.spp.Trophic.E, newdata = .[, c("CondQR50", "KFCT_AVE")]), 
-      Salinity.BF.richness_pred = predict(rfmods$hybrid.Salinity.BF.richness, newdata = .[, c("XerMtn", "KFCT_AVE")]) 
+      cnt.spp.IndicatorClass_TP_high = predict(rfmods$hybrid.cnt.spp.IndicatorClass_TP_high, newdata = .[, c("PPT_00_09", "KFCT_AVE")]), 
+      cnt.spp.most.tol = predict(rfmods$hybrid.cnt.spp.most.tol, newdata = .[, c("CondQR50", "XerMtn")]), 
+      EpiRho.richness = predict(rfmods$hybrid.EpiRho.richness, newdata = .[, c("AREA_SQKM", "TMAX_WS")]), 
+      OxyRed.DO_30.richness = predict(rfmods$hybrid.OxyRed.DO_30.richness, newdata = .[, c("AtmCa", "PPT_00_09")]), 
+      prop.spp.Planktonic = predict(rfmods$hybrid.prop.spp.Planktonic, newdata = .[, c("CondQR50", "SITE_ELEV")]), 
+      prop.spp.Trophic.E = predict(rfmods$hybrid.prop.spp.Trophic.E, newdata = .[, c("CondQR50", "KFCT_AVE")]), 
+      Salinity.BF.richness = predict(rfmods$hybrid.Salinity.BF.richness, newdata = .[, c("XerMtn", "KFCT_AVE")]) 
       
     ) %>% 
-    select(SampleID, cnt.spp.IndicatorClass_TP_high_pred,cnt.spp.most.tol_pred,EpiRho.richness_pred, 
-           OxyRed.DO_30.richness_pred,prop.spp.Planktonic_pred,prop.spp.Trophic.E_pred,Salinity.BF.richness_pred )
+    select(SampleID, cnt.spp.IndicatorClass_TP_high,cnt.spp.most.tol,EpiRho.richness, 
+           OxyRed.DO_30.richness,prop.spp.Planktonic,prop.spp.Trophic.E,Salinity.BF.richness )
   
   # join with observed, take residuals for raw/pred metrics
   hybrid.results <- hybrid.results %>% 
     left_join(hybrid.predmet, by = 'SampleID') %>%
     mutate(
-      cnt.spp.IndicatorClass_TP_high_mod = cnt.spp.IndicatorClass_TP_high_raw - cnt.spp.IndicatorClass_TP_high_pred, 
-      cnt.spp.most.tol_mod = cnt.spp.most.tol_raw - cnt.spp.most.tol_pred, 
-      EpiRho.richness_mod = EpiRho.richness_raw - EpiRho.richness_pred, 
-      OxyRed.DO_30.richness_mod = OxyRed.DO_30.richness_raw - OxyRed.DO_30.richness_pred, 
-      prop.spp.Planktonic_mod = prop.spp.Planktonic_raw - prop.spp.Planktonic_pred, 
-      prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E_pred, 
-      Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness_pred
+      cnt.spp.IndicatorClass_TP_high_mod = cnt.spp.IndicatorClass_TP_high_raw - cnt.spp.IndicatorClass_TP_high, 
+      cnt.spp.most.tol_mod = cnt.spp.most.tol_raw - cnt.spp.most.tol, 
+      EpiRho.richness_mod = EpiRho.richness_raw - EpiRho.richness, 
+      OxyRed.DO_30.richness_mod = OxyRed.DO_30.richness_raw - OxyRed.DO_30.richness, 
+      prop.spp.Planktonic_mod = prop.spp.Planktonic_raw - prop.spp.Planktonic, 
+      prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E, 
+      Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness
       
     ) %>% 
     column_to_rownames('SampleID') # %>% 
@@ -378,7 +378,8 @@ mmifun <- function(taxa, station){
   d.rf.mean <- 0.752705813
   sba.rf.mean <- 0.70994176
   hybrid.rf.mean <- 0.73063118
-
+  
+  # ASCI has to be MMI divided by Ref Cal Mean
   d.scored$ASCI <- d.scored$MMI / d.rf.mean
   sba.scored$ASCI <- sba.scored$MMI / sba.rf.mean
   hybrid.scored$ASCI <- hybrid.scored$MMI / hybrid.rf.mean
@@ -394,15 +395,16 @@ mmifun <- function(taxa, station){
   hybrid.predmet <- hybrid.predmet %>% column_to_rownames("SampleID")
 
   # put all results in long format
+ 
   out <- list(
     diatoms_obs = d.results, 
     diatoms_pred = d.predmet,
-    diatoms_scr = d.scored.scaled,
+    diatoms_scr = d.scored.scaled %>% select(-ASCI),
     sba_obs = sba.results,
-    sba_scr = sba.scored.scaled,
+    sba_scr = sba.scored.scaled %>% select(-ASCI),
     hybrid_obs = hybrid.results, 
     hybrid_pred = hybrid.predmet,
-    hybrid_scr = hybrid.scored.scaled
+    hybrid_scr = hybrid.scored.scaled %>% select(-ASCI)
   ) %>% 
     enframe %>% 
     mutate(
@@ -423,7 +425,14 @@ mmifun <- function(taxa, station){
   #   ungroup %>% 
   #   split(.$taxa) %>% 
   #   map(select, -taxa)
-  
+
+
+  # Robert 7/23/2020
+  # Looks like this is where the ASCI scores were getting duplicated
+  # Notice that above, sba.scored.scaled gets added to out
+  # it also got the ASCI column of it added here
+  # all columns from "out" get those suffixes put on them, namely "_scr"
+  # I prevented ASCI from getting included up there
   mmiout <- list(
     diatoms = d.scored.scaled %>% 
       rownames_to_column('SampleID') %>% 
