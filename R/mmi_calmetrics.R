@@ -302,19 +302,10 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     spread(name, metest) %>% 
     data.frame(stringsAsFactors = F)
   
-  
-  # recent change to allow access to the stations_combined variable in the mmifun script
-  # it returns a list now
-  # 7/1/2020
-  out <- list(
+  return(
     metrics %>% 
     # mutate_at('SampleID', as.character) %>% 
-    left_join(specialty_metrics, by = 'SampleID'),
-    stations_combined
+    left_join(specialty_metrics, by = 'SampleID')
   )
-    
-  names(out) <- c("metrics","stations_combined")
-
-  return(out)
 }
 
