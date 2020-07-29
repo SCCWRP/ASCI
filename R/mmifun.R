@@ -32,15 +32,15 @@
 #' # calc metrics
 #' out <- mmifun(dat, station)
 #' out
-mmifun <- function(taxa, station){
+mmifun <- function(dat, station){
   
   options(gsubfn.engine = "R")
   
   # Import taxonomy data -----------------------------------------------------------
-  bugs <- taxa 
+  algae <- dat
   
   # Get diatom, sba, hybrid --------------------------------------------------------
-  bugs <- merge(bugs, STE[,c("FinalID", "FinalIDassigned", "Genus", "Phylum", "Class")], all.x = T) %>% 
+  algae <- merge(algae, STE[,c("FinalID", "FinalIDassigned", "Genus", "Phylum", "Class")], all.x = T) %>% 
     filter(
       SampleTypeCode != "Qualitative",
       !is.na(FinalIDassigned),
@@ -56,22 +56,22 @@ mmifun <- function(taxa, station){
   }
   
   # diatoms only in integrated
-  bugs.d <- bugs %>% 
+  algae.d <- algae %>% 
     filter(
       SampleTypeCode == 'Integrated'
     )
-  bugs.d <- chkmt(bugs.d)
+  algae.d <- chkmt(algae.d)
   
   # soft-bodied not in integrated
-  bugs.sba <- bugs %>% 
+  algae.sba <- algae %>% 
     filter(
       SampleTypeCode != 'Integrated'
     )
-  bugs.sba <- chkmt(bugs.sba)
+  algae.sba <- chkmt(algae.sba)
   
   # ASCI should always calculate hybrid even if they are missing assemblage 
-  smpid <- bugs$SampleID
-  bugs <- bugs %>% 
+  smpid <- algae$SampleID
+  algae <- algae %>% 
     filter(SampleID %in% smpid) %>% 
     group_by(SampleID) %>% 
     mutate(ComboResult = as.numeric(pmax(BAResult, Result, na.rm = T))) %>% 
@@ -79,27 +79,36 @@ mmifun <- function(taxa, station){
     ungroup()
   
   # Convert to species abd matrix at Species level  -----------------------------------------------------------
-  bugs.d.m <- as.data.frame(acast(bugs.d, 
-                                  SampleID ~ FinalIDassigned, 
-                                  value.var = "BAResult", 
-                                  fun.aggregate=sum, na.rm = T))
-  bugs.sba.m <- as.data.frame(acast(bugs.sba, 
-                                    SampleID ~ FinalIDassigned, 
-                                    value.var = "Result", 
-                                    fun.aggregate=sum, na.rm = T))
-  bugs.hybrid.m <- as.data.frame(acast(bugs, 
-                                       SampleID ~ FinalIDassigned, 
-                                       value.var = "ComboResult", 
-                                       fun.aggregate=sum, na.rm = T))
+  algae.d.m <- as.data.frame(
+    acast(
+      algae.d, 
+      SampleID ~ FinalIDassigned, 
+      value.var = "BAResult", 
+      fun.aggregate=sum, na.rm = T)
+    )
+  algae.sba.m <- as.data.frame(
+    acast(
+      algae.sba, 
+      SampleID ~ FinalIDassigned, 
+      value.var = "Result", 
+      fun.aggregate=sum, na.rm = T)
+    )
+  algae.hybrid.m <- as.data.frame(
+    acast(
+      algae, 
+      SampleID ~ FinalIDassigned, 
+      value.var = "ComboResult", 
+      fun.aggregate=sum, na.rm = T)
+    )
   
   stations <- taxa %>% 
     select(StationCode, SampleDate, Replicate, SampleID) %>% 
     unique()
   
   # calculate metrics
-  d.mmi <- mmi_calcmetrics('diatoms', bugs.d.m, stations)
-  sba.mmi <- mmi_calcmetrics('sba', bugs.sba.m, stations)
-  hybrid.mmi <- mmi_calcmetrics('hybrid', bugs.hybrid.m, stations)
+  d.mmi <- mmi_calcmetrics('diatoms', algae.d.m, stations)
+  sba.mmi <- mmi_calcmetrics('sba', algae.sba.m, stations)
+  hybrid.mmi <- mmi_calcmetrics('hybrid', algae.hybrid.m, stations)
 
 
   d.metrics <- d.mmi$metrics
@@ -173,7 +182,7 @@ mmifun <- function(taxa, station){
   # get observe diatom metrics and percent attributed
   d.results <- d.metrics %>%
     select(SampleID, d.win) %>%
-    filter(SampleID %in% rownames(bugs.d.m)) %>%
+    filter(SampleID %in% rownames(algae.d.m)) %>%
     mutate(
       cnt.spp.most.tol.pcnt.attributed = cnt.spp.most.tol/100,
       EpiRho.richness.pcnt.attributed = EpiRho.richness/100,
@@ -245,7 +254,7 @@ mmifun <- function(taxa, station){
   
   sba.results <- sba.metrics %>% 
     select(SampleID, sba.win) %>%
-    filter(SampleID %in% rownames(bugs.sba.m)) %>% 
+    filter(SampleID %in% rownames(algae.sba.m)) %>% 
     mutate(
       prop.spp.IndicatorClass_DOC_high.pcnt.attributed = prop.spp.IndicatorClass_DOC_high/100,
       prop.spp.IndicatorClass_NonRef.pcnt.attributed = prop.spp.IndicatorClass_NonRef/100,
@@ -298,7 +307,7 @@ mmifun <- function(taxa, station){
   # get observed hybrid results and percent attributed
   hybrid.results <- hybrid.metrics %>% 
     select(SampleID, hybrid.win) %>%
-    filter(SampleID %in% rownames(bugs.hybrid.m)) %>% 
+    filter(SampleID %in% rownames(algae.hybrid.m)) %>% 
     mutate(
       cnt.spp.IndicatorClass_TP_high.pcnt.attributed = cnt.spp.IndicatorClass_TP_high/100,
       cnt.spp.most.tol.pcnt.attributed = cnt.spp.most.tol/100,
@@ -376,7 +385,7 @@ mmifun <- function(taxa, station){
   # Score metrics [make from 0 to 1] -----------------------------------------------------------
   
   omni.ref <- mmilkup$omni.ref
-  d.scored <- score_metric(taxa = 'diatoms', bugs.d.m, d.results, omni.ref) %>% 
+  d.scored <- score_metric(taxa = 'diatoms', algae.d.m, d.results, omni.ref) %>% 
     select(-rowname) %>% 
     replace(. > 1, 1) %>% 
     replace(. < 0, 0) %>% 
@@ -384,7 +393,7 @@ mmifun <- function(taxa, station){
   names(d.scored) <- gsub("_raw","_scr",names(d.scored))
 
   
-  sba.scored <- score_metric(taxa = 'sba', bugs.sba.m, sba.results, omni.ref) %>% 
+  sba.scored <- score_metric(taxa = 'sba', algae.sba.m, sba.results, omni.ref) %>% 
     select(-rowname) %>% 
     replace(. > 1, 1) %>%
     replace(. < 0, 0) %>% 
@@ -392,7 +401,7 @@ mmifun <- function(taxa, station){
   names(sba.scored) <- gsub("_raw","_scr",names(sba.scored))
   
   
-  hybrid.scored <- score_metric(taxa = 'hybrid', bugs.hybrid.m, hybrid.results, omni.ref) %>%
+  hybrid.scored <- score_metric(taxa = 'hybrid', algae.hybrid.m, hybrid.results, omni.ref) %>%
     select(-rowname) %>% 
     replace(. > 1, 1) %>% 
     replace(. < 0, 0) %>% 
