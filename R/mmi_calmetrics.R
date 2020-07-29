@@ -64,6 +64,7 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     left_join(taxonomy_pa_melt, by = c('SampleID', 'FinalIDassigned', 'value'))
   
   #the next two lines create a genus variable by splitting the full taxa name
+  # can probably be done with dplyr::mutate
   stations_list = strsplit(stations_combined$FinalIDassigned," ")
   stations_combined$Genus = lapply(stations_list, FUN=function(x) x[1])
   
@@ -287,10 +288,6 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
         mutate(metest = map(value, function(met){ 
           toprs <- paste0('with(smp, ', met, ')')
           parse(text = toprs) %>% eval
-          # out <- try({eval(parse(text = toprs))})
-          # if(inherits(out, 'try-error')) browser()
-          # else out
-          
         })
         ) %>% 
         select(-value) %>% 

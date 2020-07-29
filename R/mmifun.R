@@ -43,7 +43,7 @@ mmifun <- function(taxa, station){
   bugs <- merge(bugs, STE[,c("FinalID", "FinalIDassigned", "Genus", "Phylum", "Class")], all.x = T) %>% 
     filter(
       SampleTypeCode != "Qualitative",
-      !is.na(FinalIDassigned), 
+      !is.na(FinalIDassigned),
       !is.null(FinalIDassigned))
   
   # subset into assemblages 
@@ -100,23 +100,15 @@ mmifun <- function(taxa, station){
   d.mmi <- mmi_calcmetrics('diatoms', bugs.d.m, stations)
   sba.mmi <- mmi_calcmetrics('sba', bugs.sba.m, stations)
   hybrid.mmi <- mmi_calcmetrics('hybrid', bugs.hybrid.m, stations)
-  
-  # recent change to allow access to the stations combined variable that gets generated in the mmi_calmetrics function
-  # it returns a list now
-  # 7/1/2020
+
+
   d.metrics <- d.mmi$metrics
-  d.stations_combined <- d.mmi$stations_combined
-  
   sba.metrics <- sba.mmi$metrics
-  sba.stations_combined <- sba.mmi$stations_combined
-  
   hybrid.metrics <- hybrid.mmi$metrics
-  hybrid.stations_combined <- hybrid.mmi$stations_combined
   
   
   
   # Setup GIS predictors by station id --------------------------------------
-  
   stationid <- taxa %>% 
     select(SampleID, StationCode) %>% 
     unique %>% 
@@ -125,7 +117,6 @@ mmifun <- function(taxa, station){
   # Load winning metrics -----------------------------------------------------------
   
   # metric names for mmi_calcmetrics
-  
   d.win<-c("cnt.spp.most.tol",
            "EpiRho.richness",
            "prop.spp.IndicatorClass_TN_low",
@@ -184,16 +175,16 @@ mmifun <- function(taxa, station){
     select(SampleID, d.win) %>%
     filter(SampleID %in% rownames(bugs.d.m)) %>%
     mutate(
-      pcnt.attributed.cnt.spp.most.tol =  cnt.spp.most.tol/100,
-      pcnt.attributed.EpiRho.richness =  EpiRho.richness/100,
-      pcnt.attributed.prop.spp.IndicatorClass_TN_low =  prop.spp.IndicatorClass_TN_low/100,
-      pcnt.attributed.prop.spp.Planktonic =  prop.spp.Planktonic/100,
-      pcnt.attributed.prop.spp.Trophic.E =  prop.spp.Trophic.E/100,
-      pcnt.attributed.Salinity.BF.richness =  Salinity.BF.richness/100
+      cnt.spp.most.tol.pcnt.attributed = cnt.spp.most.tol/100,
+      EpiRho.richness.pcnt.attributed = EpiRho.richness/100,
+      prop.spp.IndicatorClass_TN_low.pcnt.attributed = prop.spp.IndicatorClass_TN_low/100,
+      prop.spp.Planktonic.pcnt.attributed =  prop.spp.Planktonic/100,
+      prop.spp.Trophic.E.pcnt.attributed =  prop.spp.Trophic.E/100,
+      Salinity.BF.richness.pcnt.attributed =  Salinity.BF.richness/100
       
     )  # %>% 
   
-  names(d.results) <- paste0(names(d.results), '_raw') 
+  names(d.results) <- paste0(names(d.results),'_raw') 
   
   d.results <- d.results %>% 
     dplyr::rename(
@@ -204,35 +195,47 @@ mmifun <- function(taxa, station){
   # predicted diatom metrics
   d.predmet <- stationid %>% 
     mutate(
-      cnt.spp.most.tol = predict(rfmods$diatoms.cnt.spp.most.tol, newdata = .[,c("XerMtn","PPT_00_09")]),
-      EpiRho.richness = predict(rfmods$diatoms.EpiRho.richness, newdata = .[,c("AREA_SQKM","TMAX_WS")]),
-      prop.spp.IndicatorClass_TN_low = predict(rfmods$diatoms.prop.spp.IndicatorClass_TN_low,newdata = .[,c("CondQR50","MAX_ELEV")]),
-      prop.spp.Planktonic = predict(rfmods$diatoms.prop.spp.Planktonic,newdata = .[,c("CondQR50","SITE_ELEV")]),
-      prop.spp.Trophic.E = predict(rfmods$diatoms.prop.spp.Trophic.E,newdata = .[,c("KFCT_AVE","CondQR50")]),
-      Salinity.BF.richness = predict(rfmods$diatoms.Salinity.BF.richness,newdata = .[,c("XerMtn","KFCT_AVE","CondQR50")])
+      cnt.spp.most.tol_pred = predict(rfmods$diatoms.cnt.spp.most.tol, newdata = .[,c("XerMtn","PPT_00_09")]),
+      EpiRho.richness_pred = predict(rfmods$diatoms.EpiRho.richness, newdata = .[,c("AREA_SQKM","TMAX_WS")]),
+      prop.spp.IndicatorClass_TN_low_pred = predict(rfmods$diatoms.prop.spp.IndicatorClass_TN_low,newdata = .[,c("CondQR50","MAX_ELEV")]),
+      prop.spp.Planktonic_pred = predict(rfmods$diatoms.prop.spp.Planktonic,newdata = .[,c("CondQR50","SITE_ELEV")]),
+      prop.spp.Trophic.E_pred = predict(rfmods$diatoms.prop.spp.Trophic.E,newdata = .[,c("KFCT_AVE","CondQR50")]),
+      Salinity.BF.richness_pred = predict(rfmods$diatoms.Salinity.BF.richness,newdata = .[,c("XerMtn","KFCT_AVE","CondQR50")])
     ) %>% 
     select(SampleID, 
-           cnt.spp.most.tol, EpiRho.richness, prop.spp.IndicatorClass_TN_low, 
-           prop.spp.Planktonic, prop.spp.Trophic.E, Salinity.BF.richness) 
+           cnt.spp.most.tol_pred, EpiRho.richness_pred, prop.spp.IndicatorClass_TN_low_pred, 
+           prop.spp.Planktonic_pred, prop.spp.Trophic.E_pred, Salinity.BF.richness_pred) 
   
   # join with observed, take residuals for raw/pred metrics
   d.results <- d.results %>% 
-    left_join(d.predmet, by = 'SampleID') %>%
-    mutate(
-      cnt.spp.most.tol_mod = cnt.spp.most.tol_raw - cnt.spp.most.tol,
-      EpiRho.richness_mod = EpiRho.richness_raw - EpiRho.richness,
-      prop.spp.IndicatorClass_TN_low_mod = prop.spp.IndicatorClass_TN_low_raw - prop.spp.IndicatorClass_TN_low,
-      prop.spp.Planktonic_mod = prop.spp.Planktonic_raw - prop.spp.Planktonic,
-      prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E,
-      Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness
-    ) %>% 
-    column_to_rownames('SampleID')
+      left_join(d.predmet, by = 'SampleID') %>%
+     # Susie and Rafi 7/28/2020 told me we are omitting mod
+     # mutate(
+     #   cnt.spp.most.tol_mod = cnt.spp.most.tol_raw - cnt.spp.most.tol_pred,
+     #   EpiRho.richness_mod = EpiRho.richness_raw - EpiRho.richness_pred,
+     #   prop.spp.IndicatorClass_TN_low_mod = prop.spp.IndicatorClass_TN_low_raw - prop.spp.IndicatorClass_TN_low_pred,
+     #   prop.spp.Planktonic_mod = prop.spp.Planktonic_raw - prop.spp.Planktonic_pred,
+     #   prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E_pred,
+     #   Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness_pred
+     # ) %>% 
+     column_to_rownames('SampleID')
   
   # final selection
-  colsel <- names(d.results) %in% d.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(d.results)) | grepl('pred',
-                                                                                                                names(d.results))
+  colsel <- names(d.results) %in% 
+    d.win.suf | # we may omit this. These are the "mod" columns which i actually commented out above
+    grepl('^NumberTaxa|pcnt\\.attributed', names(d.results)) | 
+    grepl('pred',names(d.results)) |
+    grepl('\\_raw$', names(d.results))
   d.results <- d.results[, colsel] %>% 
-    rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
+    rename_at(vars(contains('pcnt.attributed')), function(x) { 
+      gsub('\\_raw', '', x)
+      }
+    ) %>%
+    rename_at(vars(contains('pcnt.attributed')), function(x) { 
+      gsub('\\.pcnt\\.attributed', '_pct_att', x)
+    }
+    )
+    
   d.results <- chkmt(d.results)
   
   ##
@@ -244,10 +247,10 @@ mmifun <- function(taxa, station){
     select(SampleID, sba.win) %>%
     filter(SampleID %in% rownames(bugs.sba.m)) %>% 
     mutate(
-      pcnt.attributed.prop.spp.IndicatorClass_DOC_high = prop.spp.IndicatorClass_DOC_high/100,
-      pcnt.attributed.prop.spp.IndicatorClass_NonRef = prop.spp.IndicatorClass_NonRef/100,
-      pcnt.attributed.prop.spp.IndicatorClass_TP_high = prop.spp.IndicatorClass_TP_high/100, 
-      pcnt.attributed.prop.spp.ZHR_raw = prop.spp.ZHR/100 # prop.spp.ZHR_raw wasn't a column
+      prop.spp.IndicatorClass_DOC_high.pcnt.attributed = prop.spp.IndicatorClass_DOC_high/100,
+      prop.spp.IndicatorClass_NonRef.pcnt.attributed = prop.spp.IndicatorClass_NonRef/100,
+      prop.spp.IndicatorClass_TP_high.pcnt.attributed = prop.spp.IndicatorClass_TP_high/100, 
+      prop.spp.ZHR_raw.pcnt.attributed = prop.spp.ZHR/100 # prop.spp.ZHR_raw wasn't a column
     )  # %>% 
   # select(-c('foo'))  # mystery line 
   
@@ -263,11 +266,21 @@ mmifun <- function(taxa, station){
     column_to_rownames('SampleID')
   
   # final selection
-  colsel <- names(sba.results) %in% sba.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(sba.results)) | grepl('pred',
-                                                                                                                      names(sba.results))
+  colsel <- names(sba.results) %in% 
+    sba.win.suf | 
+    grepl('^NumberTaxa|pcnt\\.attributed', names(sba.results)) | 
+    grepl('pred',names(sba.results)) |
+    grepl('\\_raw$', names(sba.results))
   
   sba.results <- sba.results[, colsel] %>% 
-    rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
+    rename_at(vars(contains('pcnt.attributed')), function(x) { 
+      gsub('\\_raw', '', x)
+    }
+    ) %>%
+    rename_at(vars(contains('pcnt.attributed')), function(x) { 
+      gsub('\\.pcnt\\.attributed', '_pct_att', x)
+    }
+    )
   sba.results <- chkmt(sba.results)
   
   ##
@@ -287,14 +300,14 @@ mmifun <- function(taxa, station){
     select(SampleID, hybrid.win) %>%
     filter(SampleID %in% rownames(bugs.hybrid.m)) %>% 
     mutate(
-      pcnt.attributed.cnt.spp.IndicatorClass_TP_high = cnt.spp.IndicatorClass_TP_high/100,
-      pcnt.attributed.cnt.spp.most.tol = cnt.spp.most.tol/100,
-      pcnt.attributed.EpiRho.richness = EpiRho.richness/100,
-      pcnt.attributed.OxyRed.DO_30.richness = OxyRed.DO_30.richness/100,
-      pcnt.attributed.prop.spp.Planktonic = prop.spp.Planktonic/100,
-      pcnt.attributed.prop.spp.Trophic.E = prop.spp.Trophic.E/100,
-      pcnt.attributed.prop.spp.ZHR_raw = prop.spp.ZHR/100, # prop.spp.ZHR_raw wasn't a column
-      pcnt.attributed.Salinity.BF.richness = Salinity.BF.richness/100
+      cnt.spp.IndicatorClass_TP_high.pcnt.attributed = cnt.spp.IndicatorClass_TP_high/100,
+      cnt.spp.most.tol.pcnt.attributed = cnt.spp.most.tol/100,
+      EpiRho.richness.pcnt.attributed = EpiRho.richness/100,
+      OxyRed.DO_30.richness.pcnt.attributed = OxyRed.DO_30.richness/100,
+      prop.spp.Planktonic.pcnt.attributed = prop.spp.Planktonic/100,
+      prop.spp.Trophic.E.pcnt.attributed = prop.spp.Trophic.E/100,
+      prop.spp.ZHR_raw.pcnt.attributed = prop.spp.ZHR/100, # prop.spp.ZHR_raw wasn't a column
+      Salinity.BF.richness.pcnt.attributed = Salinity.BF.richness/100
       
     ) #  %>% 
   # select(-c('OxyRed.DO_30.richness', 'prop.spp.BCG4', 'Salinity.BF.richness')) # mystery line 
@@ -312,38 +325,52 @@ mmifun <- function(taxa, station){
     mutate(
       # hybrid.cnt.spp.IndicatorClass_TP_high is supposed to be a randomForest model object thing
       # However, right now it is saying that it is NULL........
-      cnt.spp.IndicatorClass_TP_high = predict(rfmods$hybrid.cnt.spp.IndicatorClass_TP_high, newdata = .[, c("PPT_00_09", "KFCT_AVE")]), 
-      cnt.spp.most.tol = predict(rfmods$hybrid.cnt.spp.most.tol, newdata = .[, c("CondQR50", "XerMtn")]), 
-      EpiRho.richness = predict(rfmods$hybrid.EpiRho.richness, newdata = .[, c("AREA_SQKM", "TMAX_WS")]), 
-      OxyRed.DO_30.richness = predict(rfmods$hybrid.OxyRed.DO_30.richness, newdata = .[, c("AtmCa", "PPT_00_09")]), 
-      prop.spp.Planktonic = predict(rfmods$hybrid.prop.spp.Planktonic, newdata = .[, c("CondQR50", "SITE_ELEV")]), 
-      prop.spp.Trophic.E = predict(rfmods$hybrid.prop.spp.Trophic.E, newdata = .[, c("CondQR50", "KFCT_AVE")]), 
-      Salinity.BF.richness = predict(rfmods$hybrid.Salinity.BF.richness, newdata = .[, c("XerMtn", "KFCT_AVE")]) 
+      cnt.spp.IndicatorClass_TP_high_pred = predict(rfmods$hybrid.cnt.spp.IndicatorClass_TP_high, newdata = .[, c("PPT_00_09", "KFCT_AVE")]), 
+      cnt.spp.most.tol_pred = predict(rfmods$hybrid.cnt.spp.most.tol, newdata = .[, c("CondQR50", "XerMtn")]), 
+      EpiRho.richness_pred = predict(rfmods$hybrid.EpiRho.richness, newdata = .[, c("AREA_SQKM", "TMAX_WS")]), 
+      OxyRed.DO_30.richness_pred = predict(rfmods$hybrid.OxyRed.DO_30.richness, newdata = .[, c("AtmCa", "PPT_00_09")]), 
+      prop.spp.Planktonic_pred = predict(rfmods$hybrid.prop.spp.Planktonic, newdata = .[, c("CondQR50", "SITE_ELEV")]), 
+      prop.spp.Trophic.E_pred = predict(rfmods$hybrid.prop.spp.Trophic.E, newdata = .[, c("CondQR50", "KFCT_AVE")]), 
+      Salinity.BF.richness_pred = predict(rfmods$hybrid.Salinity.BF.richness, newdata = .[, c("XerMtn", "KFCT_AVE")]) 
       
     ) %>% 
-    select(SampleID, cnt.spp.IndicatorClass_TP_high,cnt.spp.most.tol,EpiRho.richness, 
-           OxyRed.DO_30.richness,prop.spp.Planktonic,prop.spp.Trophic.E,Salinity.BF.richness )
+    select(SampleID, cnt.spp.IndicatorClass_TP_high_pred, cnt.spp.most.tol_pred, EpiRho.richness_pred, 
+           OxyRed.DO_30.richness_pred, prop.spp.Planktonic_pred, prop.spp.Trophic.E_pred, Salinity.BF.richness_pred )
   
   # join with observed, take residuals for raw/pred metrics
   hybrid.results <- hybrid.results %>% 
     left_join(hybrid.predmet, by = 'SampleID') %>%
-    mutate(
-      cnt.spp.IndicatorClass_TP_high_mod = cnt.spp.IndicatorClass_TP_high_raw - cnt.spp.IndicatorClass_TP_high, 
-      cnt.spp.most.tol_mod = cnt.spp.most.tol_raw - cnt.spp.most.tol, 
-      EpiRho.richness_mod = EpiRho.richness_raw - EpiRho.richness, 
-      OxyRed.DO_30.richness_mod = OxyRed.DO_30.richness_raw - OxyRed.DO_30.richness, 
-      prop.spp.Planktonic_mod = prop.spp.Planktonic_raw - prop.spp.Planktonic, 
-      prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E, 
-      Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness
-      
-    ) %>% 
+    # Rafi and Susie said mods are gone now 7/28/2020
+    # mutate(
+    #   cnt.spp.IndicatorClass_TP_high_mod = cnt.spp.IndicatorClass_TP_high_raw - cnt.spp.IndicatorClass_TP_high, 
+    #   cnt.spp.most.tol_mod = cnt.spp.most.tol_raw - cnt.spp.most.tol, 
+    #   EpiRho.richness_mod = EpiRho.richness_raw - EpiRho.richness, 
+    #   OxyRed.DO_30.richness_mod = OxyRed.DO_30.richness_raw - OxyRed.DO_30.richness, 
+    #   prop.spp.Planktonic_mod = prop.spp.Planktonic_raw - prop.spp.Planktonic, 
+    #   prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E, 
+    #   Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness
+    #   
+    # ) %>% 
     column_to_rownames('SampleID') # %>% 
   # select_at(vars(-contains('pred')))
   
   # final selection
-  colsel <- names(hybrid.results) %in% hybrid.win.suf | grepl('^NumberTaxa|^pcnt\\.attributed', names(hybrid.results)) | grepl('pred', names(hybrid.results))
-  hybrid.results <- hybrid.results[, colsel] %>% 
-    rename_at(vars(contains('pcnt.attributed')), function(x) gsub('\\_raw$', '', x))
+  colsel <- names(hybrid.results) %in% 
+    hybrid.win.suf | 
+    grepl('^NumberTaxa|pcnt\\.attributed', names(hybrid.results)) | 
+    grepl('pred', names(hybrid.results)) |
+    grepl('\\_raw', names(hybrid.results))
+  
+  
+  hybrid.results <- hybrid.results[, colsel] %>%
+    rename_at(vars(contains('pcnt.attributed')), function(x) { 
+      gsub('\\_raw', '', x)
+    }
+    ) %>%
+      rename_at(vars(contains('pcnt.attributed')), function(x) { 
+        gsub('\\.pcnt\\.attributed', '_pct_att', x)
+      }
+    )
   hybrid.results <- chkmt(hybrid.results)
   
   # Score metrics [make from 0 to 1] -----------------------------------------------------------
@@ -353,19 +380,24 @@ mmifun <- function(taxa, station){
     select(-rowname) %>% 
     replace(. > 1, 1) %>% 
     replace(. < 0, 0) %>% 
-    select(sort(colnames(.))) 
+    select(sort(colnames(.)))
+  names(d.scored) <- gsub("_raw","_scr",names(d.scored))
+
   
   sba.scored <- score_metric(taxa = 'sba', bugs.sba.m, sba.results, omni.ref) %>% 
     select(-rowname) %>% 
     replace(. > 1, 1) %>%
     replace(. < 0, 0) %>% 
     select(sort(colnames(.)))
+  names(sba.scored) <- gsub("_raw","_scr",names(sba.scored))
+  
   
   hybrid.scored <- score_metric(taxa = 'hybrid', bugs.hybrid.m, hybrid.results, omni.ref) %>%
     select(-rowname) %>% 
     replace(. > 1, 1) %>% 
     replace(. < 0, 0) %>% 
     select(sort(colnames(.)))
+  names(hybrid.scored) <- gsub("_raw","_scr",names(hybrid.scored))
   
   # Find average. Scale index by dividing by refcalmean ----------------------------------
 
@@ -447,13 +479,14 @@ mmifun <- function(taxa, station){
       select(SampleID, ASCI)
   )
   
-  # make out a list
+
   out <- out %>% 
-    unite('met', met, results, sep = '_') %>% 
-    mutate(
-      met = gsub('_obs$', '', met),
-      met = gsub('_scr$', '_score', met)
-    ) %>% 
+    # i think the suffixes are already in place
+    # unite('met', met, results, sep = '_') %>% 
+    # mutate(
+    #   met = gsub('_obs$', '', met),
+    #   met = gsub('_scr$', '_score', met)
+    # ) %>% 
     split(.$taxa) %>% 
     map(select, -taxa) %>% 
     map(spread, met, val)

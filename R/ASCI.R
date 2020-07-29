@@ -152,15 +152,15 @@ ASCI <- function(taxa, station){
       c(beginning_cols, names(out1)[which(!names(out1) %in% beginning_cols)], "Comments")
     ) 
   
-  names(out1) <- gsub("pcnt","pct",names(out1))
-  names(out1) <- gsub("prop","prp",names(out1))
-  names(out1) <- gsub("attributed","att",names(out1))
-  names(out1) <- gsub("score","scr",names(out1))
+  # names(out1) <- gsub("pcnt","pct",names(out1))
+  # names(out1) <- gsub("prop","prp",names(out1))
+  # names(out1) <- gsub("attributed","att",names(out1))
+  # names(out1) <- gsub("score","scr",names(out1))
  # names(out1) <- gsub("IndicatorClass","IC",names(out1))
  # names(out1) <- gsub("OxyRed","OxRd",names(out1))
  # names(out1) <- gsub("OxyReq","OxRq",names(out1))
  # names(out1) <- gsub("DO_100orDO_75","DO100_75",names(out1))
-  names(out1) <- gsub("\\.","_",names(out1))
+  #names(out1) <- gsub("\\.","_",names(out1))
   
   out1 <- out1 %>%
     mutate(
