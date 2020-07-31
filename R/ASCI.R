@@ -42,6 +42,7 @@ ASCI <- function(taxa, station){
   dat <- dat$taxa
   
   # calculate GIS from stations
+  # calculates required GIS metrics from the other ones provided, if the required ones were not already provided
   station <- calcgis(station)
   
   # mmi

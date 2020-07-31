@@ -61,7 +61,8 @@ mmi_calcmetrics <- function(taxa = c('diatoms', 'sba', 'hybrid'), tax_dat, stati
     left_join(taxonomy_pa_melt, by = 'SampleID') %>% 
     left_join(traits, by = 'FinalIDassigned') %>% 
     left_join(indicators, by = 'FinalIDassigned') %>% 
-    left_join(taxonomy_pa_melt, by = c('SampleID', 'FinalIDassigned', 'value'))
+    left_join(taxonomy_pa_melt, by = c('SampleID', 'FinalIDassigned', 'value')
+  )
   
   #the next two lines create a genus variable by splitting the full taxa name
   # can probably be done with dplyr::mutate
