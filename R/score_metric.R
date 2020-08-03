@@ -14,8 +14,8 @@
 #' score_metric(taxa = 'diatoms', bugs.d.m, d.results, omni.ref)
 #' }
 
-score_metric <- function(taxa, bugs.m, results.metric, omni.ref){
-  scored <- data.frame(rowname = row.names(bugs.m))
+score_metric <- function(taxa, algae.m, results.metric, omni.ref){
+  scored <- data.frame(rowname = row.names(algae.m))
   foo <- which(colnames(results.metric) %in% omni.ref$Metric)
   cols <- names(results.metric)[foo]
   
