@@ -4,7 +4,9 @@
 \name{demo_station}
 \alias{demo_station}
 \title{Example station}
-\format{A \code{\link[base]{data.frame}} with 3 rows and 26 variables:}
+\format{
+A \code{\link[base]{data.frame}} with 3 rows and 26 variables:
+}
 \usage{
 demo_station
 }
