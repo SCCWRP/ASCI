@@ -16,7 +16,6 @@
 #' @importFrom dplyr bind_rows mutate select case_when mutate_all group_by ungroup inner_join summarize full_join
 #' @importFrom magrittr "%>%"
 #' @importFrom tidyr gather spread unnest unite replace_na
-#' @importFrom gtools na.replace
 #' @import purrr
 #' @import tibble
 #' 
@@ -90,12 +89,9 @@ ASCI <- function(taxa, stations){
     group_by(SampleID) %>%
     summarize(
       SampleType = paste0(unique(SampleTypeCode), collapse = ', '),
-      D_NumberTaxa = sum(!is.na(BAResult[which(SampleTypeCode == 'Integrated')])),
-      S_NumberTaxa = sum(
-        !is.na(Result[which(SampleTypeCode %in% c('Microalgae','Macroalgae'))]) | 
-        !is.na(BAResult[which(SampleTypeCode == 'Epiphyte')])
-      ),
-      H_NumberTaxa = sum(!is.na(Result) | !is.na(BAResult)),
+      D_NumberTaxa = sum(!is.na(BAResult[which(SampleTypeCode == 'Integrated')])), # May be incorrect
+      H_NumberTaxa = length(FinalID), # May be incorrect
+      S_NumberTaxa = H_NumberTaxa - D_NumberTaxa, # May be incorrect
       D_ValveCount = sum(BAResult[which(SampleTypeCode == 'Integrated')], na.rm = T),
       # This line of code seems wrong to me
       # Since it is Soft Body, wouldn't it be Result? Rather than BAResult
