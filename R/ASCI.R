@@ -91,7 +91,10 @@ ASCI <- function(taxa, stations){
     summarize(
       SampleType = paste0(unique(SampleTypeCode), collapse = ', '),
       D_NumberTaxa = sum(!is.na(BAResult[which(SampleTypeCode == 'Integrated')])),
-      S_NumberTaxa = sum(!is.na(Result[which(SampleTypeCode != 'Integrated')])),
+      S_NumberTaxa = sum(
+        !is.na(Result[which(SampleTypeCode %in% c('Microalgae','Macroalgae'))]) | 
+        !is.na(BAResult[which(SampleTypeCode == 'Epiphyte')])
+      ),
       H_NumberTaxa = sum(!is.na(Result) | !is.na(BAResult)),
       D_ValveCount = sum(BAResult[which(SampleTypeCode == 'Integrated')], na.rm = T),
       # This line of code seems wrong to me
