@@ -45,7 +45,7 @@ ASCI <- function(taxa, stations){
   dat <- dat$taxa
   
   # calculate GIS from stations
-  # calcgis calculates required gismetrics which are not provided, from the ones that were provided
+  # calcgis calculates required gismetrics which are not provided, from the ones that were provided in the station data
   # IF possible... If not enough data was provided it throws an error, or at least it is supposed to...
   gismetrics <- calcgis(stations)
   
@@ -69,9 +69,18 @@ ASCI <- function(taxa, stations){
   
   # Pass the algae and the gis data to each subsequent function
   # the sba function wont need the gis data since there are no predictive metrics for SBA data
-  diatom.scores <- diatoms(algae, gismetrics)
-  sba.scores = sba(algae)
-  hybrid.scores = hybrid(algae, gismetrics)
+  diatom.metrics <- diatoms(algae, gismetrics)
+  sba.metrics = sba(algae)
+  hybrid.metrics = hybrid(algae, gismetrics)
+  
+  # Next it's time to score the metrics
+  # It merges the metrics dataframes with the global dataframe called mmilkup$omni.ref,
+  #   scores the metrics, gets ASCI and returns the final output 
+  #   in the format that we want it to be in (for each assemblage type of course)
+  diatom.scores <- score(diatom.metrics, assemblage = 'diatoms')
+  sba.scores <- score(sba.metrics, assemblage = 'sba')
+  hybrid.scores <- score(hybrid.metrics, assemblage = 'hybrid')
+  
   
   # Here we bring them all together
   combined.scores <- diatom.scores %>%
@@ -93,11 +102,10 @@ ASCI <- function(taxa, stations){
       H_NumberTaxa = length(FinalID), # May be incorrect
       S_NumberTaxa = H_NumberTaxa - D_NumberTaxa, # May be incorrect
       D_ValveCount = sum(BAResult[which(SampleTypeCode == 'Integrated')], na.rm = T),
-      # This line of code seems wrong to me
-      # Since it is Soft Body, wouldn't it be Result? Rather than BAResult
       S_EntityCount = sum(BAResult[which(SampleTypeCode != 'Integrated')], na.rm = T),
       S_Biovolume = sum(Result, na.rm = T),
       Comments = dplyr::case_when(
+        # If there are no Integrated SampleTypeCodes, then there were no diatoms
         !("Integrated" %in% SampleTypeCode) ~ "Warning - Only Soft Body data present",
         # if it gets to this next step, it has already determined that Integrated is one of the sampletypecodes
         # if the length of the unique sampletypecodes is 1, then that means that Integrated is the ONLY sampletypecode
@@ -111,17 +119,19 @@ ASCI <- function(taxa, stations){
 
   # --- Preparing the final output ----
   # The next few lines of code are going to be purely for presentation, and organizing final output
-  beginning_cols <- c('SampleID', 'StationCode','SampleDate','Replicate',
-                      'SampleType','D_ValveCount','S_EntityCount','S_Biovolume','D_NumberTaxa',
-                      'S_NumberTaxa','H_NumberTaxa','UnrecognizedTaxa',
-                      'D_ASCI','S_ASCI','H_ASCI')
+  beginning_cols <- c(
+    'SampleID', 'StationCode','SampleDate','Replicate',
+    'SampleType','D_ValveCount','S_EntityCount','S_Biovolume',
+    'D_NumberTaxa', 'S_NumberTaxa','H_NumberTaxa','UnrecognizedTaxa',
+    'D_ASCI','S_ASCI','H_ASCI'
+  )
 
   ending_cols <- c('Comments','version_number')
 
   out <- combined.scores %>%
     inner_join(
       # join it with original data to tack on StationCode, SampleDate and Replicate, 
-      # which disappeared because we were only grouping based on SampleID
+      #   which disappeared because we were only grouping based on SampleID
       dat %>% 
         select(SampleID,StationCode,SampleDate,Replicate) %>% 
         unique(),

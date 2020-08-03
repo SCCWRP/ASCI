@@ -20,7 +20,7 @@ diatoms <- function(algae, gismetrics) {
     # groupby includes StationCode so that the column is preserved, to later join with gismetrics
     group_by(StationCode, SampleID) %>%
     summarize(
-      # Get the raw and percent attributed metrics
+      # ---- Get the raw and percent attributed metrics ----
       # Raw metric is, well, the actual calculated metric value
       # Percent attributed is the percentage of species that actually had data available in the column used 
       #   to calculate that metric
@@ -56,6 +56,7 @@ diatoms <- function(algae, gismetrics) {
     group_by(SampleID) %>%
     # Next we get the Predicted values and the Mod values (Raw - Pred)
     mutate(
+      # ---- Get Predicted Metrics ----
       # Count of most tolerant species
       # GIS Predictors: XerMtn and PPT_00_09
       cnt.spp.most.tol_pred = predict(
@@ -64,35 +65,35 @@ diatoms <- function(algae, gismetrics) {
       cnt.spp.most.tol_mod = cnt.spp.most.tol_raw - cnt.spp.most.tol_pred,
       
       # Count of genus Epithemia and Rhopalodia
-      # GIS Predictors: XerMtn and PPT_00_09
+      # GIS Predictors: AREA_SQKM and TMAX_WS
       EpiRho.richness_pred = predict(
         rfmods$diatoms.EpiRho.richness, c(AREA_SQKM, TMAX_WS)
       ),
       EpiRho.richness_mod = EpiRho.richness_raw - EpiRho.richness_pred,
       
       # Proportion of species with a value of "low" in the IndicatorClass_TN column
-      # GIS Predictors: XerMtn and PPT_00_09
+      # GIS Predictors: CondQR50 and MAX_ELEV
       prop.spp.IndicatorClass_TN_low_pred = predict(
         rfmods$diatoms.prop.spp.IndicatorClass_TN_low, c(CondQR50, MAX_ELEV)
       ),
       prop.spp.IndicatorClass_TN_low_mod = prop.spp.IndicatorClass_TN_low_raw - prop.spp.IndicatorClass_TN_low_pred,
       
       # Proportion of Species with the Habitat = P
-      # GIS Predictors: XerMtn and PPT_00_09
+      # GIS Predictors: CondQR50 and SITE_ELEV
       prop.spp.Planktonic_pred = predict(
         rfmods$diatoms.prop.spp.Planktonic, c(CondQR50, SITE_ELEV)
       ),
       prop.spp.Planktonic_mod = prop.spp.Planktonic_raw - prop.spp.Planktonic_pred,
       
       # Proportion of species with the TrophicState value equal to "E"
-      # GIS Predictors: XerMtn and PPT_00_09
+      # GIS Predictors: KFCT_AVE and CondQR50
       prop.spp.Trophic.E_pred = predict(
         rfmods$diatoms.prop.spp.Trophic.E, c(KFCT_AVE,CondQR50)
       ),
       prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E_pred,
       
       # How many species have a Salinity value of "BF"
-      # GIS Predictors: XerMtn and PPT_00_09
+      # GIS Predictors: XerMtn, KFCT_AVE and CondQR50
       Salinity.BF.richness_pred = predict(
         rfmods$diatoms.Salinity.BF.richness, c(XerMtn,KFCT_AVE,CondQR50)
       ),
@@ -102,12 +103,7 @@ diatoms <- function(algae, gismetrics) {
     ungroup()
   
     
-  # Next it's time to score the metrics
-  # the "score" function is fairly dynamic
-  # Adhering to the DRY principle, it scores the metrics, gets ASCI and returns the final output
-  # in the format that we want it to be in, for each assemblage type of course.
-  return( 
-    score(d.metrics, assemblage = 'diatoms') 
-  )
+  # Last but not least we return the metrics
+  return(d.metrics)
     
 }

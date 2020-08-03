@@ -109,16 +109,12 @@ hybrid <- function(algae, gismetrics) {
       ),
       Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness_pred
     ) %>%
+    # we don't want those GIS Metric names as columns in our final output
     select(-names(gismetrics)) %>%
     ungroup()
   
   
-  # Next it's time to score the metrics
-  # the "score" function is fairly dynamic
-  # Adhering to the DRY principle, it scores the metrics, gets ASCI and returns the final output
-  # in the format that we want it to be in, for each assemblage type of course.
-  return( 
-    score(hybrid.metrics, assemblage = 'hybrid')
-  )
+  # Last but not least we return the metrics
+  return(hybrid.metrics)
   
 }

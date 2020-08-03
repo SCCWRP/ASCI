@@ -44,12 +44,7 @@ sba <- function(algae) {
     ungroup() 
   
   
-  # Next it's time to score the metrics
-  # the "score" function is fairly dynamic
-  # Adhering to the DRY (Don't repeat yourself) principle, it scores the metrics, gets ASCI and returns the final output
-  # in the format that we want it to be in, for each assemblage type of course.
-  return( 
-    score(sba.metrics, assemblage = 'sba') 
-  )
+  # Last but not least we return the metrics
+  return(sba.metrics)
   
 }

@@ -17,18 +17,24 @@ score <- function(metrics, assemblage){
     stop('Error in score_metric.R - assemblage keyword arg must be diatoms, sba or hybrid')
   }
   
-  # we make the assumption that the dataframe of metrics comes in a wide format
+  # we make the assumption that the dataframe of metrics comes in a wide 
+  # For this reason, we will pivot it out to long format, to be able to join with the onmi.ref dataframe
   scored.metrics <- metrics %>% 
     pivot_longer(
       -SampleID, 
       names_to = 'Metric',
       values_to = 'Value'
     ) %>%
+    # mmilkup$omni.ref is a dataframe with a column called "Metric" which is the metric name
+    # and it has other columns with info about that metric that lets us get the scored version of each metric
+    # doing an inner join ensures that we only keep the "raw" and "mod" version of each metric,
+    #   since those are the only ones that get scored
     inner_join(
       mmilkup$omni.ref %>% filter(Assemblage == assemblage),
       by = 'Metric'
     ) %>%
     mutate(
+      # This is how the scores were calculated in the old version of the package
       Score = case_when(
         StressResponse == 'inc' ~ (Value - Max) / (Min - Max),
         StressResponse == 'dec' ~ (Value - Min) / (Max - Min),
@@ -41,7 +47,6 @@ score <- function(metrics, assemblage){
   
   # Scored Metric dataframe is in a very convenient form to get the ASCI scores
   # We will just go ahead and calculate ASCI scores
-  # IMHO no point of putting this part in a separate function, since its only a few lines of code
   ASCI.scores <- scored.metrics %>%
     group_by(SampleID) %>%
     summarize(
@@ -57,6 +62,7 @@ score <- function(metrics, assemblage){
   # now we will pivot it wider because that's how we will need it to be from here on out
   scored.metrics <- scored.metrics %>%
     select(-RefCalMean) %>%
+    # put the metric names back as column names
     pivot_wider(
       names_from = Metric, 
       values_from = Score
@@ -92,14 +98,14 @@ score <- function(metrics, assemblage){
       vars(-SampleID),
       function(x) {
         # take the first letter of the assemblage keyword arg, and that will be the prefix
-        # for all the final column names (except SampleID of course)
-        # that toupper function expression will return D for diatoms, S for sba and H for hybrid
+        #   for all the final column names (except SampleID of course)
+        # That toupper function expression will return D for diatoms, S for sba and H for hybrid
+        # assemblage keyword are can be one of "diatoms","sba", or "hybrid"
         paste0(
           toupper(substr(assemblage,1,1)), "_", x
         ) 
       }
     )
-  
   
   return(final.output)
   
