@@ -41,6 +41,15 @@ score <- function(metrics, assemblage){
         TRUE ~ NA_real_
       )
     ) %>%
+    # Scores need to be "trimmed"
+    # Negative scores should be zero, and those greater than 1 need to be converted to 1
+    mutate(
+      Score = case_when(
+        Score > 1 ~ 1, # Cut scores greater than 1 down to 1
+        Score < 0 ~ 0, # Negative scores get changed to zero
+        TRUE ~ Score   # Only remaining case is 0 < Score < 1 in which case leave it alone
+      )
+    ) %>%
     select(
       SampleID, Metric, Score, RefCalMean
     )
