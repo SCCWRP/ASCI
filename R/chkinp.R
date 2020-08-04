@@ -31,6 +31,7 @@
 #' @importFrom dplyr arrange filter group_by mutate select summarise
 #' @importFrom magrittr "%>%"
 #' @importFrom tidyr gather
+#' @importFrom stringr str_squish
 #' 
 #' @examples
 #' # all checks passed, data returned with SampleID
@@ -85,6 +86,10 @@
 
 chkinp <- function(taxa, station, getval = FALSE){
   
+  # Replace -88's with NA
+  taxa <- taxa %>% mutate_all(~dplyr::na_if(.,-88))
+  
+  
   ##
   # check if required columns are present in taxa
   taxcols <- c('StationCode', 'SampleDate', 'Replicate',
@@ -100,9 +105,28 @@ chkinp <- function(taxa, station, getval = FALSE){
     stop(msg, call. = FALSE)
   }
   
+  # Reassure that all columns are the correct datatype
+  taxa <- taxa %>%
+    dplyr::mutate(
+      StationCode = str_squish(as.character(StationCode)),
+      # Nothing in the code necessarily demands that the SampleDate needs to be a Date field (to my knowledge)
+      # For that reason, we will not coerce it to a date, in case they put different date formats or something like that
+      #SampleDate = as.POSIXct(SampleDate),
+      Replicate = as.integer(as.character(Replicate)),
+      Replicate = replace(Replicate, which(is.na(Replicate)), -88),
+      SampleTypeCode = str_squish(as.character(SampleTypeCode)),
+      BAResult = as.integer(as.character(BAResult)),
+      Result = as.numeric(as.character(Result)),
+      FinalID = str_squish(as.character(FinalID)),
+      SampleID = paste(StationCode, SampleDate, Replicate, sep = "_")
+    ) %>% 
+    dplyr::select(SampleID, StationCode, SampleDate, Replicate, SampleTypeCode, BAResult, Result, FinalID)
+  
+  
+  
   ##
   # add id values after columns are checked
-  taxa <- getids(taxa)  
+  #taxa <- getids(taxa)  
 
   ##
   # check if sites have both diatom and sba data
@@ -135,7 +159,7 @@ chkinp <- function(taxa, station, getval = FALSE){
     
     msg <- paste(chk, collapse = ', ') %>% 
       paste('Missing abundance data for diatoms', .)
-    stop(msg, call. = FALSE)
+    #stop(msg, call. = FALSE)
     
   }
 
@@ -158,8 +182,16 @@ chkinp <- function(taxa, station, getval = FALSE){
                 "AtmCa", "AtmMg", "AtmSO4", "MINP_WS", "MEANP_WS", "SumAve_P", 
                 "TMAX_WS", "XWD_WS", "MAXWD_WS", "LST32AVE", "BDH_AVE", "KFCT_AVE", 
                 "PRMH_AVE")
-  regvals <- c("StationCode", "SITE_ELEV", "TEMP_00_09", "KFCT_AVE", 
-               "AtmCa", "PPT_00_09", "MAX_ELEV")
+  regvals <- c("StationCode", 
+               "AREA_SQKM",
+                "KFCT_AVE",
+                #"XerMtn",
+                "PPT_00_09",
+                #"CondQR50",
+                "TMAX_WS",
+                "MAX_ELEV",
+                "SITE_ELEV",
+                "AtmCa")
 
   # must have one of or both XerMtn and PSA6C
   chk <- c('XerMtn', 'PSA6C') %in% names(station)
@@ -204,11 +236,17 @@ chkinp <- function(taxa, station, getval = FALSE){
     
   }
 
+  # Station columns that need to be character:
+  # StationCode, PSA6, PSA6C, County
+  # These seem to be read in as factors sometimes
+  station <- station %>% dplyr::mutate_if(is.factor, as.character)
+  
+  
   ##
   # find and remove unidentified taxonomy
   chk <- setdiff(taxa$FinalID, STE$FinalID)
-  if(length(chk) > 0){
-    
+  #if(length(chk) > 0){
+  if (TRUE) {  # in the case that length(chk) == 0, txrmv is not getting defined. Thus causing it to break when it references it later on
     # removed FinalID by SampleID
     txrmv <- taxa %>% 
       filter(FinalID %in% chk) %>% 

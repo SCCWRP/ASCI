@@ -1,7 +1,7 @@
 #' Score samples using the ASCI tool
 #'
 #' @param taxa \code{data.frame} for input taxonomy data
-#' @param station \code{data.frame} for input station data
+#' @param stations \code{data.frame} for input station data
 #' 
 #' @details 
 #' One index for three taxonomy types are scored, MMI for diatoms, soft-bodied algae, and hybrid. 
@@ -15,7 +15,7 @@
 #' 
 #' @importFrom dplyr bind_rows mutate select case_when mutate_all group_by ungroup inner_join summarize full_join
 #' @importFrom magrittr "%>%"
-#' @importFrom tidyr gather spread unnest unite
+#' @importFrom tidyr gather spread unnest unite replace_na
 #' @import purrr
 #' @import tibble
 #' 
@@ -34,107 +34,131 @@
 #' # remove soft-bodied from station sample 801M16916
 #' tmp <- subset(demo_algae_tax, !(StationCode == '801M16916' & SampleTypeCode != 'Integrated'))
 #' ASCI(tmp, demo_station)
-ASCI <- function(taxa, station){
+ASCI <- function(taxa, stations){
+  # Renamed the station argument to gismetrics, because it is actually GIS metric data on the stations
+  # for which ASCI is being processed
+  # The station data comes from the table called tblgismetrics in the SMC database
 
   # This is comment
   # run all other checks, get output if passed
-  dat <- chkinp(taxa, station)
+  dat <- chkinp(taxa, stations)
   txrmv <- dat$txrmv
   dat <- dat$taxa
   
   # calculate GIS from stations
-  station <- calcgis(station)
+  # calcgis calculates required gismetrics which are not provided, from the ones that were provided in the station data
+  # IF possible... If not enough data was provided it throws an error, or at least it is supposed to...
+  gismetrics <- calcgis(stations)
   
-  # mmi
-  mmind <- mmifun(dat, station)
-  
-  
-  # main output (scores)
-  mmiscr <- mmind %>% 
-    map(~ .x$MMI_scores) %>% 
-    map(gather, 'Metric', 'Value', -SampleID) %>% 
-    enframe('taxa') %>% 
-    unnest(cols = value) %>% 
-    mutate_all(~ replace(., is.na(.), NA))
-  
-  ##
-  # supplementary info
-  Supp1_mmi <- mmind %>% 
-    map(~ .x$MMI_supp) %>% 
-    map(gather, 'Metric', 'Value', -SampleID) %>% 
-    enframe('taxa') %>% 
-    unnest(cols = value) %>% 
-    mutate_all(~ replace(., is.na(.), NA))
-  
-  # get diatom valve counts
-  extra1 <- dat %>% 
-    filter(SampleTypeCode == 'Integrated') %>% 
-    group_by(SampleID) %>%
-    summarize(
-      D_ValveCount = sum(BAResult, na.rm = T)
+  # Prepare the Algae data to have metrics ran on it
+  # We need to tack on the traits and indicators dataframes, which has certain important info on the species
+  # That info is used to calculate metrics which are later used for ASCI
+  algae <- dat %>%
+    left_join(STE[,c("FinalID","FinalIDassigned")], by = "FinalID") %>%
+    left_join(mmilkup$traits, by = 'FinalIDassigned') %>%
+    left_join(mmilkup$indicators, by = 'FinalIDassigned') %>%
+    filter(
+      # I saw the sampletypecode Qualitative filtered out in previous versions of the ASCI calculator
+      SampleTypeCode != 'Qualitative',
+      # The na.replace function makes it so that if Result is NA, it gets counted as "Not being equal to Zero"
+      # As opposed to just an NA
+      # The reason we want to get rid of Result and BAResult being Zero is that BAResult or Result of Zero is the same
+      # as the organism not being present
+      replace_na(Result != 0, T), 
+      replace_na(BAResult != 0, T)
     )
   
-  # get sampletype concatenated column, soft-bodied entity and biovolume count
-  extra2 <- dat %>% 
-    group_by(SampleID) %>% 
+
+  # Pass the algae and the gis data to each subsequent function
+  # the sba function wont need the gis data since there are no predictive metrics for SBA data
+  diatom.metrics <- diatoms(algae, gismetrics)
+  sba.metrics = sba(algae)
+  hybrid.metrics = hybrid(algae, gismetrics)
+
+  
+  # Next it's time to score the metrics
+  # It merges the metrics dataframes with the global dataframe called mmilkup$omni.ref,
+  #   scores the metrics, gets ASCI and returns the final output 
+  #   in the format that we want it to be in (for each assemblage type of course)
+  diatom.scores <- score(diatom.metrics, assemblage = 'diatoms')
+  sba.scores <- score(sba.metrics, assemblage = 'sba')
+  hybrid.scores <- score(hybrid.metrics, assemblage = 'hybrid')
+  
+  
+  # Here we bring them all together
+  combined.scores <- diatom.scores %>%
+    inner_join(
+      sba.scores,
+      by = "SampleID"
+    ) %>%
+    inner_join(
+      hybrid.scores,
+      by = "SampleID"
+    )
+
+  # Here we get the what I like to call the supplementary information
+  supplementary_info <- algae %>%
+    group_by(SampleID) %>%
     summarize(
       SampleType = paste0(unique(SampleTypeCode), collapse = ', '),
-      S_EntityCount = sum(BAResult, na.rm = T),
-      S_Biovolume = sum(Result, na.rm = T)
-    ) %>% 
-    full_join(extra1, by = 'SampleID')
+      D_NumberTaxa = sum(!is.na(BAResult[which(SampleTypeCode == 'Integrated')])), # May be incorrect
+      H_NumberTaxa = length(FinalID), # May be incorrect
+      S_NumberTaxa = H_NumberTaxa - D_NumberTaxa, # May be incorrect
+      D_ValveCount = sum(BAResult[which(SampleTypeCode == 'Integrated')], na.rm = T),
+      S_EntityCount = sum(BAResult[which(SampleTypeCode != 'Integrated')], na.rm = T),
+      S_Biovolume = sum(Result, na.rm = T),
+      Comments = dplyr::case_when(
+        # If there are no Integrated SampleTypeCodes, then there were no diatoms
+        !("Integrated" %in% SampleTypeCode) ~ "Warning - Only Soft Body data present",
+        # if it gets to this next step, it has already determined that Integrated is one of the sampletypecodes
+        # if the length of the unique sampletypecodes is 1, then that means that Integrated is the ONLY sampletypecode
+        (length(unique(SampleTypeCode)) == 1) ~ "Warning - Only Diatom data present",
+        # if it failed to meet the above criteria, its fine and we don't need to give a warning
+        TRUE ~ ""
+      ),
+      version_number = as.character(packageVersion('ASCI'))
+    ) %>%
+    ungroup()
 
-  # combine all
-  out <- rbind(mmiscr, Supp1_mmi) %>% 
-    mutate(
-    taxa = case_when(
-      taxa == 'diatoms' ~ 'D',
-      taxa == 'sba' ~ 'S',
-      TRUE ~ 'H'
-      )
-    ) %>% 
-    unite('Met', c('taxa', 'Metric'), sep = '_') %>% 
-    group_by(SampleID, Met) %>% 
-    mutate(grouped_id = dplyr::row_number()) %>% 
-    spread(Met, Value) %>% 
-    select(-grouped_id) %>% 
-    ungroup() 
-  out1 <- extra2 %>% 
-    inner_join(out, by = 'SampleID') %>% 
-    filter(SampleID != 1)
-  
-  # get original stationcode, date, and replicate
-  # add unrecognized taxa
-  out1 <- getids(out1, concatenate = FALSE) %>% 
-    left_join(txrmv, by = 'SampleID')
-  
-  # unholy column selection
-  colsel <- c("SampleID", "StationCode", "SampleDate", "Replicate", "SampleType", 
-              
-              "D_ValveCount", "S_EntityCount", "S_Biovolume", "D_NumberTaxa", 
-              "S_NumberTaxa", "H_NumberTaxa", "UnrecognizedTaxa", "D_ASCI", "S_ASCI", "H_ASCI", 
-              
-              # "D_cnt.spp.IndicatorClass_TP_low_raw", "D_cnt.spp.IndicatorClass_TP_low_raw_score", 
-              # "D_prop.spp.Saprobic.BM_raw", "D_prop.spp.Saprobic.BM_raw_score", 
-              # "D_prop.spp.SPIspecies4_mod", "D_prop.spp.SPIspecies4_mod_score", 
-             #  "D_Salinity.BF.richness_mod", "D_Salinity.BF.richness_mod_score", 
-             #  "D_pcnt.attributed.IndicatorClass_TP_Low", "D_pcnt.attributed.Salinity.BF", 
-             #  "D_pcnt.attributed.Saprobic.BM", "D_pcnt.attributed.SPIspecies4", 
-             #  "H_OxyRed.DO_30.richness_mod", "H_OxyRed.DO_30.richness_mod_score", "H_prop.spp.BCG4_mod",
-             #  "H_prop.spp.BCG4_mod_score",  "H_prop.spp.IndicatorClass_DOC_high_raw","H_prop.spp.IndicatorClass_DOC_high_raw_score", 
-             #  "H_Salinity.BF.richness_mod", "H_Salinity.BF.richness_mod_score",  
-             #  "H_pcnt.attributed.OxyRed.DO_30", "H_pcnt.attributed.BCG4", "H_pcnt.attributed.IndicatorClass_DOC_high",
-             #  "H_pcnt.attributed.Salinity.BF",
-             #  "S_prop.spp.BCG45_raw", "S_prop.spp.BCG45_raw_score", "S_prop.spp.Green_raw", 
-             #  "S_prop.spp.Green_raw_score", "S_cnt.spp.IndicatorClass_DOC_high_raw", 
-             #  "S_cnt.spp.IndicatorClass_DOC_high_raw_score", "S_pcnt.attributed.BCG45", "S_pcnt.attributed.Green", 
-             #  "S_pcnt.attributed.IndicatorClass_DOC_high"
-              NULL
-              )
+  # --- Preparing the final output ----
+  # The next few lines of code are going to be purely for presentation, and organizing final output
+  beginning_cols <- c(
+    'SampleID', 'StationCode','SampleDate','Replicate',
+    'SampleType','D_ValveCount','S_EntityCount','S_Biovolume',
+    'D_NumberTaxa', 'S_NumberTaxa','H_NumberTaxa','UnrecognizedTaxa',
+    'D_ASCI','S_ASCI','H_ASCI'
+  )
 
-  out1 <- out1[, colsel]
+  ending_cols <- c('Comments','version_number')
 
-  return(out1)
-  
+  out <- combined.scores %>%
+    inner_join(
+      # join it with original data to tack on StationCode, SampleDate and Replicate, 
+      #   which disappeared because we were only grouping based on SampleID
+      dat %>% 
+        select(SampleID,StationCode,SampleDate,Replicate) %>% 
+        unique(),
+      by = 'SampleID'
+    ) %>%
+    inner_join(
+      supplementary_info,
+      by = 'SampleID'
+    ) %>%
+    # Tack on the Unrecognized Taxa gathered by chkinp at the beginning
+    # left join because the txrmv only has rows if a sample had unrecognized taxa
+    left_join(
+      txrmv,
+      by = 'SampleID'
+    ) %>%
+    select(
+      # Final ordering of the columns
+      all_of(beginning_cols),
+      starts_with("D_"),
+      starts_with("S_"),
+      starts_with("H_"),
+      all_of(ending_cols)
+    )
+
+  return(out)
+
 }
-

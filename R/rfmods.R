@@ -6,12 +6,21 @@
 #'  
 #' @format A \code{\link[base]{list}} with six elements, one for each predictive metric and a final element for conductivity estimates:
 #' \describe{
-#'   \item{\code{diatoms.prop.spp.BCG12}}{randomForest}
-#'   \item{\code{diatoms.prop.spp.Salinity.BF}}{randomForest}
+
+#'   \item{\code{diatoms.cnt.spp.most.tol}}{randomForest}
+#'   \item{\code{diatoms.EpiRho.richness}}{randomForest}
+#'   \item{\code{diatoms.prop.spp.IndicatorClass_TN_low}}{randomForest}
+#'   \item{\code{diatoms.prop.spp.Planktonic}}{randomForest}
 #'   \item{\code{diatoms.prop.spp.Trophic.E}}{randomForest}
+#'   \item{\code{diatoms.Salinity.BF.richness}}{randomForest}
+#'   \item{\code{hybrid.cnt.spp.IndicatorClass_TP_high}}{randomForest}
+#'   \item{\code{hybrid.cnt.spp.most.tol}}{randomForest}
+#'   \item{\code{hybrid.EpiRho.richness}}{randomForest}
 #'   \item{\code{hybrid.OxyRed.DO_30.richness}}{randomForest}
-#'   \item{\code{hybrid.prop.spp.BCG4}}{randomForest}
+#'   \item{\code{hybrid.prop.spp.Planktonic}}{randomForest}
+#'   \item{\code{hybrid.prop.spp.Trophic.E}}{randomForest}
 #'   \item{\code{hybrid.Salinity.BF.richness}}{randomForest}
+
 #'   \item{\code{cond.qrf}}{quantregForest}
 #' }
 #'
