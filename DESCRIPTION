@@ -25,6 +25,7 @@ Imports:
 Depends:
     R (>= 3.4.0), 
     methods
+Encoding: UTF-8
 Authors@R: c(
   person(given = "Marcus W.", family = "Beck",
     role = c("aut","cre"),

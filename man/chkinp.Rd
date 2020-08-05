@@ -57,6 +57,7 @@ tmp <- merge(demo_algae_tax, STE, all.x = T) \%>\%
   filter(Class \%in\% 'Bacillariophyceae')
 chkinp(tmp, demo_station)
 
+
 # missing abundance data for diatoms
 tmp <- demo_algae_tax
 tmp$BAResult <- NA

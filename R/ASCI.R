@@ -16,6 +16,7 @@
 #' @importFrom dplyr bind_rows mutate select case_when mutate_all group_by ungroup inner_join summarize full_join
 #' @importFrom magrittr "%>%"
 #' @importFrom tidyr gather spread unnest unite replace_na
+#' @importFrom utils packageVersion
 #' @import purrr
 #' @import tibble
 #' 
