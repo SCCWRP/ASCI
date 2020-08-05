@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Random forest models for metrics — rfmods • ASCI</title>
+<title>Create scored metrics — score • ASCI</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Random forest models for metrics — rfmods" />
-<meta property="og:description" content="List of random forest models for predictive metrics" />
+<meta property="og:title" content="Create scored metrics — score" />
+<meta property="og:description" content="Create scored metrics" />
 
 
 
@@ -108,41 +108,38 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Random forest models for metrics</h1>
-    <small class="dont-index">Source: <a href='https://github.com/SCCWRP/ASCI/blob/master/R/rfmods.R'><code>R/rfmods.R</code></a></small>
-    <div class="hidden name"><code>rfmods.Rd</code></div>
+    <h1>Create scored metrics</h1>
+    <small class="dont-index">Source: <a href='https://github.com/SCCWRP/ASCI/blob/master/R/score.R'><code>R/score.R</code></a></small>
+    <div class="hidden name"><code>score.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>List of random forest models for predictive metrics</p>
+    <p>Create scored metrics</p>
     </div>
 
-    <pre class="usage"><span class='no'>rfmods</span></pre>
+    <pre class="usage"><span class='fu'>score</span>(<span class='no'>metrics</span>, <span class='no'>assemblage</span>)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>metrics</th>
+      <td><p>mmi metrics dataframe, having metrics to be scored</p></td>
+    </tr>
+    <tr>
+      <th>assemblage</th>
+      <td><p>chr string indicating the assemblage type - diatoms, sba or hybrid</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code><a href='https://rdrr.io/r/base/list.html'>list</a></code> with six elements, one for each predictive metric and a final element for conductivity estimates:</p><dl'>
-  <dt><code>diatoms.cnt.spp.most.tol</code></dt><dd><p>randomForest</p></dd>
-  <dt><code>diatoms.EpiRho.richness</code></dt><dd><p>randomForest</p></dd>
-  <dt><code>diatoms.prop.spp.IndicatorClass_TN_low</code></dt><dd><p>randomForest</p></dd>
-  <dt><code>diatoms.prop.spp.Planktonic</code></dt><dd><p>randomForest</p></dd>
-  <dt><code>diatoms.prop.spp.Trophic.E</code></dt><dd><p>randomForest</p></dd>
-  <dt><code>diatoms.Salinity.BF.richness</code></dt><dd><p>randomForest</p></dd>
-  <dt><code>hybrid.cnt.spp.IndicatorClass_TP_high</code></dt><dd><p>randomForest</p></dd>
-  <dt><code>hybrid.cnt.spp.most.tol</code></dt><dd><p>randomForest</p></dd>
-  <dt><code>hybrid.EpiRho.richness</code></dt><dd><p>randomForest</p></dd>
-  <dt><code>hybrid.OxyRed.DO_30.richness</code></dt><dd><p>randomForest</p></dd>
-  <dt><code>hybrid.prop.spp.Planktonic</code></dt><dd><p>randomForest</p></dd>
-  <dt><code>hybrid.prop.spp.Trophic.E</code></dt><dd><p>randomForest</p></dd>
-  <dt><code>hybrid.Salinity.BF.richness</code></dt><dd><p>randomForest</p></dd>
-  <dt><code>cond.qrf</code></dt><dd><p>quantregForest</p></dd>
-
-</dl>
-
+    <p>a data.frame scored</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>rfmods</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'>score</span>(<span class='kw'>taxa</span> <span class='kw'>=</span> <span class='st'>'diatoms'</span>, <span class='no'>bugs.d.m</span>, <span class='no'>d.results</span>, <span class='no'>omni.ref</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
