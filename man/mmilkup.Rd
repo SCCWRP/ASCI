@@ -11,15 +11,12 @@ A \code{\link[base]{list}} with six elements named \code{traits}, \code{d.win}, 
 mmilkup
 }
 \description{
-Lookup tables for MMI calculations used in \code{\link{mmifun}} and \code{\link{mmi_calcmetrics}}
+Lookup tables for MMI calculations
 }
 \details{
-Each element is a \code{\link[base]{data.frame}} where all are used in \code{\link{mmifun}}, except \code{indicators} which is used in \code{\link{mmi_calcmetrics}}.
+Each element is a \code{\link[base]{data.frame}}.
 }
 \examples{
 data(mmilkup)
-}
-\seealso{
-\code{\link{mmifun}}, \code{\link{mmi_calcmetrics}}
 }
 \keyword{datasets}

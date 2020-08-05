@@ -7,7 +7,7 @@
 #' @param getval logical to return a vector of values not satisfied by checks, useful for data prep
 #'
 #' @return A two element list of the original data (named \code{taxa}) and removed taxa by \code{SampleID} (named \code{txrmv})
-#' if all checks are met.  The original data also includes a new column for \code{SampleID} (see \code{\link{getids}}).  An 
+#' if all checks are met.  The original data also includes a new column for \code{SampleID}.  An 
 #' error message is returned if the datasetsdo not meet requirements or a vector of values that caused the error if \code{getval = TRUE}.  
 #' Site data will include only those sites in the taxonomic data.
 #' 

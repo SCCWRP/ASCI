@@ -23,7 +23,7 @@ Imports:
     glue,
     stringr
 Depends:
-    R (>= 3.4.0), 
+    R (>= 3.5.0), 
     methods
 Encoding: UTF-8
 Authors@R: c(
