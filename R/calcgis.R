@@ -19,7 +19,7 @@
 #' 
 #' @export
 #' 
-#' @seealso \code{\link{chkinp}}, \code{\link{getids}}
+#' @seealso \code{\link{chkinp}}
 #'
 #' @importFrom dplyr mutate mutate_if
 #' @importFrom magrittr "%>%"

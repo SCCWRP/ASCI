@@ -6,7 +6,6 @@
 #' @details 
 #' One index for three taxonomy types are scored, MMI for diatoms, soft-bodied algae, and hybrid. 
 #' If only soft-bodied algae or diatoms are present, only the respective ASCI and metrics are returned.
-#' This function outputs the results of \code{\link{mmifun}} functions in a user-friendly format.
 #' 
 #' @return 
 #' A dataframe with all metrics calculated for each provided taxa
@@ -19,8 +18,6 @@
 #' @importFrom utils packageVersion
 #' @import purrr
 #' @import tibble
-#' 
-#' @seealso  \code{\link{mmifun}}
 #' 
 #' @examples 
 #' # calculate all
