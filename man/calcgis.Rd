@@ -61,5 +61,5 @@ calcgis(tmp)
 }
 }
 \seealso{
-\code{\link{chkinp}}, \code{\link{getids}}
+\code{\link{chkinp}}
 }

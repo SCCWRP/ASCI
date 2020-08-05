@@ -20,7 +20,6 @@ Score samples using the ASCI tool
 \details{
 One index for three taxonomy types are scored, MMI for diatoms, soft-bodied algae, and hybrid. 
 If only soft-bodied algae or diatoms are present, only the respective ASCI and metrics are returned.
-This function outputs the results of \code{\link{mmifun}} functions in a user-friendly format.
 }
 \examples{
 # calculate all
@@ -35,7 +34,4 @@ ASCI(tmp, demo_station)
 # remove soft-bodied from station sample 801M16916
 tmp <- subset(demo_algae_tax, !(StationCode == '801M16916' & SampleTypeCode != 'Integrated'))
 ASCI(tmp, demo_station)
-}
-\seealso{
-\code{\link{mmifun}}
 }
