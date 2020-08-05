@@ -19,7 +19,9 @@ Imports:
     reshape2, 
     tibble,
     tidyr,
-    vegan
+    vegan,
+    glue,
+    stringr
 Depends:
     R (>= 3.4.0), 
     methods
