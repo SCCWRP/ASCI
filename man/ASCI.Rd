@@ -4,12 +4,12 @@
 \alias{ASCI}
 \title{Score samples using the ASCI tool}
 \usage{
-ASCI(taxa, station)
+ASCI(taxa, stations)
 }
 \arguments{
 \item{taxa}{\code{data.frame} for input taxonomy data}
 
-\item{station}{\code{data.frame} for input station data}
+\item{stations}{\code{data.frame} for input station data}
 }
 \value{
 A dataframe with all metrics calculated for each provided taxa

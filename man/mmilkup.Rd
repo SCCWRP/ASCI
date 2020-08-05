@@ -4,7 +4,9 @@
 \name{mmilkup}
 \alias{mmilkup}
 \title{Lookup tables for MMI calculations}
-\format{A \code{\link[base]{list}} with six elements named \code{traits}, \code{d.win}, \code{sba.win}, \code{hybrid.win}, \code{omni.ref}, and \code{indicators}.}
+\format{
+A \code{\link[base]{list}} with six elements named \code{traits}, \code{d.win}, \code{sba.win}, \code{hybrid.win}, \code{omni.ref}, and \code{indicators}.
+}
 \usage{
 mmilkup
 }

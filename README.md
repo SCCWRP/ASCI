@@ -1,7 +1,7 @@
 
 ## ASCI
 
-#### *Marcus W. Beck (maintainer), <marcusb@sccwrp.org>, Susanna Theroux, <susannat@sccwrp.org>, Quynh-Thi Ho, <qthi.ho@gmail.com>, John Van Sickle*
+#### *Marcus W. Beck, <marcusb@sccwrp.org>; Susanna Theroux, <susannat@sccwrp.org>; Robert Butler (maintainer), <robertb@sccwrp.org>; Quynh-Thi Ho, <qthi.ho@gmail.com> *
 
 [![Travis-CI Build
 Status](https://travis-ci.org/SCCWRP/ASCI.svg?branch=master)](https://travis-ci.org/SCCWRP/ASCI)
@@ -10,7 +10,7 @@ Status](https://ci.appveyor.com/api/projects/status/github/SCCWRP/ASCI?branch=ma
 [![DOI](https://zenodo.org/badge/106055957.svg)](https://zenodo.org/badge/latestdoi/106055957)
 
 R package materials to calculate the Algal Stream Condition Index (ASCI)
-based on O/E and pMMI scores using diatom, soft-bodied algae, or a
+based on predictive MMI scores using diatom, soft-bodied algae, or a
 hybrid appproach.
 
 ### Installation

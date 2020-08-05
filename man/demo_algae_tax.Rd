@@ -4,7 +4,8 @@
 \name{demo_algae_tax}
 \alias{demo_algae_tax}
 \title{Example data for algae taxonomy}
-\format{A \code{\link[base]{data.frame}} with 208 rows and 7 variables:
+\format{
+A \code{\link[base]{data.frame}} with 208 rows and 7 variables:
 \describe{
   \item{\code{StationCode}}{chr}
   \item{\code{SampleDate}}{chr}
@@ -13,7 +14,8 @@
   \item{\code{BAResult}}{num}
   \item{\code{Result}}{num}
   \item{\code{FinalID}}{chr}
-}}
+}
+}
 \usage{
 demo_algae_tax
 }
