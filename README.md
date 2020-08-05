@@ -1,7 +1,7 @@
 
 ## ASCI
 
-#### *Marcus W. Beck, <marcusb@sccwrp.org>; Susanna Theroux, <susannat@sccwrp.org>; Robert Butler (maintainer), <robertb@sccwrp.org>; Quynh-Thi Ho, <qthi.ho@gmail.com> *
+#### *Marcus W. Beck, <marcusb@sccwrp.org>; Susanna Theroux, <susannat@sccwrp.org>; Robert Butler (maintainer), <robertb@sccwrp.org>; Quynh-Thi Ho, <qthi.ho@gmail.com>; Duy Nguyen, <duynguyen1993@csu.fullerton.edu> *
 
 [![Travis-CI Build
 Status](https://travis-ci.org/SCCWRP/ASCI.svg?branch=master)](https://travis-ci.org/SCCWRP/ASCI)
