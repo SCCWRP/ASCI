@@ -39,6 +39,14 @@ Authors@R: c(
     role = c("aut"), 
     email = "qthi.ho@gmail.com"
     ),
+    person(given = "Robert", family = "Butler", 
+    role = c("aut"), 
+    email = "robertb@sccwrp.org"
+    ),
+    person(given = "Duy", family = "Nguyen", 
+    role = c("ctb"), 
+    email = "duynguyen1993@csu.fullerton.edu"
+    ),
   person(given = "John", family = "Van Sickle",
     role = "aut", 
     email = "VanSickle.John@epa.gov"
