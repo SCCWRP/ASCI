@@ -4,6 +4,10 @@ note <- sprintf("R package version %s", meta$Version)
 bibentry(bibtype = "Manual",
          title = "{SCCWRP/ASCI: v0.0.1}",
          author = c(
+           person(given = "Robert", family = "Butler",
+                  role = c"aut", 
+                  email = "qthi.ho@gmail.com"
+           ),
            person(given = "Marcus W.", family = "Beck",
                   role = c("aut","cre"),
                   email = "marcusb@sccwrp.org"),
@@ -11,10 +15,18 @@ bibentry(bibtype = "Manual",
                   role = "aut", 
                   email = "susannat@sccwrp.org"
            ),
+          person(given = "Quynh-Thi", family = "Ho",
+                  role = "aut", 
+                  email = "qthi.ho@gmail.com"
+           ),
            person(given = "John", family = "Van Sickle",
                   role = "aut", 
                   email = "VanSickle.John@epa.gov"
-           )
+           ),
+           person(given = "Duy", family = "Nguyen",
+                  role = "ctb", 
+                  email = "duynguyen1993@csu.fullerton.edu"
+           ),
          ),
          year = year,
          note = note,
