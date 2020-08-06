@@ -26,7 +26,7 @@ bibentry(bibtype = "Manual",
            person(given = "Duy", family = "Nguyen",
                   role = "ctb", 
                   email = "duynguyen1993@csu.fullerton.edu"
-           ),
+           )
          ),
          year = year,
          note = note,
