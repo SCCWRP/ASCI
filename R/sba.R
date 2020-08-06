@@ -25,8 +25,8 @@ sba <- function(algae) {
       #   to calculate that metric
       
       # Proportion of species with a value of "high" in the IndicatorClass_DOC column
-      prop.spp.IndicatorClass_DOC_high_raw_raw = sum(na.omit(IndicatorClass_DOC=='high'))/length(na.omit(IndicatorClass_DOC)),
-      prop.spp.IndicatorClass_DOC_high_raw_pct_att = length(na.omit(IndicatorClass_DOC)) / length(IndicatorClass_DOC),
+      prop.spp.IndicatorClass_DOC_high_raw = sum(na.omit(IndicatorClass_DOC=='high'))/length(na.omit(IndicatorClass_DOC)),
+      prop.spp.IndicatorClass_DOC_high_pct_att = length(na.omit(IndicatorClass_DOC)) / length(IndicatorClass_DOC),
       
       # Proportion of species with a value of "NRF" in the IndicatorClass_Ref column
       prop.spp.IndicatorClass_NonRef_raw = sum(na.omit(IndicatorClass_Ref=='NRF'))/length(na.omit(IndicatorClass_Ref)),

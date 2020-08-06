@@ -30,7 +30,7 @@ score <- function(metrics, assemblage){
     # doing an inner join ensures that we only keep the "raw" and "mod" version of each metric,
     #   since those are the only ones that get scored
     inner_join(
-      mmilkup$omni.ref %>% filter(Assemblage == assemblage),
+      mmilkup$omni.ref %>% filter(Assemblage == assemblage, `Used for ASCI`),
       by = 'Metric'
     ) %>%
     mutate(
@@ -83,7 +83,7 @@ score <- function(metrics, assemblage){
         names(.)[which(grepl("_mod|_raw",names(.)))]
       ),
       function(x) {
-        paste0(x, "_scr")
+        gsub("_mod|_raw","_scr", x)
       }
     )
   

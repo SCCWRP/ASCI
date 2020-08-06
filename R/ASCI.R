@@ -129,6 +129,9 @@ ASCI <- function(taxa, stations){
 
   ending_cols <- c('Comments','version_number')
 
+  
+  # output is combined.scores, joined with what i called the "supplementary info" 
+  #   and the Unrecognized Taxa
   out <- combined.scores %>%
     inner_join(
       # join it with original data to tack on StationCode, SampleDate and Replicate, 
@@ -154,7 +157,9 @@ ASCI <- function(taxa, stations){
       starts_with("D_"),
       starts_with("S_"),
       starts_with("H_"),
-      all_of(ending_cols)
+      all_of(ending_cols),
+      # We dont want to include mods in final output
+      -contains("_mod", ignore.case = FALSE) 
     )
 
   return(out)
