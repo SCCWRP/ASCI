@@ -52,7 +52,7 @@ globalVariables(
 
     # Other various column names that show up in strings of dplyr pipes
     # and Travis wants to see them show up in this file
-    "Score", "Metric", "Metric_Type"
+    "Score", "Metric", "Metric_Type", "Used for ASCI"
 
   )
 )
