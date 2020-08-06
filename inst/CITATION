@@ -5,7 +5,7 @@ bibentry(bibtype = "Manual",
          title = "{SCCWRP/ASCI: v0.0.1}",
          author = c(
            person(given = "Robert", family = "Butler",
-                  role = c"aut", 
+                  role = "aut", 
                   email = "qthi.ho@gmail.com"
            ),
            person(given = "Marcus W.", family = "Beck",
