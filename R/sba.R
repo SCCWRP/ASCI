@@ -10,7 +10,10 @@
 sba <- function(algae) {  
   # First things first - Keep only non integrated sampletypecodes
   algae <- algae %>%
-    filter(SampleTypeCode != 'Integrated')
+    filter(
+      SampleTypeCode != 'Integrated',
+      Phylum != 'Bacillariophyta'
+    )
 
   # Now we get the metrics
   # No predictive metrics for soft body algae

@@ -13,7 +13,10 @@ diatoms <- function(algae, gismetrics) {
   # First things first - Keep only integrated sampletypecodes
   # The scores appear to come out closer to the expected results when we DONT include this step
   algae <- algae %>%
-    filter(SampleTypeCode == 'Integrated')
+    filter(
+      SampleTypeCode == 'Integrated',
+      Phylum == 'Bacillariophyta'
+    )
 
   # Now we get the metrics
   d.metrics <- algae %>%
