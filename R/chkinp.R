@@ -89,7 +89,7 @@ chkinp <- function(taxa, station, getval = FALSE){
   # Replace -88's with NA
   taxa <- taxa %>% mutate_all(~dplyr::na_if(.,-88))
   
-  
+
   ##
   # check if required columns are present in taxa
   taxcols <- c('StationCode', 'SampleDate', 'Replicate',
@@ -174,7 +174,23 @@ chkinp <- function(taxa, station, getval = FALSE){
     stop(msg, call. = FALSE)
     
   }
+
   
+  # check for duplicates in stations data
+  chk <- station %>% 
+    group_by(StationCode) %>% 
+    filter(n() > 1) %>%
+    distinct(StationCode)
+  if (nrow(chk) > 0) {
+    stop(
+      paste(
+        "Duplicate records in station data for the following sites:\n",
+        paste(chk, collapse = ',\n')
+      )
+    )
+  }
+  
+    
   ##
   # check station columns
   
