@@ -57,13 +57,13 @@ ASCI <- function(taxa, stations){
     left_join(mmilkup$indicators, by = 'FinalIDassigned') %>%
     filter(
       # I saw the sampletypecode Qualitative filtered out in previous versions of the ASCI calculator
-      SampleTypeCode != 'Qualitative',
+      SampleTypeCode != 'Qualitative'
       # The replace_na function makes it so that if Result is NA, it gets counted as "Not being equal to Zero"
       # As opposed to just an NA
       # The reason we want to get rid of Result and BAResult being Zero is that BAResult or Result of Zero is the same
       # as the organism not being present
-      replace_na(Result != 0, T), 
-      replace_na(BAResult != 0, T)
+      #replace_na(Result != 0, T), 
+      #replace_na(BAResult != 0, T)
     )
   
 
