@@ -17,9 +17,13 @@ sba <- function(algae) {
     select(
       -c(SampleTypeCode, BAResult, Result)
     ) %>%
+    group_by(
+      SampleID
+    ) %>%
     distinct(
-      FinalIDAssigned, .keep_all = TRUE
-    )
+      FinalIDassigned, .keep_all = TRUE
+    ) %>% 
+    ungroup()
 
   # Now we get the metrics
   # No predictive metrics for soft body algae

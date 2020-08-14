@@ -20,9 +20,13 @@ diatoms <- function(algae, gismetrics) {
     select(
       -c(SampleTypeCode, BAResult, Result)
     ) %>%
+    group_by(
+      SampleID
+    ) %>%
     distinct(
-      FinalIDAssigned, .keep_all = TRUE
-    )
+      FinalIDassigned, .keep_all = TRUE
+    ) %>%
+    ungroup()
 
   # Now we get the metrics
   d.metrics <- algae %>%

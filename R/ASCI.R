@@ -65,10 +65,14 @@ ASCI <- function(taxa, stations){
       replace_na(Result > 0, T), 
       replace_na(BAResult > 0, T)
     ) %>% 
+    group_by(
+      SampleID
+    ) %>%
     distinct(
       # Susie said we should remove rows duplicated on these fields
-      FinalIDAssigned, SampleTypeCode, Result, BAResult, .keep_all = TRUE
-    )
+      FinalIDassigned, SampleTypeCode, Result, BAResult, .keep_all = TRUE
+    ) %>% 
+    ungroup()
 
 
   # Pass the algae and the gis data to each subsequent function

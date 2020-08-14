@@ -13,9 +13,13 @@ hybrid <- function(algae, gismetrics) {
     select(
       -c(SampleTypeCode, BAResult, Result)
     ) %>%
-    distinct(
-      FinalIDAssigned, .keep_all = TRUE
+    group_by(
+      SampleID
     ) %>%
+    distinct(
+      FinalIDassigned, .keep_all = TRUE
+    ) %>%
+    ungroup() %>%
     # groupby includes StationCode so that the column is preserved, to later join with gismetrics
     group_by(StationCode, SampleID) %>%
     summarize(
