@@ -64,7 +64,8 @@ ASCI <- function(taxa, stations){
       # as the organism not being present
       replace_na(Result != 0, T), 
       replace_na(BAResult != 0, T)
-    )
+    ) %>%
+    distinct(FinalIDassigned,.keep_all = TRUE)
   
 
   # Pass the algae and the gis data to each subsequent function
