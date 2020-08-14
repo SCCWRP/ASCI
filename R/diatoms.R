@@ -16,6 +16,12 @@ diatoms <- function(algae, gismetrics) {
     filter(
       SampleTypeCode == 'Integrated',
       Phylum == 'Bacillariophyta'
+    ) %>%
+    select(
+      -c(SampleTypeCode, BAResult, Result)
+    ) %>%
+    distinct(
+      FinalIDAssigned, .keep_all = TRUE
     )
 
   # Now we get the metrics
