@@ -107,8 +107,9 @@ ASCI <- function(taxa, stations){
     group_by(SampleID) %>%
     summarize(
       SampleType = paste0(unique(SampleTypeCode), collapse = ', '),
-      D_NumberTaxa = sum(!is.na(BAResult[which(SampleTypeCode == 'Integrated')])), # May be incorrect
-      H_NumberTaxa = length(FinalID), # May be incorrect
+      #D_NumberTaxa = sum(!is.na(BAResult[which(SampleTypeCode == 'Integrated')])), # May be incorrect
+      D_NumberTaxa = length(unique(FinalID[which((SampleTypeCode == 'Integrated') & (Phylum == 'Bacillariophyta'))])),
+      H_NumberTaxa = length(unique(FinalID)), # May be incorrect
       S_NumberTaxa = H_NumberTaxa - D_NumberTaxa, # May be incorrect
       D_ValveCount = sum(BAResult[which(SampleTypeCode == 'Integrated')], na.rm = T),
       S_EntityCount = sum(BAResult[which(SampleTypeCode != 'Integrated')], na.rm = T),
