@@ -10,8 +10,8 @@ Status](https://ci.appveyor.com/api/projects/status/github/SCCWRP/ASCI?branch=ma
 [![DOI](https://zenodo.org/badge/106055957.svg)](https://zenodo.org/badge/latestdoi/106055957)
 
 R package materials to calculate the Algal Stream Condition Index (ASCI)
-based on O/E and pMMI scores using diatom, soft-bodied algae, or a
-hybrid appproach.
+based on pMMI scores using diatom, soft-bodied algae, or a
+hybrid appproach. A link to the ASCI manuscript can be found here: https://www.sciencedirect.com/science/article/pii/S1470160X20303587
 
 ### Installation
 
