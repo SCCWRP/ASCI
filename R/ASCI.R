@@ -93,11 +93,11 @@ ASCI <- function(taxa, stations){
   
   # Here we bring them all together
   combined.scores <- diatom.scores %>%
-    inner_join(
+    full_join(
       sba.scores,
       by = "SampleID"
     ) %>%
-    inner_join(
+    full_join(
       hybrid.scores,
       by = "SampleID"
     )
