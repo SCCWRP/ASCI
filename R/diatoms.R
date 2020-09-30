@@ -65,56 +65,86 @@ diatoms <- function(algae, gismetrics) {
     ungroup() %>%
     # join with the gismetrics dataframe by the StationCode column
     # gismetrics dataframe has no SampleID column
-    inner_join(gismetrics, by = 'StationCode') %>%
-    group_by(SampleID) %>%
+    full_join(gismetrics, by = 'StationCode') %>%
+    group_by(StationCode, SampleID) %>%
     # Next we get the Predicted values and the Mod values (Raw - Pred)
     mutate(
       # ---- Get Predicted Metrics ----
       # Count of most tolerant species
       # GIS Predictors: XerMtn and PPT_00_09
-      cnt.spp.most.tol_pred = predict(
-        rfmods$diatoms.cnt.spp.most.tol, c(XerMtn,PPT_00_09)
+      cnt.spp.most.tol_pred = ifelse(
+        is.na(cnt.spp.most.tol_raw),
+        NA_real_,
+        predict(
+          rfmods$diatoms.cnt.spp.most.tol, c(XerMtn,PPT_00_09)
+        )
       ),
       cnt.spp.most.tol_mod = cnt.spp.most.tol_raw - cnt.spp.most.tol_pred,
       
       # Count of genus Epithemia and Rhopalodia
       # GIS Predictors: AREA_SQKM and TMAX_WS
-      EpiRho.richness_pred = predict(
-        rfmods$diatoms.EpiRho.richness, c(AREA_SQKM, TMAX_WS)
+      EpiRho.richness_pred = ifelse(
+        is.na(EpiRho.richness_raw),
+        NA_real_,
+        predict(
+          rfmods$diatoms.EpiRho.richness, c(AREA_SQKM, TMAX_WS)
+        )
       ),
       EpiRho.richness_mod = EpiRho.richness_raw - EpiRho.richness_pred,
       
       # Proportion of species with a value of "low" in the IndicatorClass_TN column
       # GIS Predictors: CondQR50 and MAX_ELEV
-      prop.spp.IndicatorClass_TN_low_pred = predict(
-        rfmods$diatoms.prop.spp.IndicatorClass_TN_low, c(CondQR50, MAX_ELEV)
+      prop.spp.IndicatorClass_TN_low_pred = ifelse(
+        is.na(prop.spp.IndicatorClass_TN_low_raw),
+        NA_real_,
+        predict(
+          rfmods$diatoms.prop.spp.IndicatorClass_TN_low, c(CondQR50, MAX_ELEV)
+        )
       ),
       prop.spp.IndicatorClass_TN_low_mod = prop.spp.IndicatorClass_TN_low_raw - prop.spp.IndicatorClass_TN_low_pred,
       
       # Proportion of Species with the Habitat = P
       # GIS Predictors: CondQR50 and SITE_ELEV
-      prop.spp.Planktonic_pred = predict(
-        rfmods$diatoms.prop.spp.Planktonic, c(CondQR50, SITE_ELEV)
+      prop.spp.Planktonic_pred = ifelse(
+        is.na(prop.spp.Planktonic_raw),
+        NA_real_,
+        predict(
+          rfmods$diatoms.prop.spp.Planktonic, c(CondQR50, SITE_ELEV)
+        )
       ),
       prop.spp.Planktonic_mod = prop.spp.Planktonic_raw - prop.spp.Planktonic_pred,
       
       # Proportion of species with the TrophicState value equal to "E"
       # GIS Predictors: KFCT_AVE and CondQR50
-      prop.spp.Trophic.E_pred = predict(
-        rfmods$diatoms.prop.spp.Trophic.E, c(KFCT_AVE,CondQR50)
+      prop.spp.Trophic.E_pred = ifelse(
+        is.na(prop.spp.Trophic.E_raw),
+        NA_real_,
+        predict(
+          rfmods$diatoms.prop.spp.Trophic.E, c(KFCT_AVE,CondQR50)
+        )
       ),
       prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E_pred,
       
       # How many species have a Salinity value of "BF"
       # GIS Predictors: XerMtn, KFCT_AVE and CondQR50
-      Salinity.BF.richness_pred = predict(
-        rfmods$diatoms.Salinity.BF.richness, c(XerMtn,KFCT_AVE,CondQR50)
+      Salinity.BF.richness_pred = ifelse(
+        is.na(Salinity.BF.richness_raw),
+        NA_real_,
+        predict(
+          rfmods$diatoms.Salinity.BF.richness, c(XerMtn,KFCT_AVE,CondQR50)
+        )
       ),
       Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness_pred
     ) %>%
-    select(-names(gismetrics)) %>%
-    ungroup()
+    ungroup()  %>%
+    select(-c(names(gismetrics), StationCode))
   
+
+  # if rows have all NA values, drop the rows.
+  d.metrics <- d.metrics[
+    rowSums(is.na(d.metrics)) != ncol(d.metrics)
+  ,]
+
     
   # Last but not least we return the metrics
   return(d.metrics)
