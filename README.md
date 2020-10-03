@@ -129,7 +129,7 @@ demo_results
 ### FAQ
 
 #### Missing data 
-If a single algal assemblage is submitted (e.g. no soft algae taxa submitted), then the corresponding indices to the missing assemblage will return NA. However, if an assemblage is submitted but no taxa are attributed for the corresponding metrics, then the metrics will score the worst possible score. Samples with single assemblages submitted will result in a warning message. With few exceptions, missing values in stations data are not allowed. 
+If a single algal assemblage is submitted (e.g. no soft algae taxa submitted), then the corresponding metrics and indices to the missing assemblage will return NA. However, if an assemblage is submitted but no taxa are attributed for the corresponding metrics, then the metrics will score the worst possible score. Samples with single assemblages submitted will result in a warning message. With few exceptions, missing values in stations data are not allowed. 
 
 #### Bad or Missing Field Names
 All required field names must be present in input files. Please be sure to match the field names provided above. Although we have implemented scripts to make the inputs case-insensitive, we recommend conforming to the capitalizations shown above.
