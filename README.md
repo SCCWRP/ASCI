@@ -124,3 +124,18 @@ demo_results
     ## #   H_prop.spp.ZHR_scr <dbl>, H_Salinity.BF.richness_pct_att <dbl>,
     ## #   H_Salinity.BF.richness_pred <dbl>, H_Salinity.BF.richness_raw <int>,
     ## #   H_Salinity.BF.richness_scr <dbl>, Comments <chr>, version_number <chr>
+
+
+### FAQ
+
+# Missing data 
+If a single algal assemblage is submitted (e.g. no soft algae taxa submitted), then the corresponding indices to the missing assemblage will return NA. However, if an assemblage is submitted but no taxa are attributed for the corresponding metrics, then the metrics will score the worst possible score. Samples with single assemblages submitted will result in a warning message. With few exceptions, missing values in stations data are not allowed. 
+
+# Bad or Missing Field Names
+All required field names must be present in input files. Please be sure to match the field names provided above. Although we have implemented scripts to make the inputs case-insensitive, we recommend conforming to the capitalizations shown above.
+
+# Stations with Catchments that Include Parts in Mexico
+Portions of some streams include areas in Mexico. Because the geodatabases used to calculate ASCI predictors do not currently include this area, the ASCI cannot be calculated properly for these sites. The geodatabases will be updated within the next few months. In the interim, we make the following recommendations: If more than 90% of the area of a watershed is within California, treat the state boundary as the edge of the watershed and calculate the predictors accordingly. However, you should interpret these results with caution, particularly if the portion within Mexico contains substantially different natural features. For watersheds that are less than 90% within California, we recommend using the Southern California Algal Indices of Biotic Integrity (Fetscher et al. 2014) as a substitute index.
+
+# Unrecognized Taxa
+Novel or misspelled species names will not be recognized by the calculator and will be output as unrecognized taxa. Users should modify these species in agreement with the SWAMP species lists and re-run the calculator. 
