@@ -170,7 +170,14 @@ ASCI <- function(taxa, stations){
       # We dont want to include mods in final output
       -contains("_mod", ignore.case = FALSE) 
     )
-
+  
+  # Hybrid scores must be NA if they were missing one of the assemblage types
+  out <- out %>% 
+    mutate_at(
+      .vars = names(test)[which(startsWith(names(test), "H_") & names(test) != "H_NumberTaxa")],
+      .funs = function(x){ ifelse(.$D_NumberTaxa == 0 | .$S_NumberTaxa == 0, NA_real_, x) }
+    )
+  
   return(out)
 
 }
