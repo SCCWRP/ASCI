@@ -48,6 +48,10 @@ ASCI <- function(taxa, stations){
   # IF possible... If not enough data was provided it throws an error, or at least it is supposed to...
   gismetrics <- calcgis(stations)
   
+  STE <- STE %>% mutate(
+    FinalID = str_trim(FinalID)
+  )
+  
   # Prepare the Algae data to have metrics ran on it
   # We need to tack on the traits and indicators dataframes, which has certain important info on the species
   # That info is used to calculate metrics which are later used for ASCI
