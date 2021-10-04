@@ -16,6 +16,7 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom tidyr gather spread unnest unite replace_na
 #' @importFrom utils packageVersion
+#' @importFrom stringr str_trim
 #' @import purrr
 #' @import tibble
 #' 
