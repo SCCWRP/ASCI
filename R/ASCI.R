@@ -49,7 +49,8 @@ ASCI <- function(taxa, stations){
   gismetrics <- calcgis(stations)
   
   STE <- STE %>% mutate(
-    FinalID = str_trim(FinalID)
+    FinalID = str_trim(FinalID),
+    FinalIDassigned = str_trim(FinalIDassigned)
   )
   
   # Prepare the Algae data to have metrics ran on it
