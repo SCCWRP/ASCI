@@ -139,3 +139,9 @@ Portions of some streams include areas in Mexico. Because the geodatabases used 
 
 #### Unrecognized Taxa
 Novel or misspelled species names will not be recognized by the calculator and will be output as unrecognized taxa. Users should modify these species in agreement with the SWAMP species lists and re-run the calculator. The calculator STE currently reflects the 2019 SWAMP lookup lists and is available to view [HERE](https://github.com/SCCWRP/ASCI/blob/master/data/STE.RData).
+
+### Metadata
+Resources: <a href="https://github.com/SCCWRP/ASCIsop">SOP</a><br>
+Contact: <a href="https://www.sccwrp.org/about/staff/susanna-theroux/">Susanna Theroux</a><br>
+
+
