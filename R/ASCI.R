@@ -188,6 +188,11 @@ ASCI <- function(taxa, stations){
       .funs = function(x){ ifelse(.$D_NumberTaxa == 0 | .$S_NumberTaxa == 0, NA_real_, x) }
     )
   
+  missingcols <- setdiff(allcols, names(out))
+  for (col in missingcols) {
+    out[,col] <- NA_real_
+  }
+  
   return(out)
 
 }
