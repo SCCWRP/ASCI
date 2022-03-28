@@ -105,6 +105,23 @@ chkinp <- function(taxa, station, getval = FALSE){
     stop(msg, call. = FALSE)
   }
   
+  taxa <- taxa %>%
+    left_join(
+      taxa_crosswalk %>% 
+        rename(FinalID = NewName)
+      ,
+      by = 'FinalID'
+    ) %>% 
+    mutate(
+      FinalID = case_when(
+        is.na(OldName_in_ASCI_Calculator) ~ FinalID,
+        T ~ OldName_in_ASCI_Calculator
+      )
+    ) %>%
+    select(-OldName_in_ASCI_Calculator)
+  
+  
+  
   # Reassure that all columns are the correct datatype
   taxa <- taxa %>%
     dplyr::mutate(

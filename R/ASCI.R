@@ -44,20 +44,6 @@ ASCI <- function(taxa, stations){
   txrmv <- dat$txrmv
   dat <- dat$taxa
   
-  dat <- dat %>%
-    left_join(
-      taxa_crosswalk %>% 
-      rename(FinalID = NewName)
-      ,
-      by = 'FinalID'
-    ) %>% 
-    mutate(
-      FinalID = case_when(
-        is.na(OldName_in_ASCI_Calculator) ~ FinalID,
-        T ~ OldName_in_ASCI_Calculator
-      )
-    ) %>%
-    select(-OldName_in_ASCI_Calculator)
   
   # calculate GIS from stations
   # calcgis calculates required gismetrics which are not provided, from the ones that were provided in the station data
