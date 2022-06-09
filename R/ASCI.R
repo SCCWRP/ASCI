@@ -170,17 +170,7 @@ ASCI <- function(taxa, stations){
     left_join(
       txrmv,
       by = 'SampleID'
-    ) %>%
-    select(
-      # Final ordering of the columns
-      all_of(beginning_cols),
-      starts_with("D_"),
-      starts_with("S_"),
-      starts_with("H_"),
-      all_of(ending_cols),
-      # We dont want to include mods in final output
-      -contains("_mod", ignore.case = FALSE) 
-    )
+    ) 
   
   # Hybrid scores must be NA if they were missing one of the assemblage types
   out <- out %>% 
@@ -192,8 +182,22 @@ ASCI <- function(taxa, stations){
   missingcols <- setdiff(allcols, names(out))
   for (col in missingcols) {
     out[,col] <- NA_real_
-  }
+  } 
+  out <- out %>%
+    select(allcols)
   
+  # out <- out %>%
+  #   select(
+  #     # Final ordering of the columns
+  #     all_of(beginning_cols),
+  #     starts_with("D_"),
+  #     starts_with("S_"),
+  #     starts_with("H_"),
+  #     all_of(ending_cols),
+  #     # We dont want to include mods in final output
+  #     -contains("_mod", ignore.case = FALSE) 
+  #   )
+  # 
   return(out)
 
 }
