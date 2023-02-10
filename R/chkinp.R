@@ -87,7 +87,12 @@
 chkinp <- function(taxa, station, getval = FALSE){
   
   # Replace -88's with NA
-  taxa <- taxa %>% mutate_all(~dplyr::na_if(.,-88))
+  # doesnt work for character columns
+  # taxa <- taxa %>% mutate_all(~dplyr::na_if(.,-88))
+  
+  # trying a more 'old school' approach
+  taxa[taxa == -88] <- NA_real_
+  taxa[taxa == '-88'] <- NA_character_
   
 
   ##
