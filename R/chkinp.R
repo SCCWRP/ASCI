@@ -92,7 +92,7 @@ chkinp <- function(taxa, station, getval = FALSE){
   
   # trying a more 'old school' approach
   taxa[taxa == -88] <- NA_real_
-  taxa[taxa == '-88'] <- NA_character_
+  
   
 
   ##
