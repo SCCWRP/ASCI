@@ -63,8 +63,8 @@ ASCI <- function(taxa, stations){
     left_join(mmilkup$traits, by = 'FinalIDassigned') %>%
     left_join(mmilkup$indicators, by = 'FinalIDassigned') %>%
     # Make all the -88 values in the Result and BAResult to NA
-    mutate(Result = replace(Result, Result < 0, NA),
-           BAResult = replace(BAResult, BAResult < 0, NA)
+    mutate(Result = replace(Result, Result <= 0, NA),
+           BAResult = replace(BAResult, BAResult <= 0, NA)
            ) %>%
     filter(
       # I saw the sampletypecode Qualitative filtered out in previous versions of the ASCI calculator

@@ -76,7 +76,7 @@ diatoms <- function(algae, gismetrics) {
         is.na(cnt.spp.most.tol_raw),
         NA_real_,
         predict(
-          rfmods$diatoms.cnt.spp.most.tol, c(XerMtn,PPT_00_09)
+          rfmods$diatoms.cnt.spp.most.tol, data.frame(XerMtn=XerMtn, PPT_00_09=PPT_00_09)
         )
       ),
       cnt.spp.most.tol_mod = cnt.spp.most.tol_raw - cnt.spp.most.tol_pred,
@@ -87,7 +87,7 @@ diatoms <- function(algae, gismetrics) {
         is.na(EpiRho.richness_raw),
         NA_real_,
         predict(
-          rfmods$diatoms.EpiRho.richness, c(AREA_SQKM, TMAX_WS)
+          rfmods$diatoms.EpiRho.richness, data.frame(AREA_SQKM = AREA_SQKM, TMAX_WS = TMAX_WS)
         )
       ),
       EpiRho.richness_mod = EpiRho.richness_raw - EpiRho.richness_pred,
@@ -98,7 +98,7 @@ diatoms <- function(algae, gismetrics) {
         is.na(prop.spp.IndicatorClass_TN_low_raw),
         NA_real_,
         predict(
-          rfmods$diatoms.prop.spp.IndicatorClass_TN_low, c(CondQR50, MAX_ELEV)
+          rfmods$diatoms.prop.spp.IndicatorClass_TN_low, data.frame(CondQR50 = CondQR50, MAX_ELEV = MAX_ELEV)
         )
       ),
       prop.spp.IndicatorClass_TN_low_mod = prop.spp.IndicatorClass_TN_low_raw - prop.spp.IndicatorClass_TN_low_pred,
@@ -109,7 +109,7 @@ diatoms <- function(algae, gismetrics) {
         is.na(prop.spp.Planktonic_raw),
         NA_real_,
         predict(
-          rfmods$diatoms.prop.spp.Planktonic, c(CondQR50, SITE_ELEV)
+          rfmods$diatoms.prop.spp.Planktonic, data.frame(CondQR50 = CondQR50, SITE_ELEV = SITE_ELEV)
         )
       ),
       prop.spp.Planktonic_mod = prop.spp.Planktonic_raw - prop.spp.Planktonic_pred,
@@ -120,7 +120,7 @@ diatoms <- function(algae, gismetrics) {
         is.na(prop.spp.Trophic.E_raw),
         NA_real_,
         predict(
-          rfmods$diatoms.prop.spp.Trophic.E, c(KFCT_AVE,CondQR50)
+          rfmods$diatoms.prop.spp.Trophic.E, c(KFCT_AVE = KFCT_AVE,CondQR50 = CondQR50)
         )
       ),
       prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E_pred,
@@ -131,7 +131,7 @@ diatoms <- function(algae, gismetrics) {
         is.na(Salinity.BF.richness_raw),
         NA_real_,
         predict(
-          rfmods$diatoms.Salinity.BF.richness, c(XerMtn,KFCT_AVE,CondQR50)
+          rfmods$diatoms.Salinity.BF.richness, data.frame(XerMtn = XerMtn, KFCT_AVE = KFCT_AVE, CondQR50 = CondQR50)
         )
       ),
       Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness_pred
