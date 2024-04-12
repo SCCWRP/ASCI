@@ -63,8 +63,8 @@ ASCI <- function(taxa, stations){
     left_join(mmilkup$traits, by = 'FinalIDassigned') %>%
     left_join(mmilkup$indicators, by = 'FinalIDassigned') %>%
     # Make all the -88 values in the Result and BAResult to NA
-    mutate(Result = replace(Result, Result < 0, NA),
-           BAResult = replace(BAResult, BAResult < 0, NA)
+    mutate(Result = replace(Result, Result <= 0, NA),
+           BAResult = replace(BAResult, BAResult <= 0, NA)
            ) %>%
     filter(
       # I saw the sampletypecode Qualitative filtered out in previous versions of the ASCI calculator
@@ -170,17 +170,7 @@ ASCI <- function(taxa, stations){
     left_join(
       txrmv,
       by = 'SampleID'
-    ) %>%
-    select(
-      # Final ordering of the columns
-      all_of(beginning_cols),
-      starts_with("D_"),
-      starts_with("S_"),
-      starts_with("H_"),
-      all_of(ending_cols),
-      # We dont want to include mods in final output
-      -contains("_mod", ignore.case = FALSE) 
-    )
+    ) 
   
   # Hybrid scores must be NA if they were missing one of the assemblage types
   out <- out %>% 
@@ -192,8 +182,22 @@ ASCI <- function(taxa, stations){
   missingcols <- setdiff(allcols, names(out))
   for (col in missingcols) {
     out[,col] <- NA_real_
-  }
+  } 
+  out <- out %>%
+    select(allcols)
   
+  # out <- out %>%
+  #   select(
+  #     # Final ordering of the columns
+  #     all_of(beginning_cols),
+  #     starts_with("D_"),
+  #     starts_with("S_"),
+  #     starts_with("H_"),
+  #     all_of(ending_cols),
+  #     # We dont want to include mods in final output
+  #     -contains("_mod", ignore.case = FALSE) 
+  #   )
+  # 
   return(out)
 
 }

@@ -93,6 +93,14 @@ chkinp <- function(taxa, station, getval = FALSE){
   # trying a more 'old school' approach
   taxa[taxa == -88] <- NA_real_
   
+<<<<<<< HEAD
+=======
+  # Clean up the STE
+  STE <- STE %>% mutate(
+    FinalID = str_trim(FinalID),
+    FinalIDassigned = str_trim(FinalIDassigned)
+  )
+>>>>>>> master
   
 
   ##
@@ -149,7 +157,51 @@ chkinp <- function(taxa, station, getval = FALSE){
   ##
   # add id values after columns are checked
   #taxa <- getids(taxa)  
+  
+  # check if They put integrated SampleTypeCode for a FinalID of a Soft Body Algae organism
+  # Standard to distinguish diatoms and soft body technically is the phylum - Bacillariophyta
+  # Algae with phylum "Bacillariophyta" are diatoms
+  # If the Phylum is not Bacillariophyta, then it is soft body
+  tmp <- taxa %>% 
+    left_join(STE %>% select(FinalID, Phylum), by = 'FinalID') %>% 
+    filter((Phylum != 'Bacillariophyta') & (SampleTypeCode == 'Integrated'))
+  
+  chk <- (nrow(tmp) > 0)
+  if(chk){
+    offendingTaxa <- tmp$FinalID %>% unique() %>% paste( collapse = ', ')
+    
+    msg <- paste(
+      'Error in data submitted. ASCI scores not calculated. Soft algae taxa present in the Integrated fraction: \n', 
+      offendingTaxa,
+      'Please correct and resubmit'
+    )
+    
+    stop(msg)
+  }
 
+  # check if They put Microalgae, Macroalgae, or Qualitative SampleTypeCode for a Diatom
+  # Standard to distinguish diatoms and soft body technically is the phylum - Bacillariophyta
+  # Algae with phylum "Bacillariophyta" are diatoms
+  # If the Phylum is not Bacillariophyta, then it is soft body
+  tmp <- taxa %>% 
+    left_join(STE %>% select(FinalID, Phylum), by = 'FinalID') %>% 
+    filter((Phylum == 'Bacillariophyta') & (SampleTypeCode %in% c('Microalgae', 'Macroalgae', 'Qualitative') ))
+  
+  chk <- (nrow(tmp) > 0)
+  if(chk){
+    offendingTaxa <- tmp$FinalID %>% unique() %>% paste( collapse = ', ')
+    
+    msg <- paste(
+      'Error in data submitted. ASCI scores not calculated. Diatom taxa present in the Microalgae, Macroalgae, or Qualitative fraction: \n', 
+      offendingTaxa,
+      'Please correct and resubmit'
+    )
+    
+    stop(msg)
+  }
+  
+  
+  
   ##
   # check if sites have both diatom and sba data
   tmp <-taxa %>% 

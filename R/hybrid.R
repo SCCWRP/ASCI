@@ -73,49 +73,49 @@ hybrid <- function(algae, gismetrics) {
       # Count of species with a value of "high" in the IndicatorClass_TN column
       # GIS Predictors: "PPT_00_09", "KFCT_AVE"
       cnt.spp.IndicatorClass_TP_high_pred = predict(
-        rfmods$hybrid.cnt.spp.IndicatorClass_TP_high, c(PPT_00_09, KFCT_AVE)
+        rfmods$hybrid.cnt.spp.IndicatorClass_TP_high, data.frame(PPT_00_09 = PPT_00_09, KFCT_AVE = KFCT_AVE)
       ),
       cnt.spp.IndicatorClass_TP_high_mod = cnt.spp.IndicatorClass_TP_high_raw - cnt.spp.IndicatorClass_TP_high_pred,
       
       # Count of most tolerant species
       # GIS Predictors: "CondQR50", "XerMtn"
       cnt.spp.most.tol_pred = predict(
-        rfmods$hybrid.cnt.spp.most.tol, c(CondQR50, XerMtn)
+        rfmods$hybrid.cnt.spp.most.tol, data.frame(CondQR50 = CondQR50, XerMtn = XerMtn)
       ),
       cnt.spp.most.tol_mod = cnt.spp.most.tol_raw - cnt.spp.most.tol_pred,
       
       # Count of genus Epithemia and Rhopalodia
       # GIS Predictors: "AREA_SQKM", "TMAX_WS"
       EpiRho.richness_pred = predict(
-        rfmods$hybrid.EpiRho.richness, c(AREA_SQKM, TMAX_WS)
+        rfmods$hybrid.EpiRho.richness, data.frame(AREA_SQKM = AREA_SQKM, TMAX_WS = TMAX_WS)
       ),
       EpiRho.richness_mod = EpiRho.richness_raw - EpiRho.richness_pred,
       
       # Count of speices with OxygenRequirements DO_30
       # GIS Predictors: "AtmCa", "PPT_00_09"
       OxyRed.DO_30.richness_pred = predict(
-        rfmods$hybrid.OxyRed.DO_30.richness, c(AtmCa, PPT_00_09)
+        rfmods$hybrid.OxyRed.DO_30.richness, data.frame(AtmCa = AtmCa, PPT_00_09 = PPT_00_09)
       ),
       OxyRed.DO_30.richness_mod = OxyRed.DO_30.richness_raw - OxyRed.DO_30.richness_pred,
 
       # Proportion of Species with the Habitat = P
       # GIS Predictors: "CondQR50", "SITE_ELEV"
       prop.spp.Planktonic_pred = predict(
-        rfmods$hybrid.prop.spp.Planktonic, c(CondQR50, SITE_ELEV)
+        rfmods$hybrid.prop.spp.Planktonic, data.frame(CondQR50 = CondQR50, SITE_ELEV = SITE_ELEV)
       ),
       prop.spp.Planktonic_mod = prop.spp.Planktonic_raw - prop.spp.Planktonic_pred,
       
       # Proportion of species with the TrophicState value equal to "E"
       # GIS Predictors: "CondQR50", "KFCT_AVE"
       prop.spp.Trophic.E_pred = predict(
-        rfmods$hybrid.prop.spp.Trophic.E, c(CondQR50, KFCT_AVE)
+        rfmods$hybrid.prop.spp.Trophic.E, data.frame(CondQR50 = CondQR50, KFCT_AVE = KFCT_AVE)
       ),
       prop.spp.Trophic.E_mod = prop.spp.Trophic.E_raw - prop.spp.Trophic.E_pred,
       
       # How many species have a Salinity value of "BF"
       # GIS Predictors: "XerMtn", "KFCT_AVE"
       Salinity.BF.richness_pred = predict(
-        rfmods$hybrid.Salinity.BF.richness, c(XerMtn, KFCT_AVE)
+        rfmods$hybrid.Salinity.BF.richness, data.frame(XerMtn = XerMtn, KFCT_AVE = KFCT_AVE)
       ),
       Salinity.BF.richness_mod = Salinity.BF.richness_raw - Salinity.BF.richness_pred
     ) %>%
