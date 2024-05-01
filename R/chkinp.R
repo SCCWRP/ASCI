@@ -93,14 +93,11 @@ chkinp <- function(taxa, station, getval = FALSE){
   # trying a more 'old school' approach
   taxa[taxa == -88] <- NA_real_
   
-<<<<<<< HEAD
-=======
   # Clean up the STE
   STE <- STE %>% mutate(
     FinalID = str_trim(FinalID),
     FinalIDassigned = str_trim(FinalIDassigned)
   )
->>>>>>> master
   
 
   ##
